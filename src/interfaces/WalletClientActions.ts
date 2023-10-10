@@ -1,11 +1,11 @@
 import { createWalletClient, WalletClient } from "viem";
-import { getMainNet } from "../utils";
+import { getChainTransport } from "../utils";
 
 export class WalletClientActions {
   private walletClient: WalletClient;
 
   constructor() {
-    const mainNet = getMainNet();
+    const mainNet = getChainTransport();
     this.walletClient = createWalletClient(mainNet);
   }
 
@@ -13,7 +13,8 @@ export class WalletClientActions {
     return this.walletClient.name
   }
 
-  getAddresses() {
+  async getAddresses() {
+    console.log(await this.walletClient.getAddresses())
     return this.walletClient.getAddresses()
   }
 }

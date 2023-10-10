@@ -1,11 +1,11 @@
 import { createPublicClient, PublicClient } from "viem";
-import { getMainNet } from "../utils/getMainNet.ts";
+import { getChainTransport } from "../utils/getChainTransport.ts";
 
 export class PublicClientActions {
   private publicClient: PublicClient;
 
   constructor() {
-    const mainNet = getMainNet();
+    const mainNet = getChainTransport();
     this.publicClient = createPublicClient(mainNet);
   }
 
