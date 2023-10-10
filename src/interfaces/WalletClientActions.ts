@@ -5,16 +5,11 @@ export class WalletClientActions {
   private walletClient: WalletClient;
 
   constructor() {
-    const mainNet = getChainTransport();
-    this.walletClient = createWalletClient(mainNet);
+    const chainTransport = getChainTransport();
+    this.walletClient = createWalletClient(chainTransport);
   }
 
-  getName() {
-    return this.walletClient.name
-  }
-
-  async getAddresses() {
-    console.log(await this.walletClient.getAddresses())
-    return this.walletClient.getAddresses()
+  async requestAddresses() {
+    return this.walletClient.requestAddresses()
   }
 }

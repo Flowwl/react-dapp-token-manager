@@ -1,4 +1,8 @@
-export default function Status({ address, balance }: { address: string | null; balance: bigint; }) {
+import { useRpcPublicClient } from "../contexts";
+
+export default function Status() {
+  const { address, balance } = useRpcPublicClient();
+
   if (!address) {
     return (
       <div className="flex items-center">

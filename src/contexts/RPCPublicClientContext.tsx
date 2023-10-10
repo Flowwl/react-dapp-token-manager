@@ -1,25 +1,36 @@
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, useState } from "react";
 import { createCtx } from "../utils";
-import { ENV_CONFIG } from "../config";
 import { PublicClientActions, WalletClientActions } from "../interfaces";
-import { useFetch } from "../hooks";
 
 interface Props {
   children: ReactNode;
 }
 
-
 const RpcPublicClientProvider: FC<Props> = ({ children }) => {
-  const publicClientActions = new PublicClientActions(ENV_CONFIG.ADDRESS_TOKEN);
+  const publicClientActions = new PublicClientActions();
   const walletClientActions = new WalletClientActions();
 
-  const { data, isLoading } = useFetch(publicClientActions.getBalance())
-  if (isLoading) { return(<div>Loading...</div>)}
-  console.log(data)
+  const [address, setAddress] = useState<string | null>(null);
+  const [balance, setBalance] = useState<bigint>(BigInt(0));
+
+  async function connect() {
+    try {
+      const [address] = await walletClientActions.requestAddresses();
+      const balance = await publicClientActions.getBalance(address);
+      setAddress(address);
+      setBalance(balance);
+    } catch (error) {
+      alert(`Transaction failed: ${error}`);
+    }
+  }
+
   return (
     <RpcPublicClientBaseProvider value={{
       publicClientActions,
-      walletClientActions
+      walletClientActions,
+      connect,
+      address,
+      balance
     }}>
       <div className="h-full">{children}</div>
     </RpcPublicClientBaseProvider>
@@ -30,7 +41,10 @@ export default RpcPublicClientProvider;
 
 export interface RpcPublicClient {
   publicClientActions: PublicClientActions,
-  walletClientActions: WalletClientActions
+  walletClientActions: WalletClientActions,
+  connect: () => Promise<void>,
+  address: string | null,
+  balance: bigint
 }
 
 export const [useRpcPublicClient, RpcPublicClientBaseProvider] = createCtx<RpcPublicClient>();
