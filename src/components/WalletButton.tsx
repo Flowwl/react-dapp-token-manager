@@ -4,7 +4,7 @@ import Status from "./Status.tsx";
 export default function WalletButton() {
   //State variables for address & balance
   const [address, setAddress] = useState<string | null>(null);
-  const [balance, setBalance] = useState<BigInt>(BigInt(0));
+  const [balance, setBalance] = useState<bigint>(BigInt(0));
   const { walletClientActions, publicClientActions} = useRpcPublicClient()
   // Function requests connection and retrieves the address of wallet
   // Then it retrievies the balance of the address

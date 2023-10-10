@@ -1,4 +1,4 @@
-export default function Status({ address, balance }: { address: string | null; balance: BigInt; }) {
+export default function Status({ address, balance }: { address: string | null; balance: bigint; }) {
   if (!address) {
     return (
       <div className="flex items-center">
