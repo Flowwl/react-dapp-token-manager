@@ -1,12 +1,12 @@
 import { FC } from 'react';
-import { useRpcPublicClient } from "../contexts";
+import { useConnectedWalletContext } from "../contexts";
 
 interface SendButtonProps {
   className?: string;
 }
 
 const SendButton: FC<SendButtonProps> = () => {
-  const { sendTransaction } = useRpcPublicClient();
+  const { sendTransaction } = useConnectedWalletContext();
 
 
   const handleClick = async () => {

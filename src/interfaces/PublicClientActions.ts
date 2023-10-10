@@ -2,7 +2,7 @@ import { createPublicClient, PublicClient } from "viem";
 import { getChainTransport } from "../utils";
 import { assertIsHexString } from "../asserts";
 
-export class PublicClientActions {
+class PublicClientActions {
   private publicClient: PublicClient;
 
   constructor() {
@@ -15,3 +15,5 @@ export class PublicClientActions {
     return this.publicClient.getBalance({ address: address });
   }
 }
+
+export const publicClientActions = new PublicClientActions();
