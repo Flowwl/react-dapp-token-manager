@@ -1,10 +1,12 @@
-import { createPublicClient, PublicClient, http } from "viem";
-import { mainnet } from "viem/chains";
+import { createPublicClient, PublicClient } from "viem";
+import { getMainNet } from "../utils/getMainNet.ts";
 
 export class PublicClientActions {
   private publicClient: PublicClient;
+
   constructor() {
-    this.publicClient = createPublicClient({ chain: mainnet, transport: http() })
+    const mainNet = getMainNet();
+    this.publicClient = createPublicClient(mainNet);
   }
 
   async getBalance(address: string) {
