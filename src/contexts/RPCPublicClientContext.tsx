@@ -1,7 +1,8 @@
 import { FC, ReactNode } from "react";
 import { createCtx } from "../utils";
 import { ENV_CONFIG } from "../config";
-import { PublicClientActions } from "../interfaces";
+import { PublicClientActions, WalletClientActions } from "../interfaces";
+import { useFetch } from "../hooks";
 
 interface Props {
   children: ReactNode;
@@ -10,10 +11,16 @@ interface Props {
 
 const RpcPublicClientProvider: FC<Props> = ({ children }) => {
   const publicClientActions = new PublicClientActions(ENV_CONFIG.ADDRESS_TOKEN);
+  const walletClientActions = new WalletClientActions();
 
-  console.log(publicClientActions.getBalance())
+  const { data, isLoading } = useFetch(publicClientActions.getBalance())
+  if (isLoading) { return(<div>Loading...</div>)}
+  console.log(data)
   return (
-    <RpcPublicClientBaseProvider value={{}}>
+    <RpcPublicClientBaseProvider value={{
+      publicClientActions,
+      walletClientActions
+    }}>
       <div className="h-full">{children}</div>
     </RpcPublicClientBaseProvider>
   );
@@ -21,6 +28,9 @@ const RpcPublicClientProvider: FC<Props> = ({ children }) => {
 
 export default RpcPublicClientProvider;
 
-export interface RpcPublicClient {}
+export interface RpcPublicClient {
+  publicClientActions: PublicClientActions,
+  walletClientActions: WalletClientActions
+}
 
 export const [useRpcPublicClient, RpcPublicClientBaseProvider] = createCtx<RpcPublicClient>();
