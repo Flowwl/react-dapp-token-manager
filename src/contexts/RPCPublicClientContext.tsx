@@ -2,6 +2,7 @@ import { FC, ReactNode, useState } from "react";
 import { createCtx } from "../utils";
 import { PublicClientActions, WalletClientActions } from "../interfaces";
 import { LOCAL_STORAGE_KEYS } from "../constants";
+import { HexString } from "../types";
 
 interface Props {
   children: ReactNode;
@@ -11,7 +12,7 @@ const RpcPublicClientProvider: FC<Props> = ({ children }) => {
   const publicClientActions = new PublicClientActions();
   const walletClientActions = new WalletClientActions();
 
-  const [address, setAddress] = useState<string | null>(localStorage.getItem(LOCAL_STORAGE_KEYS.WALLET_ADDRESS) || null);
+  const [address, setAddress] = useState<HexString | null>((localStorage.getItem(LOCAL_STORAGE_KEYS.WALLET_ADDRESS) as HexString) || null);
 
   async function connect() {
     try {
@@ -41,7 +42,7 @@ export interface RpcPublicClient {
   publicClientActions: PublicClientActions,
   walletClientActions: WalletClientActions,
   connect: () => Promise<void>,
-  address: string | null,
+  address: HexString | null,
 }
 
 export const [useRpcPublicClient, RpcPublicClientBaseProvider] = createCtx<RpcPublicClient>();
