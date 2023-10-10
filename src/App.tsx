@@ -1,6 +1,6 @@
-import WalletButton from "./components/WalletButton.tsx";
-import SendButton from "./components/SendButton.tsx";
-import Status from "./components/Status.tsx";
+import WalletButton from "./components/molecules/WalletButton.tsx";
+import SendButton from "./components/molecules/SendButton.tsx";
+import Status from "./components/molecules/Status.tsx";
 import { useWalletAuthContext } from "./contexts";
 import ConnectedWalletContext from "./contexts/ConnectedWalletContext.tsx";
 

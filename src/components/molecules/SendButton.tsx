@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { useConnectedWalletContext } from "../contexts";
+import { useConnectedWalletContext } from "../../contexts";
 
 interface SendButtonProps {
   className?: string;

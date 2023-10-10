@@ -1,14 +1,15 @@
 import { FC } from 'react';
-import { useFetch } from "../hooks";
-import { useRpcPublicClient } from "../contexts";
-import Spinner from "./Spinner.tsx";
+import { useFetch } from "../../hooks";
+import { useWalletAuthContext } from "../../contexts";
+import Spinner from "../atoms/Spinner.tsx";
+import { publicClientActions } from "../../interfaces";
 
 interface ConnectedStatusProps {
   className?: string;
 }
 
 const ConnectedStatus: FC<ConnectedStatusProps> = () => {
-  const { address , publicClientActions} = useRpcPublicClient();
+  const { address } = useWalletAuthContext();
   const { data: balance, isLoading} = useFetch(publicClientActions.getBalance(address as string))
 
   if (balance === null && isLoading) return <Spinner/>

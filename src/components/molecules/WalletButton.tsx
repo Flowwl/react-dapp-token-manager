@@ -1,7 +1,7 @@
-import { useRpcPublicClient } from "../contexts";
+import { useWalletAuthContext } from "../../contexts";
 
 export default function WalletButton() {
-  const { connect } = useRpcPublicClient();
+  const { connect } = useWalletAuthContext();
 
   return (
     <button
