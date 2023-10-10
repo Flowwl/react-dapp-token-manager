@@ -5,8 +5,10 @@ import ConnectedStatus from "./ConnectedStatus.tsx";
 export default function Status() {
   const { address } = useRpcPublicClient();
 
-  if (!address) {
-    return <DisconnectedStatus/>;
-  }
-  return <ConnectedStatus/>;
+  return (
+    <>
+    {address && <ConnectedStatus/>}
+    {!address && <DisconnectedStatus/>}
+    </>
+  )
 }

@@ -1,8 +1,9 @@
 import { FC, ReactNode, useState } from "react";
-import { createCtx } from "../utils";
+import { createCtx, getChainTransport } from "../utils";
 import { PublicClientActions, WalletClientActions } from "../interfaces";
 import { LOCAL_STORAGE_KEYS } from "../constants";
 import { HexString } from "../types";
+import { parseEther } from "viem";
 
 interface Props {
   children: ReactNode;
@@ -24,12 +25,31 @@ const RpcPublicClientProvider: FC<Props> = ({ children }) => {
     }
   }
 
+  async function sendTransaction(to: HexString, value: string) {
+    try {
+      if (address === null) {
+        alert("Please connect your wallet first");
+        return;
+      }
+      const hash = await walletClientActions.sendTransaction({
+        account: address,
+        to: to,
+        value: parseEther(value), // send 0.001 matic
+        chain: getChainTransport().chain,
+      });
+      alert(`Transaction successful. Transaction Hash: ${hash}`);
+    } catch (error) {
+      alert(`Transaction failed: ${error}`);
+    }
+  }
+
   return (
     <RpcPublicClientBaseProvider value={{
       publicClientActions,
       walletClientActions,
       connect,
-      address
+      address,
+      sendTransaction
     }}>
       <div className="h-full">{children}</div>
     </RpcPublicClientBaseProvider>
@@ -42,6 +62,7 @@ export interface RpcPublicClient {
   publicClientActions: PublicClientActions,
   walletClientActions: WalletClientActions,
   connect: () => Promise<void>,
+  sendTransaction: (to: HexString, value: string) => Promise<void>,
   address: HexString | null,
 }
 

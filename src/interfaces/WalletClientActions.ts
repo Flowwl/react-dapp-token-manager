@@ -1,4 +1,4 @@
-import { createWalletClient, WalletClient } from "viem";
+import { createWalletClient, SendTransactionParameters, WalletClient } from "viem";
 import { getChainTransport } from "../utils";
 
 export class WalletClientActions {
@@ -11,5 +11,9 @@ export class WalletClientActions {
 
   async requestAddresses() {
     return this.walletClient.requestAddresses()
+  }
+
+  async sendTransaction(params: SendTransactionParameters) {
+    return this.walletClient.sendTransaction(params);
   }
 }
