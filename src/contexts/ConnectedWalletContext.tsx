@@ -3,7 +3,8 @@ import { createCtx, getChainTransport } from "../utils";
 import cx from "classnames";
 import { HexString } from "../types";
 import { parseEther } from "viem";
-import { walletClientActions } from "../interfaces";
+import { publicClientActions, walletClientActions } from "../interfaces";
+import { getAbi } from "../utils/abi.ts";
 
 interface Props {
   children: ReactNode;
@@ -24,9 +25,18 @@ const ConnectedWalletContextProvider: FC<Props> = ({ children, address }) => {
       alert(`Transaction failed: ${error}`);
     }
   }
+
+  async function getTotalSupply() {
+    return publicClientActions.readContract<bigint>({
+      address,
+      abi: getAbi(),
+      functionName: 'totalSupply',
+    })
+  }
   return (
     <ConnectedWalletContextBaseProvider value={{
-      sendTransaction
+      sendTransaction,
+      getTotalSupply
     }}>
       <div className={cx("h-full")}>{children}</div>
     </ConnectedWalletContextBaseProvider>
@@ -37,6 +47,7 @@ export default ConnectedWalletContextProvider;
 
 export interface ConnectedWalletContext {
   sendTransaction: (to: HexString, value: string) => Promise<void>;
+  getTotalSupply: () => Promise<bigint>;
 }
 
 export const [useConnectedWalletContext, ConnectedWalletContextBaseProvider] = createCtx<ConnectedWalletContext>();
