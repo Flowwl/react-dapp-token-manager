@@ -1,12 +1,14 @@
 import './App.css';
+import WalletButton from "./components/WalletButton.tsx";
 
 function App() {
   return (
-      <div>
-        App
-      </div>
+    <div>
+      App
+      <WalletButton/>
+    </div>
 
-  )
+  );
 }
 
-export default App
+export default App;

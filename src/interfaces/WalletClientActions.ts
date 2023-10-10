@@ -12,4 +12,8 @@ export class WalletClientActions {
   getName() {
     return this.walletClient.name
   }
+
+  getAddresses() {
+    return this.walletClient.getAddresses()
+  }
 }
