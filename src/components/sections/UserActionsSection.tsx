@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import cx from "classnames";
 import { useGetTotalSupply, useGetUserBalanceByToken } from "../../hooks";
 import { useChainContext, useConnectedWalletContext } from "../../contexts";
@@ -9,13 +9,15 @@ import { useMint } from "../../hooks/useMint.ts";
 import { useBurn } from "../../hooks/useBurn.ts";
 import { useApproveTo } from "../../hooks/useApproveTo.ts";
 import { useTransferFrom } from "../../hooks/useTransferFrom.ts";
+import { useCheckAllowance } from "../../hooks/useCheckAllowance.ts";
+import { computeBigIntToFloat } from "../../utils";
 
 interface UserActionsSectionProps {
   className?: string;
 }
 
 const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
-  const { selectedToken } = useChainContext();
+  const { selectedToken, tokenDecimals } = useChainContext();
   const { address } = useConnectedWalletContext();
 
   const [transferTo, setTransferTo] = useState<string>("");
@@ -27,6 +29,7 @@ const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
   const [transferFromFrom, setTransferFromFrom] = useState<string>("");
   const [transferFromTo, setTransferFromTo] = useState<string>("");
   const [transferFromValue, setTransferFromValue] = useState<string>("0");
+  const [allowanceOf, setAllowanceOf] = useState<string>("");
 
   const { data: totalSupply } = useGetTotalSupply(selectedToken);
   const { data: userBalance, isLoading: isBalanceLoading } = useGetUserBalanceByToken(address);
@@ -35,6 +38,13 @@ const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
   const { burn } = useBurn();
   const { approve } = useApproveTo();
   const { transferFrom } = useTransferFrom();
+  const { data: allowance, checkAllowance } = useCheckAllowance();
+
+  useEffect(() => {
+      if (allowance) {
+        alert(`user allowance: ${computeBigIntToFloat(allowance, tokenDecimals)} ${TOKENS[selectedToken].label}`)
+      }
+  }, [allowance, tokenDecimals, selectedToken])
 
   return (
     <div className={cx(className)}>
@@ -47,12 +57,14 @@ const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
       {/* TODO */}
       <div className="flex flex-col gap-3">
         <h2 className="underline font-bold text-xl self-center">Actions</h2>
-        {/* TODO */}
-        <div className="flex justify-between gap-5">
-          <p>Check Allowance of a spender</p>
-          <input type="text" placeholder="0x..."/>
-          <button>Check</button>
-        </div>
+        <form className="flex justify-between gap-5" onSubmit={(e) => {
+          e.preventDefault()
+          checkAllowance(allowanceOf)
+        }}>
+          <p>Check allowance of</p>
+          <input type="text" placeholder="0x..." onChange={(e) => setAllowanceOf(e.target.value)}/>
+          <button type={"submit"}>Check</button>
+        </form>
         {/* TODO Add error handling */}
         <form className="flex justify-between gap-5" onSubmit={(e) => {
           e.preventDefault()
