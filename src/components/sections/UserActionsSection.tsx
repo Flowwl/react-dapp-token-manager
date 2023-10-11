@@ -9,11 +9,12 @@ interface UserActionsSectionProps {
 }
 
 const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
-  const {selectedToken, tokenDecimals} = useChainContext()
+  const {selectedToken} = useChainContext()
   const { address } = useConnectedWalletContext()
-  const { data: totalSupply }  = useGetTotalSupply(selectedToken, tokenDecimals)
-  const { data: userBalance }  = useGetUserBalanceByToken(address, tokenDecimals);
+  const { data: totalSupply }  = useGetTotalSupply(selectedToken)
+  const { data: userBalance }  = useGetUserBalanceByToken(address, selectedToken);
 
+  console.log(totalSupply, userBalance)
   return (
     <div className={cx(className)}>
       <div>Total Supply: {totalSupply || 0}</div>
