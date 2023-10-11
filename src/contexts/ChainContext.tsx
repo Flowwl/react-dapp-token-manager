@@ -3,8 +3,9 @@ import { createCtx } from "../utils";
 import { Chain } from "viem/chains";
 import { PublicClientActions, WalletClientActions } from "../interfaces";
 import { TokenName, TOKENS } from "../constants/tokens.ts";
-import { useFetch } from "../hooks";
-import Spinner from "../components/atoms/Spinner.tsx";
+import { useSwitchToChain } from "../hooks/useSwitchToChain.ts";
+import ChainInfoContextProvider from "./ChainInfoContext.tsx";
+
 interface Props {
   children: ReactNode;
 }
@@ -12,47 +13,50 @@ interface Props {
 const ChainContextProvider: FC<Props> = ({ children }) => {
   const selectedToken = "MATIC";
   const selectedChain = TOKENS[selectedToken].chain;
+  console.log(window.ethereum);
   // @ts-expect-error typescript doesn't know about ethereum networkVersion
-  const networkVersion = parseInt(window.ethereum?.networkVersion || "0")
+  const networkVersion = parseInt(window.ethereum?.networkVersion || "0");
 
   const publicClientActions = new PublicClientActions(selectedChain);
   const walletClientActions = new WalletClientActions(selectedChain);
 
-  useEffect(() => {
-    if (networkVersion !== selectedChain.id) {
-      alert("Please change your network before proceeding.")
+  const { switchToChain } = useSwitchToChain(selectedToken);
+
+  const switchChainHandle = () => {
+    const hasConfirmed = confirm("Please change your network before proceeding. Do you want to switch automatically ? ");
+
+    if (hasConfirmed) {
+      switchToChain();
     }
-  }, [networkVersion, selectedChain]);
+    else {
+      window.location.reload();
+    }
+  };
 
   window.ethereum?.on('chainChanged', (chainId) => {
     if (chainId !== `0x${selectedChain.id.toString(16)}`) {
-      console.log("Hey change your network to the correct one!");
       window.location.reload();
     }
   });
-  const promise = async () => {
-    return publicClientActions.readContract<bigint>({
-      address: TOKENS[selectedToken].address,
-      abi: TOKENS[selectedToken].abi,
-      functionName: 'decimals'
-    });
-  };
 
-  const { data: tokenDecimals, isLoading } = useFetch(async () => promise());
+  useEffect(() => {
+    if (networkVersion !== selectedChain.id) {
+      switchChainHandle();
+    }
+  }, []);
 
-  if (tokenDecimals === null && isLoading) {
-    return <Spinner/>;
-  }
+
   return (
     <ChainContextBaseProvider value={{
       publicClientActions,
       walletClientActions,
       selectedChain,
       selectedToken,
-      tokenDecimals: tokenDecimals || 0n
 
     }}>
-      {children}
+      <ChainInfoContextProvider>
+        {children}
+      </ChainInfoContextProvider>
     </ChainContextBaseProvider>
   );
 };
@@ -64,7 +68,6 @@ export interface ChainContext {
   walletClientActions: WalletClientActions;
   selectedToken: TokenName;
   selectedChain: Chain;
-  tokenDecimals: bigint;
 }
 
 export const [useChainContext, ChainContextBaseProvider] = createCtx<ChainContext>();
