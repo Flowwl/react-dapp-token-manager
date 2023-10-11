@@ -11,13 +11,15 @@ import { useApproveTo } from "../../hooks/useApproveTo.ts";
 import { useTransferFrom } from "../../hooks/useTransferFrom.ts";
 import { useCheckAllowance } from "../../hooks/useCheckAllowance.ts";
 import { computeBigIntToFloat } from "../../utils";
+import { useChainInfoContext } from "../../contexts/ChainInfoContext.tsx";
 
 interface UserActionsSectionProps {
   className?: string;
 }
 
 const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
-  const { selectedToken, tokenDecimals } = useChainContext();
+  const { selectedToken} = useChainContext();
+  const { tokenDecimals } = useChainInfoContext();
   const { address } = useConnectedWalletContext();
 
   const [transferTo, setTransferTo] = useState<string>("");

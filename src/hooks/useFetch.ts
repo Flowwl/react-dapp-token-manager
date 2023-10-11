@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export type FetchOptions<T, Err> = {
+export type FetchOptions<T, Err = Error> = {
   retry: boolean;
   isEnabled: boolean;
   deps: unknown[];

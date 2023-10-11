@@ -1,11 +1,12 @@
-import { useChainContext, useConnectedWalletContext } from "../contexts";
+import { useChainContext, useChainInfoContext, useConnectedWalletContext } from "../contexts";
 import { useFetch } from "./useFetch.ts";
 import { TOKENS } from "../constants/tokens.ts";
 import { useState } from "react";
 import { computeFloatToBigInt } from "../utils";
 
 export const useMint = () => {
-  const { walletClientActions, publicClientActions, selectedToken, tokenDecimals } = useChainContext();
+  const { walletClientActions, publicClientActions, selectedToken } = useChainContext();
+  const { tokenDecimals } = useChainInfoContext();
   const { address } = useConnectedWalletContext();
   const [value, setValue] = useState("0");
   const promise = async () => {
