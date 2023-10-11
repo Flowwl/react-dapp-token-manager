@@ -8,8 +8,8 @@ interface ConnectedStatusProps {
 
 const ConnectedStatus: FC<ConnectedStatusProps> = () => {
   return (
-    <div className="flex items-center">
-      <MetamaskIcon className="h-12 w-12"/>
+    <div className="flex items-center gap-2">
+      <MetamaskIcon className="h-10 w-10"/>
       <UserAddressListBox/>
     </div>
   );
