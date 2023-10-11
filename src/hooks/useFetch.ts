@@ -49,7 +49,7 @@ export const useFetch = <T>(promise: () => Promise<T>, options: Partial<FetchOpt
             setEnabled(false);
           }
         });
-    }, [enabled, isLoading, promise, options.retry]);
+    }, [enabled, isLoading, promise, options.retry, data, opts]);
 
     return {
       isLoading,
