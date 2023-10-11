@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 
-type Options = {
+export type FetchOptions<T> = {
   retry: boolean;
   isEnabled: boolean;
   deps: unknown[];
+  onSuccess?: (data: T) => void
 }
-export const useFetch = <T>(promise: () => Promise<T>, options: Partial<Options> = {}) => {
-  const opts: Options = {
+export const useFetch = <T>(promise: () => Promise<T>, options: Partial<FetchOptions<T>> = {}) => {
+  const opts: FetchOptions<T> = {
     isEnabled: true,
     retry: false,
     deps: [],
@@ -39,6 +40,7 @@ export const useFetch = <T>(promise: () => Promise<T>, options: Partial<Options>
       promise()
         .then((res) => {
           setData(res);
+          opts.onSuccess && opts.onSuccess(res);
         })
         .catch((err) => setError(err))
         .finally(() => {
