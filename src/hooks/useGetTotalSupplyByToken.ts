@@ -21,5 +21,5 @@ export function useGetTotalSupply(token: TokenName) {
     return computeBigIntToFloat(totalSupply, tokenDecimals);
   }
 
-  return useFetch(promise());
+  return useFetch(async () => promise());
 }

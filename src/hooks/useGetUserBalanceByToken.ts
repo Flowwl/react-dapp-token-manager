@@ -1,5 +1,5 @@
 import { HexString } from "../types";
-import { computeBigIntToFloat } from "../utils/computeBigIntToFloat.ts";
+import { computeBigIntToFloat } from "../utils";
 import { useChainContext } from "../contexts";
 import { useFetch } from "./useFetch.ts";
 import { TokenName, TOKENS } from "../constants/tokens.ts";
@@ -17,5 +17,5 @@ export const useGetUserBalanceByToken = (address: HexString, token: TokenName) =
     return computeBigIntToFloat(balance, tokenDecimals);
   };
 
-  return useFetch(promise());
+  return useFetch(async () => promise());
 };

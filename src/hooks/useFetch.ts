@@ -1,30 +1,46 @@
 import { useEffect, useState } from "react";
 
-export const useFetch = <T>(promise: Promise<T>) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<null | Error>(null);
-  const [data, setData] = useState<T | null>(null);
-  const [retry, setRetry] = useState(true)
+type Options = {
+  retry?: boolean;
+  isEnabled: boolean;
+}
+export const useFetch = <T>(promise: () => Promise<T>, options: Options = { isEnabled: true, retry: false }) => {
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<null | Error>(null);
+    const [data, setData] = useState<T | null>(null);
+    const [enabled, setEnabled] = useState<boolean>(options.isEnabled);
 
-  useEffect(() => {
-    if (!isLoading && retry) {
+    useEffect(() => {
+      if (!enabled) {
+        return;
+      }
+      if (isLoading) {
+        return;
+      }
+
+      if (data) {
+        return;
+      }
       setIsLoading(true);
-      promise
+      promise()
         .then((res) => {
-          setData(res)
+          setData(res);
         })
         .catch((err) => setError(err))
         .finally(() => {
           setIsLoading(false);
-          setRetry(false);
+          if (!options.retry) {
+            setEnabled(false);
+          }
         });
-    }
-  }, [promise]);
+    }, [enabled, isLoading, promise, options.retry]);
 
-  return {
-    isLoading,
-    isError: !!error,
-    error: error,
-    data: data
-  };
-};
+    return {
+      isLoading,
+      setEnabled: (isQueryEnabled: boolean) => setEnabled(isQueryEnabled),
+      isError: !!error,
+      error: error,
+      data: data
+    };
+  }
+;

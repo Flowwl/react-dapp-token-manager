@@ -1,9 +1,8 @@
 import { FC } from 'react';
 import { useWalletAuthContext } from "../../contexts";
-import { useFetch } from "../../hooks";
+import { useGetUserBalanceByToken } from "../../hooks";
 import Spinner from "../atoms/Spinner.tsx";
 import { HexString } from "../../types";
-import { getUserBalanceByToken } from "../../services";
 
 interface UserBalanceProps {
   className?: string;
@@ -11,7 +10,7 @@ interface UserBalanceProps {
 
 const UserBalance: FC<UserBalanceProps> = () => {
   const { address} = useWalletAuthContext();
-  const { data: balance, isLoading } = useFetch(getUserBalanceByToken(address as HexString, "MATIC"));
+  const { data: balance, isLoading } = useGetUserBalanceByToken(address as HexString, "MATIC");
 
 
   if (balance === null && isLoading) {

@@ -12,7 +12,7 @@ interface UserAddressListBoxProps {
 
 const UserAddressListBox: FC<UserAddressListBoxProps> = ({ className }) => {
   const { address, getAddresses, selectAddress } = useWalletAuthContext();
-  const { data: addresses, isLoading: areAddressesLoading } = useFetch(getAddresses());
+  const { data: addresses, isLoading: areAddressesLoading } = useFetch(() => getAddresses());
   const onSelect = async (value: ListBoxValue) => {
     selectAddress(value.name as HexString);
   };
