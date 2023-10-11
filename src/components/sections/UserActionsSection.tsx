@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import cx from "classnames";
 import { useGetTotalSupply, useGetUserBalanceByToken } from "../../hooks";
 import { useChainContext, useConnectedWalletContext } from "../../contexts";
@@ -38,13 +38,11 @@ const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
   const { burn } = useBurn();
   const { approve } = useApproveTo();
   const { transferFrom } = useTransferFrom();
-  const { data: allowance, checkAllowance } = useCheckAllowance();
-
-  useEffect(() => {
-      if (allowance) {
+  const { checkAllowance } = useCheckAllowance({
+    onSuccess: (allowance) => {
         alert(`user allowance: ${computeBigIntToFloat(allowance, tokenDecimals)} ${TOKENS[selectedToken].label}`)
-      }
-  }, [allowance, tokenDecimals, selectedToken])
+    }
+  });
 
   return (
     <div className={cx(className)}>

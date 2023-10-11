@@ -1,22 +1,13 @@
 import { useChainContext, useConnectedWalletContext } from "../contexts";
-import { useFetch } from "./useFetch.ts";
+import { FetchOptions, useFetch } from "./useFetch.ts";
 import { useState } from "react";
 import { TOKENS } from "../constants/tokens.ts";
 
-export const useCheckAllowance = () => {
+export const useCheckAllowance = (opts: Partial<FetchOptions<bigint>> = {}) => {
   const { selectedToken, publicClientActions } = useChainContext();
   const { address } = useConnectedWalletContext();
   const [of, setOf] = useState<string>("")
   const promise = async () => {
-    // const { request } = await publicClientActions.simulateContract({
-    //   account: address,
-    //   address: TOKENS[selectedToken].address,
-    //   abi: TOKENS[selectedToken].abi,
-    //   functionName: 'checkAllowance',
-    //   args: [of]
-    // });
-    // const contractAddress = await walletClientActions.writeContract(request);
-
     return publicClientActions.readContract<bigint>({
       address: TOKENS[selectedToken].address,
       abi: TOKENS[selectedToken].abi,
@@ -30,7 +21,7 @@ export const useCheckAllowance = () => {
     fetchMethods.setEnabled(true)
   }
 
-  const fetchMethods = useFetch(async () => promise(), { isEnabled: false })
+  const fetchMethods = useFetch(async () => promise(), { ...opts, isEnabled: false })
   return {
     checkAllowance,
     ...fetchMethods
