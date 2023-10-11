@@ -1,6 +1,7 @@
 import { HexString } from "../types";
 import { TOKENS } from "../constants/tokens.ts";
 import { publicClientActions } from "../interfaces";
+import { computeBigIntToFloat } from "../utils/computeBigIntToFloat.ts";
 
 export const getUserBalanceByToken = async (address: HexString, token: keyof typeof TOKENS) => {
   const balance = await publicClientActions.getBalance(address)
@@ -10,5 +11,5 @@ export const getUserBalanceByToken = async (address: HexString, token: keyof typ
     functionName: 'decimals'
   })
 
-  return Number(BigInt(balance) * 100n / (BigInt(10) ** BigInt(decimals))) / 100;
+  return computeBigIntToFloat(balance, decimals);
 };
