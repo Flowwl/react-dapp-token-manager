@@ -18,8 +18,10 @@ export const useFetch = <T>(promise: () => Promise<T>, options: Partial<Options>
     const [enabled, setEnabled] = useState<boolean>(opts.isEnabled);
 
     useEffect(() => {
+      if (data && !enabled) {
         setEnabled(true);
         setData(null);
+      }
     }, [...opts.deps])
 
     useEffect(() => {

@@ -1,4 +1,4 @@
-import { createWalletClient, SendTransactionParameters, WalletClient } from "viem";
+import { createWalletClient, SendTransactionParameters, WalletClient, WriteContractParameters } from "viem";
 import { getChainTransport } from "../utils";
 import { Chain } from "viem/chains";
 
@@ -16,5 +16,10 @@ export class WalletClientActions {
 
   async sendTransaction(params: SendTransactionParameters) {
     return this.walletClient.sendTransaction(params);
+  }
+
+  async writeContract(params: WriteContractParameters) {
+    // @ts-expect-error type FIXME
+    return this.walletClient.writeContract(params);
   }
 }
