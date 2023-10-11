@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import cx from "classnames";
-import { useGetTotalSupply, useGetUserBalanceByToken } from "../../hooks";
+import { useGetTotalSupply, useGetUserBalance, useGetUserBalanceByToken } from "../../hooks";
 import { useChainContext, useConnectedWalletContext } from "../../contexts";
 import { TOKENS } from "../../constants/tokens.ts";
 import { useTransferTo } from "../../hooks/useTransferTo.ts";
@@ -34,7 +34,8 @@ const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
   const [allowanceOf, setAllowanceOf] = useState<string>("");
 
   const { data: totalSupply } = useGetTotalSupply(selectedToken);
-  const { data: userBalance, isLoading: isBalanceLoading } = useGetUserBalanceByToken(address);
+  const { data: userBalance, isLoading: isBalanceLoading } = useGetUserBalance(address);
+  const { data: busdUserBalance, isLoading: isBUSDBalanceLoading } = useGetUserBalanceByToken("BUSD");
   const { transfer } = useTransferTo();
   const { mint } = useMint();
   const { burn } = useBurn();
@@ -51,10 +52,13 @@ const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
       <div className="flex flex-col gap-3">
         <h2 className="underline font-bold text-xl self-center">Balances</h2>
         <div>Total Supply: {totalSupply || 0}</div>
-        <div className="flex gap-2">
-          {isBalanceLoading && <Spinner className={"ml-0"}/>}
+        <div className="flex flex-col gap-2">
+          {isBalanceLoading || isBUSDBalanceLoading && <Spinner className={"ml-0"}/>}
           <div className="flex flex-col">
             {!isBalanceLoading && <p>{TOKENS[selectedToken].label}: {userBalance || 0}</p>}
+          </div>
+          <div className="flex flex-col">
+            {!busdUserBalance && <p>{TOKENS["BUSD"].label}: {busdUserBalance || 0}</p>}
           </div>
         </div>
       </div>

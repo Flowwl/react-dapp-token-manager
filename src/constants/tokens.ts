@@ -11,13 +11,19 @@ type Token = {
   chain: Chain;
 }
 
-const Tokens = ["MATIC"] as const;
+const Tokens = ["MATIC", "BUSD"] as const;
 export type TokenName = typeof Tokens[number];
 export const TOKENS: Record<TokenName, Token> = {
   MATIC: {
     address: "0x15A40d37e6f8A478DdE2cB18c83280D472B2fC35",
     abi: parseAbi(Matic_Abi),
     label: "MATIC",
+    chain: polygonMumbai
+  },
+  BUSD: {
+    address: "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
+    abi: parseAbi(Matic_Abi),
+    label: "BUSD",
     chain: polygonMumbai
   }
 } as const

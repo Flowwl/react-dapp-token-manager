@@ -13,7 +13,6 @@ interface Props {
 const ChainContextProvider: FC<Props> = ({ children }) => {
   const selectedToken = "MATIC";
   const selectedChain = TOKENS[selectedToken].chain;
-  console.log(window.ethereum);
   // @ts-expect-error typescript doesn't know about ethereum networkVersion
   const networkVersion = parseInt(window.ethereum?.networkVersion || "0");
 
