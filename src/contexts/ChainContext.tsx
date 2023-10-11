@@ -1,6 +1,6 @@
 import { FC, ReactNode } from "react";
 import { createCtx } from "../utils";
-import { Chain, polygonMumbai } from "viem/chains";
+import { Chain } from "viem/chains";
 import { PublicClientActions, WalletClientActions } from "../interfaces";
 import { TokenName, TOKENS } from "../constants/tokens.ts";
 import { useFetch } from "../hooks";
@@ -12,7 +12,7 @@ interface Props {
 
 const ChainContextProvider: FC<Props> = ({ children }) => {
   const selectedToken = "MATIC";
-  const selectedChain = polygonMumbai;
+  const selectedChain = TOKENS[selectedToken].chain
 
   const publicClientActions = new PublicClientActions(selectedChain);
   const walletClientActions = new WalletClientActions(selectedChain);
