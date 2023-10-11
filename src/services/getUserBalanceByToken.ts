@@ -10,5 +10,5 @@ export const getUserBalanceByToken = async (address: HexString, token: keyof typ
     functionName: 'decimals'
   })
 
-  return Number(balance / BigInt(10) ** decimals);
+  return Number(BigInt(balance) * 100n / (BigInt(10) ** BigInt(decimals))) / 100;
 };
