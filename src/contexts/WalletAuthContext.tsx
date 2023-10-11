@@ -1,48 +1,63 @@
-import { FC, ReactNode, useState } from "react";
+import { FC, ReactNode, useEffect, useState } from "react";
 import { createCtx } from "../utils";
 import { LOCAL_STORAGE_KEYS } from "../constants";
 import { HexString } from "../types";
-import { RequestAddressesReturnType } from "viem";
-import { useChainContext } from "./ChainContext.tsx";
+import { useRequestAddresses } from "../hooks/useRequestAddresses.ts";
+import Spinner from "../components/atoms/Spinner.tsx";
 
 interface Props {
   children: ReactNode;
 }
 
 const WalletAuthContextProvider: FC<Props> = ({ children }) => {
-  const { walletClientActions } = useChainContext()
+  const [addresses, setAddresses] = useState<HexString[]>([]);
   const [address, setAddress] = useState<HexString | null>((localStorage.getItem(LOCAL_STORAGE_KEYS.WALLET_ADDRESS) as HexString) || null);
 
-  async function connect() {
-    try {
-      const [address] = await walletClientActions.requestAddresses();
-      localStorage.setItem(LOCAL_STORAGE_KEYS.WALLET_ADDRESS, address);
-      setAddress(address);
-    } catch (error) {
-      console.log(error)
+  const { requestAddresses: connect, isLoading, data } = useRequestAddresses({
+    onSuccess: (addresses) => {
+      setAddressData(addresses);
     }
+  })
+
+  const setAddressData = (accounts: HexString[]) => {
+    setAddresses(accounts);
+    selectAddress(accounts[0]);
   }
 
-  async function getAddresses() {
-    try {
-      const addresses = await walletClientActions.requestAddresses();
-      return addresses;
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  async function selectAddress(address: HexString) {
+  function selectAddress(address: HexString) {
     localStorage.setItem(LOCAL_STORAGE_KEYS.WALLET_ADDRESS, address);
     setAddress(address);
   }
 
+  window.ethereum?.on('accountsChanged', (accounts: Array<HexString>) => {
+    if (accounts.length === 0) {
+      localStorage.removeItem(LOCAL_STORAGE_KEYS.WALLET_ADDRESS);
+      setAddress(null);
+    } else {
+      setAddressData(accounts);
+    }
+  });
+
+  window.ethereum?.on('disconnect', () => {
+   console.log("Wallet disconnected. Please reconnect and refresh the page.");
+  });
+
+
+
+  useEffect(() => {
+      connect()
+  }, [connect])
+
+  if (!data && isLoading) {
+    return <Spinner/>
+  }
   return (
     <WalletAuthContextBaseProvider value={{
       connect,
       address,
+      addresses,
       selectAddress,
-      getAddresses
+      // getAddresses
     }}>
       {children}
     </WalletAuthContextBaseProvider>
@@ -52,8 +67,9 @@ const WalletAuthContextProvider: FC<Props> = ({ children }) => {
 export default WalletAuthContextProvider;
 
 export interface WalletAuthContext {
-  connect: () => Promise<void>;
-  getAddresses: () => Promise<RequestAddressesReturnType | undefined>;
+  connect: () => void;
+  addresses: HexString[];
+  // getAddresses: () => Promise<RequestAddressesReturnType | undefined>;
   selectAddress: (address: HexString) => void;
   address: HexString | null;
 }
