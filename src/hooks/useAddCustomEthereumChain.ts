@@ -7,7 +7,7 @@ export const useAddCustomEthereumChain = (token: TokenName) => {
     return window.ethereum?.request({
       method: "wallet_addEthereumChain",
       params: [{
-        chainId: chain.id.toString(16),
+        chainId: `0x${chain.id.toString(16)}`,
         rpcUrls: chain.rpcUrls.default.http,
         chainName: chain.name,
         nativeCurrency: chain.nativeCurrency,
