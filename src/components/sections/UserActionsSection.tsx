@@ -6,6 +6,7 @@ import { TOKENS } from "../../constants/tokens.ts";
 import { useTransferTo } from "../../hooks/useTransferTo.ts";
 import Spinner from "../atoms/Spinner.tsx";
 import { useMint } from "../../hooks/useMint.ts";
+import { useBurn } from "../../hooks/useBurn.ts";
 
 interface UserActionsSectionProps {
   className?: string;
@@ -18,13 +19,15 @@ const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
   const [transferTo, setTransferTo] = useState<string>("");
   const [transferValue, setTransferValue] = useState<string>("0");
   const [mintValue, setMintValue] = useState<string>("0");
+  const [burnValue, setBurnValue] = useState<string>("0");
 
   const { data: totalSupply } = useGetTotalSupply(selectedToken);
   const { data: userBalance, isLoading: isBalanceLoading } = useGetUserBalanceByToken(address);
   const { transfer } = useTransferTo();
   const { mint } = useMint();
+  const { burn } = useBurn();
 
-  console.log(mintValue)
+  console.log(mintValue, burnValue)
   return (
     <div className={cx(className)}>
       <div>Total Supply: {totalSupply || 0}</div>
@@ -64,19 +67,20 @@ const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
           <input type="text" placeholder="0x..."/>
           <button>Approve</button>
         </div>
-        {/* FIXME */}
-        <div className="flex justify-between gap-5">
+        <form className="flex justify-between gap-5" onSubmit={(e) => {
+          e.preventDefault()
+          burn(burnValue)
+        }}>
           <p>Burn</p>
-          <input type="text" placeholder="0x..."/>
-          <button>Burn</button>
-        </div>
-        {/* FIXME */}
+          <input type="number" step="0.000001" placeholder="1234" onChange={(e) => setBurnValue(e.target.value)}/>
+          <button type="submit">Burn</button>
+        </form>
         <form className="flex justify-between gap-5" onSubmit={(e) => {
           e.preventDefault()
           mint(mintValue)
         }}>
           <p>Mint</p>
-          <input type="number" placeholder="1234" onChange={(e) => setMintValue(e.target.value)}/>
+          <input type="number" placeholder="1234" step="0.000001" onChange={(e) => setMintValue(e.target.value)}/>
           <button type="submit">Mint</button>
         </form>
       </div>
