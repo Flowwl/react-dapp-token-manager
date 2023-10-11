@@ -5,6 +5,7 @@ import { HexString } from "../types";
 import { parseEther } from "viem";
 import { publicClientActions, walletClientActions } from "../interfaces";
 import { getAbi } from "../utils/abi.ts";
+import { ENV_CONFIG } from "../config.ts";
 
 interface Props {
   children: ReactNode;
@@ -28,7 +29,7 @@ const ConnectedWalletContextProvider: FC<Props> = ({ children, address }) => {
 
   async function getTotalSupply() {
     return publicClientActions.readContract<bigint>({
-      address,
+      address: ENV_CONFIG.MUMBAI_ADDRESS_TOKEN,
       abi: getAbi(),
       functionName: 'totalSupply',
     })
