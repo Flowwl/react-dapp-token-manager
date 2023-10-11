@@ -1,19 +1,22 @@
 import { FC, useEffect } from 'react';
 import cx from "classnames";
 import SendButton from "../molecules/SendButton.tsx";
-import { getTotalSupply } from "../../services";
+import { useGetTotalSupply } from "../../hooks";
+import { useChainContext } from "../../contexts";
 
 interface UserActionsSectionProps {
   className?: string;
 }
 
 const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
+  const {selectedToken} = useChainContext()
+  const { data }  = useGetTotalSupply(selectedToken)
 
   useEffect(() => {
-    getTotalSupply("MATIC").then((result) => {
-      console.log(result);
-    });
-  }, []);
+    if (data) {
+      console.log(data)
+    }
+  }, [data]);
 
   return (
     <div className={cx(className)}>

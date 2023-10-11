@@ -1,9 +1,9 @@
 import { FC, ReactNode } from "react";
-import { createCtx, getChainTransport } from "../utils";
+import { createCtx } from "../utils";
 import cx from "classnames";
 import { HexString } from "../types";
 import { parseEther } from "viem";
-import { walletClientActions } from "../interfaces";
+import { useChainContext } from "./ChainContext.tsx";
 
 interface Props {
   children: ReactNode;
@@ -11,13 +11,14 @@ interface Props {
 }
 
 const ConnectedWalletContextProvider: FC<Props> = ({ children, address }) => {
+  const { walletClientActions, selectedChain } = useChainContext()
   async function sendTransaction(to: HexString, value: string) {
     try {
       await walletClientActions.sendTransaction({
         account: address,
         to: to,
         value: parseEther(value),
-        chain: getChainTransport().chain,
+        chain: selectedChain,
       });
     } catch (error) {
       console.log(error)

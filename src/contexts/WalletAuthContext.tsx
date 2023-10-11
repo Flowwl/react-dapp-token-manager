@@ -1,15 +1,16 @@
 import { FC, ReactNode, useState } from "react";
 import { createCtx } from "../utils";
-import { walletClientActions } from "../interfaces";
 import { LOCAL_STORAGE_KEYS } from "../constants";
 import { HexString } from "../types";
 import { RequestAddressesReturnType } from "viem";
+import { useChainContext } from "./ChainContext.tsx";
 
 interface Props {
   children: ReactNode;
 }
 
 const WalletAuthContextProvider: FC<Props> = ({ children }) => {
+  const { walletClientActions } = useChainContext()
   const [address, setAddress] = useState<HexString | null>((localStorage.getItem(LOCAL_STORAGE_KEYS.WALLET_ADDRESS) as HexString) || null);
 
   async function connect() {
