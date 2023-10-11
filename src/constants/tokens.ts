@@ -5,14 +5,17 @@ import { assertIsAbi } from "../asserts";
 
 type Token = {
   address: HexString,
-  abi: Abi
+  abi: Abi,
+  label: string
 }
 
 const Tokens = ["MATIC"] as const;
-export const TOKENS: Record<typeof Tokens[number],Token> = {
+export type TokenName = typeof Tokens[number];
+export const TOKENS: Record<TokenName, Token> = {
   MATIC: {
     address: "0x15A40d37e6f8A478DdE2cB18c83280D472B2fC35",
-    abi: parseAbi(Matic_Abi)
+    abi: parseAbi(Matic_Abi),
+    label: "MATIC"
   }
 } as const
 

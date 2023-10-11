@@ -1,12 +1,13 @@
 import { createPublicClient, PublicClient, ReadContractParameters } from "viem";
 import { getChainTransport } from "../utils";
 import { assertIsHexString } from "../asserts";
+import { Chain } from "viem/chains";
 
-class PublicClientActions {
+export class PublicClientActions {
   private publicClient: PublicClient;
 
-  constructor() {
-    const chainTransport = getChainTransport();
+  constructor(chain: Chain) {
+    const chainTransport = getChainTransport(chain);
     this.publicClient = createPublicClient(chainTransport);
   }
 
@@ -20,4 +21,3 @@ class PublicClientActions {
   }
 }
 
-export const publicClientActions = new PublicClientActions();

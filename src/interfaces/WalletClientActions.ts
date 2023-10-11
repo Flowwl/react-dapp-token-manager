@@ -1,11 +1,12 @@
 import { createWalletClient, SendTransactionParameters, WalletClient } from "viem";
 import { getChainTransport } from "../utils";
+import { Chain } from "viem/chains";
 
-class WalletClientActions {
+export class WalletClientActions {
   private walletClient: WalletClient;
 
-  constructor() {
-    const chainTransport = getChainTransport();
+  constructor(chain: Chain) {
+    const chainTransport = getChainTransport(chain);
     this.walletClient = createWalletClient(chainTransport);
   }
 
@@ -17,5 +18,3 @@ class WalletClientActions {
     return this.walletClient.sendTransaction(params);
   }
 }
-
-export const walletClientActions = new WalletClientActions();
