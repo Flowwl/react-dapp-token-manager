@@ -13,15 +13,14 @@ interface Props {
 const ConnectedWalletContextProvider: FC<Props> = ({ children, address }) => {
   async function sendTransaction(to: HexString, value: string) {
     try {
-      const hash = await walletClientActions.sendTransaction({
+      await walletClientActions.sendTransaction({
         account: address,
         to: to,
         value: parseEther(value),
         chain: getChainTransport().chain,
       });
-      alert(`Transaction successful. Transaction Hash: ${hash}`);
     } catch (error) {
-      alert(`Transaction failed: ${error}`);
+      console.log(error)
     }
   }
   return (

@@ -18,7 +18,7 @@ const WalletAuthContextProvider: FC<Props> = ({ children }) => {
       localStorage.setItem(LOCAL_STORAGE_KEYS.WALLET_ADDRESS, address);
       setAddress(address);
     } catch (error) {
-      alert(`Transaction failed: ${error}`);
+      console.log(error)
     }
   }
 
@@ -27,7 +27,7 @@ const WalletAuthContextProvider: FC<Props> = ({ children }) => {
       const addresses = await walletClientActions.requestAddresses();
       return addresses;
     } catch (error) {
-      alert(`Transaction failed: ${error}`);
+      console.log(error)
     }
   }
 
