@@ -8,6 +8,7 @@ import Spinner from "../atoms/Spinner.tsx";
 import { useMint } from "../../hooks/useMint.ts";
 import { useBurn } from "../../hooks/useBurn.ts";
 import { useApproveTo } from "../../hooks/useApproveTo.ts";
+import { useTransferFrom } from "../../hooks/useTransferFrom.ts";
 
 interface UserActionsSectionProps {
   className?: string;
@@ -23,6 +24,9 @@ const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
   const [burnValue, setBurnValue] = useState<string>("0");
   const [approveTo, setApproveTo] = useState<string>("");
   const [approveValue, setApproveValue] = useState<string>("0");
+  const [transferFromFrom, setTransferFromFrom] = useState<string>("");
+  const [transferFromTo, setTransferFromTo] = useState<string>("");
+  const [transferFromValue, setTransferFromValue] = useState<string>("0");
 
   const { data: totalSupply } = useGetTotalSupply(selectedToken);
   const { data: userBalance, isLoading: isBalanceLoading } = useGetUserBalanceByToken(address);
@@ -30,6 +34,7 @@ const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
   const { mint } = useMint();
   const { burn } = useBurn();
   const { approve } = useApproveTo();
+  const { transferFrom } = useTransferFrom();
 
   return (
     <div className={cx(className)}>
@@ -67,12 +72,16 @@ const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
           <input type="number" step="0.000001" placeholder="1234" onChange={(e) => setApproveValue(e.target.value)}/>
           <button type="submit">Approve</button>
         </form>
-        {/* FIXME */}
-        <div className="flex justify-between gap-5">
+        <form className="flex justify-between gap-5" onSubmit={(e) => {
+          e.preventDefault();
+          transferFrom(transferFromFrom, transferFromTo, transferFromValue)
+        }}>
           <p>Transfer from</p>
-          <input type="text" placeholder="0x..."/>
-          <button>Approve</button>
-        </div>
+          <input type="text" placeholder="from" onChange={(e) => setTransferFromFrom(e.target.value)}/>
+          <input type="text" placeholder="to" onChange={(e) => setTransferFromTo(e.target.value)}/>
+          <input type="number" step="0.000001" placeholder="1234" onChange={(e) => setTransferFromValue(e.target.value)} />
+          <button type="submit">Transfer</button>
+        </form>
         <form className="flex justify-between gap-5" onSubmit={(e) => {
           e.preventDefault()
           burn(burnValue)
