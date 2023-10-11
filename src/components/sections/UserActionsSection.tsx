@@ -40,24 +40,28 @@ const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
   const { transferFrom } = useTransferFrom();
   const { checkAllowance } = useCheckAllowance({
     onSuccess: (allowance) => {
-        alert(`user allowance: ${computeBigIntToFloat(allowance, tokenDecimals)} ${TOKENS[selectedToken].label}`)
+      alert(`user allowance: ${computeBigIntToFloat(allowance, tokenDecimals)} ${TOKENS[selectedToken].label}`);
     }
   });
 
   return (
     <div className={cx(className)}>
-      <div>Total Supply: {totalSupply || 0}</div>
-      <div className="flex gap-2">
-        Balance:
-        {isBalanceLoading && <Spinner className={"ml-0"}/>}
-        {!isBalanceLoading && <p>{userBalance || 0} ({TOKENS[selectedToken].label}) </p>}
+      <div className="flex flex-col gap-3">
+        <h2 className="underline font-bold text-xl self-center">Balances</h2>
+        <div>Total Supply: {totalSupply || 0}</div>
+        <div className="flex gap-2">
+          {isBalanceLoading && <Spinner className={"ml-0"}/>}
+          <div className="flex flex-col">
+            {!isBalanceLoading && <p>{TOKENS[selectedToken].label}: {userBalance || 0}</p>}
+          </div>
+        </div>
       </div>
       {/* TODO */}
       <div className="flex flex-col gap-3">
         <h2 className="underline font-bold text-xl self-center">Actions</h2>
         <form className="flex justify-between gap-5" onSubmit={(e) => {
-          e.preventDefault()
-          checkAllowance(allowanceOf)
+          e.preventDefault();
+          checkAllowance(allowanceOf);
         }}>
           <p>Check allowance of</p>
           <input type="text" placeholder="0x..." onChange={(e) => setAllowanceOf(e.target.value)}/>
@@ -65,17 +69,17 @@ const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
         </form>
         {/* TODO Add error handling */}
         <form className="flex justify-between gap-5" onSubmit={(e) => {
-          e.preventDefault()
-          transfer(transferTo, transferValue)
+          e.preventDefault();
+          transfer(transferTo, transferValue);
         }}>
           <p>Send transaction</p>
           <input type="text" placeholder="0x..." onChange={(e) => setTransferTo(e.target.value)} pattern="0x[0-9a-f]*"/>
-          <input type="number" placeholder="1.3" onChange={(e) => setTransferValue(e.target.value)} />
+          <input type="number" placeholder="1.3" onChange={(e) => setTransferValue(e.target.value)}/>
           <button type={"submit"}>Send</button>
         </form>
         <form className="flex justify-between gap-5" onSubmit={(e) => {
           e.preventDefault();
-          approve(approveTo, approveValue)
+          approve(approveTo, approveValue);
         }}>
           <p>Approve address</p>
           <input type="text" placeholder="0x..." onChange={(e) => setApproveTo(e.target.value)}/>
@@ -84,25 +88,30 @@ const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
         </form>
         <form className="flex justify-between gap-5" onSubmit={(e) => {
           e.preventDefault();
-          transferFrom(transferFromFrom, transferFromTo, transferFromValue)
+          transferFrom(transferFromFrom, transferFromTo, transferFromValue);
         }}>
           <p>Transfer from</p>
           <input type="text" placeholder="from" onChange={(e) => setTransferFromFrom(e.target.value)}/>
           <input type="text" placeholder="to" onChange={(e) => setTransferFromTo(e.target.value)}/>
-          <input type="number" step="0.000001" placeholder="1234" onChange={(e) => setTransferFromValue(e.target.value)} />
+          <input
+            type="number"
+            step="0.000001"
+            placeholder="1234"
+            onChange={(e) => setTransferFromValue(e.target.value)}
+          />
           <button type="submit">Transfer</button>
         </form>
         <form className="flex justify-between gap-5" onSubmit={(e) => {
-          e.preventDefault()
-          burn(burnValue)
+          e.preventDefault();
+          burn(burnValue);
         }}>
           <p>Burn</p>
           <input type="number" step="0.000001" placeholder="1234" onChange={(e) => setBurnValue(e.target.value)}/>
           <button type="submit">Burn</button>
         </form>
         <form className="flex justify-between gap-5" onSubmit={(e) => {
-          e.preventDefault()
-          mint(mintValue)
+          e.preventDefault();
+          mint(mintValue);
         }}>
           <p>Mint</p>
           <input type="number" placeholder="1234" step="0.000001" onChange={(e) => setMintValue(e.target.value)}/>
