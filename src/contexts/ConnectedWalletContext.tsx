@@ -27,6 +27,7 @@ const ConnectedWalletContextProvider: FC<Props> = ({ children, address }) => {
   return (
     <ConnectedWalletContextBaseProvider value={{
       sendTransaction,
+      address
     }}>
       <div className={cx("h-full")}>{children}</div>
     </ConnectedWalletContextBaseProvider>
@@ -37,6 +38,7 @@ export default ConnectedWalletContextProvider;
 
 export interface ConnectedWalletContext {
   sendTransaction: (to: HexString, value: string) => Promise<void>;
+  address: HexString;
 }
 
 export const [useConnectedWalletContext, ConnectedWalletContextBaseProvider] = createCtx<ConnectedWalletContext>();

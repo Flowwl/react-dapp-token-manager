@@ -1,9 +1,8 @@
 import { FC } from 'react';
 import cx from "classnames";
 import SendButton from "../molecules/SendButton.tsx";
-import { useGetTotalSupply } from "../../hooks";
-import { useChainContext } from "../../contexts";
-import { computeBigIntToFloat } from "../../utils/computeBigIntToFloat.ts";
+import { useGetTotalSupply, useGetUserBalanceByToken } from "../../hooks";
+import { useChainContext, useConnectedWalletContext } from "../../contexts";
 
 interface UserActionsSectionProps {
   className?: string;
@@ -11,11 +10,14 @@ interface UserActionsSectionProps {
 
 const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
   const {selectedToken, tokenDecimals} = useChainContext()
-  const { data: totalSupply }  = useGetTotalSupply(selectedToken)
+  const { address } = useConnectedWalletContext()
+  const { data: totalSupply }  = useGetTotalSupply(selectedToken, tokenDecimals)
+  const { data: userBalance }  = useGetUserBalanceByToken(address, tokenDecimals);
 
   return (
     <div className={cx(className)}>
-      <div>Total Supply: {computeBigIntToFloat(totalSupply || 0n, tokenDecimals)}</div>
+      <div>Total Supply: {totalSupply || 0}</div>
+      <div>Balance: {userBalance || 0}</div>
       <SendButton/>
     </div>
   );
