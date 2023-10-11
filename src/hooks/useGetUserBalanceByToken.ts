@@ -16,6 +16,5 @@ export const useGetUserBalanceByToken = (address: HexString, token: TokenName) =
     })
     return computeBigIntToFloat(balance, tokenDecimals);
   };
-
-  return useFetch(async () => promise());
+  return useFetch(async () => promise(), { deps: [address]});
 };

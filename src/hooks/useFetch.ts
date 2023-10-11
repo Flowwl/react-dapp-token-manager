@@ -1,14 +1,26 @@
 import { useEffect, useState } from "react";
 
 type Options = {
-  retry?: boolean;
+  retry: boolean;
   isEnabled: boolean;
+  deps: unknown[];
 }
-export const useFetch = <T>(promise: () => Promise<T>, options: Options = { isEnabled: true, retry: false }) => {
+export const useFetch = <T>(promise: () => Promise<T>, options: Partial<Options> = {}) => {
+  const opts: Options = {
+    isEnabled: true,
+    retry: false,
+    deps: [],
+    ...options
+  }
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<null | Error>(null);
     const [data, setData] = useState<T | null>(null);
-    const [enabled, setEnabled] = useState<boolean>(options.isEnabled);
+    const [enabled, setEnabled] = useState<boolean>(opts.isEnabled);
+
+    useEffect(() => {
+        setEnabled(true);
+        setData(null);
+    }, [...opts.deps])
 
     useEffect(() => {
       if (!enabled) {
@@ -29,7 +41,7 @@ export const useFetch = <T>(promise: () => Promise<T>, options: Options = { isEn
         .catch((err) => setError(err))
         .finally(() => {
           setIsLoading(false);
-          if (!options.retry) {
+          if (!opts.retry) {
             setEnabled(false);
           }
         });
