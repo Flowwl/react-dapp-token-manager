@@ -3,6 +3,7 @@ import { createCtx } from "../utils";
 import { walletClientActions } from "../interfaces";
 import { LOCAL_STORAGE_KEYS } from "../constants";
 import { HexString } from "../types";
+import { RequestAddressesReturnType } from "viem";
 
 interface Props {
   children: ReactNode;
@@ -21,10 +22,26 @@ const WalletAuthContextProvider: FC<Props> = ({ children }) => {
     }
   }
 
+  async function getAddresses() {
+    try {
+      const addresses = await walletClientActions.requestAddresses();
+      return addresses;
+    } catch (error) {
+      alert(`Transaction failed: ${error}`);
+    }
+  }
+
+  async function selectAddress(address: HexString) {
+    localStorage.setItem(LOCAL_STORAGE_KEYS.WALLET_ADDRESS, address);
+    setAddress(address);
+  }
+
   return (
     <WalletAuthContextBaseProvider value={{
       connect,
       address,
+      selectAddress,
+      getAddresses
     }}>
       {children}
     </WalletAuthContextBaseProvider>
@@ -34,8 +51,10 @@ const WalletAuthContextProvider: FC<Props> = ({ children }) => {
 export default WalletAuthContextProvider;
 
 export interface WalletAuthContext {
-  connect: () => Promise<void>,
-  address: HexString | null,
+  connect: () => Promise<void>;
+  getAddresses: () => Promise<RequestAddressesReturnType | undefined>;
+  selectAddress: (address: HexString) => void;
+  address: HexString | null;
 }
 
 export const [useWalletAuthContext, WalletAuthContextBaseProvider] = createCtx<WalletAuthContext>();

@@ -17,7 +17,7 @@ export const useFetch = <T>(promise: Promise<T>) => {
           setIsLoading(false);
         });
     }
-  }, []);
+  }, [promise]);
 
   return {
     isLoading,
