@@ -8,7 +8,7 @@ export function useGetPendingTransactions(opts: Partial<FetchOptions<unknown[]>>
   const [pendingTransactions, setPendingTransactions] = useState<OnTransactionsParameter>([])
   const promise = async () => {
     console.time("calling watch pending transactions");
-    await publicClientActions.watchPendingTransactions({
+    publicClientActions.watchPendingTransactions({
       onTransactions: (transactions) => {
         console.time("refetching transactions");
         setPendingTransactions(transactions)
