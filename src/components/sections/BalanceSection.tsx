@@ -22,7 +22,7 @@ const BalanceSection: FC<BalanceSectionProps> = ({ className }) => {
   return (
     <div className={cx("bg-bg-700 rounded-lg", className)}>
       <h2 className="text-xl self-center py-4 px-8">Balances</h2>
-      <div className="flex flex-col gap-1 px-8 py-4">
+      <div className="flex flex-col gap-1 px-8 pt-4 pb-8">
         <div className="flex justify-between">
           <p>Total Supply</p>
           <p className="pl-4">{totalSupply || 0}</p>

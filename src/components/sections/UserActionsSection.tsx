@@ -44,15 +44,15 @@ const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
   const { renounceOwnership } = useRenounceOwnership();
   const { checkAllowance } = useCheckAllowance({
     onSuccess: (allowance) => {
-      alert(`user allowance: ${computeBigIntToFloat(allowance, tokenDecimals)} ${TOKENS[selectedToken].label}`);
+      alert(`User allowance: ${computeBigIntToFloat(allowance, tokenDecimals)} ${TOKENS[selectedToken].label}`);
     }
   });
 
-  const formClass = "flex flex-col justify-between gap-5";
+  const formClass = "flex flex-col justify-between gap-5 flex-wrap";
   return (
     <div className={cx("bg-bg-700 rounded-lg  flex flex-col", className)}>
       <h2 className="text-xl self-center py-4 px-8 font-title">Actions</h2>
-      <div className="overflow-y-auto flex flex-col gap-4 py-4 px-8">
+      <div className="overflow-y-auto flex flex-col gap-4 pt-4 pb-8 px-8">
         <form className={formClass} onSubmit={(e) => {
           e.preventDefault();
           checkAllowance(allowanceOf);
@@ -89,7 +89,7 @@ const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
           transferFrom(transferFromFrom, transferFromTo, transferFromValue);
         }}>
           <p>Transfer from</p>
-          <div className="flex gap-4">
+          <div className="flex gap-4 flex-wrap">
             <Input type="text" label="From" onChange={(e) => setTransferFromFrom(e.target.value)}/>
             <Input type="text" label="To" onChange={(e) => setTransferFromTo(e.target.value)}/>
             <Input
