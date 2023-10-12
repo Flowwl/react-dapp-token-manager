@@ -12,6 +12,8 @@ import { computeBigIntToFloat } from "../../utils";
 import { useChainInfoContext } from "../../contexts/ChainInfoContext.tsx";
 import Input from "../atoms/Input.tsx";
 import Button from "../atoms/Button.tsx";
+import { useTransferOwnership } from "../../hooks/useTransferOwnership.ts";
+import { useRenounceOwnership } from "../../hooks/useRenounceOwnership.ts";
 
 interface UserActionsSectionProps {
   className?: string;
@@ -31,12 +33,15 @@ const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
   const [transferFromTo, setTransferFromTo] = useState<string>("");
   const [transferFromValue, setTransferFromValue] = useState<string>("0");
   const [allowanceOf, setAllowanceOf] = useState<string>("");
+  const [transferOwnershipTo, setTransferOwnershipTo] = useState<string>("");
 
   const { transfer } = useTransferTo();
   const { mint } = useMint();
   const { burn } = useBurn();
   const { approve } = useApproveTo();
   const { transferFrom } = useTransferFrom();
+  const { transferOwnership } = useTransferOwnership();
+  const { renounceOwnership } = useRenounceOwnership();
   const { checkAllowance } = useCheckAllowance({
     onSuccess: (allowance) => {
       alert(`user allowance: ${computeBigIntToFloat(allowance, tokenDecimals)} ${TOKENS[selectedToken].label}`);
@@ -111,6 +116,23 @@ const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
           <p>Mint</p>
           <Input label="Value" type="number" step="0.000001" onChange={(e) => setMintValue(e.target.value)}/>
           <Button type="submit">Mint</Button>
+        </form>
+        <form className={formClass} onSubmit={(e) => {
+          e.preventDefault();
+          transferOwnership(transferOwnershipTo);
+        }}>
+          <p>Transfer Ownership to</p>
+          <div className="flex gap-4">
+            <Input type="text" label="To" onChange={(e) => setTransferOwnershipTo(e.target.value)}/>
+          </div>
+          <Button type="submit">Transfer Ownership</Button>
+        </form>
+        <form className={formClass} onSubmit={(e) => {
+          e.preventDefault();
+          renounceOwnership();
+        }}>
+          <p>Renounce Ownership</p>
+          <Button color="red" type="submit">Renounce Ownership</Button>
         </form>
       </div>
     </div>
