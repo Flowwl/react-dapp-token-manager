@@ -1,6 +1,6 @@
 import { FC, Fragment } from 'react';
 import { Listbox as HListbox, Transition } from '@headlessui/react';
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
+import { CheckIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
 import cx from "classnames";
 
 export type ListBoxValue = {
@@ -17,15 +17,15 @@ interface ListboxProps {
 const Listbox: FC<ListboxProps> = ({ className, onSelect, selectedValue, values }) => {
 
   return (
-    <div className={cx("w-36", className)}>
+    <div className={cx("w-56", className)}>
       <HListbox value={selectedValue} onChange={onSelect}>
         <div className="relative">
           <HListbox.Button
-            className="truncate relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
-            <span className="block truncate">{selectedValue?.name || ""}</span>
-            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-              <ChevronUpDownIcon
-                className="h-5 w-5 text-gray-400"
+            className="truncate relative w-full cursor-pointer hover:opacity-80 rounded-lg py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+            <span className="block truncate text-gray-50">{selectedValue?.name || ""}</span>
+            <span className="pointer-events-none  absolute inset-y-0 right-0 flex items-center pr-2">
+              <ChevronDownIcon
+                className="h-5 w-5 text-gray-50"
                 aria-hidden="true"
               />
             </span>
@@ -42,7 +42,7 @@ const Listbox: FC<ListboxProps> = ({ className, onSelect, selectedValue, values 
                 <HListbox.Option
                   key={value.name}
                   className={({ active }) =>
-                    `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                    `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
                       active ? 'bg-amber-100 text-amber-900' : 'text-gray-900'
                     }`
                   }

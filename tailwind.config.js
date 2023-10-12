@@ -10,10 +10,14 @@ export default withMT({
     theme: {
         fontFamily: {
             sans: ["Roboto", "sans-serif"],
+            title: ['Proxima Nova', 'sans-serif'],
         },
         extend: {
             colors: {
-                bg: "#141518"
+                "bg-900": "#141518",
+                "bg-700": "#1e1f25",
+                "text-deactivated": "#677096",
+                "text-activated": "#cbcbca"
             }
         }
     },
