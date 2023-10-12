@@ -1,12 +1,11 @@
 import { HexString } from "../types";
-import { useChainContext, useChainInfoContext, useConnectedWalletContext } from "../contexts";
+import { useChainContext, useConnectedWalletContext } from "../contexts";
 import { useFetch } from "./useFetch.ts";
 import { useState } from "react";
 import { computeFloatToBigInt } from "../utils";
 
 export const useTransferTo = () => {
-  const { walletClientActions, selectedChain } = useChainContext();
-  const { tokenDecimals } = useChainInfoContext();
+  const { walletClientActions, selectedChain, tokenDecimals } = useChainContext();
   const { address } = useConnectedWalletContext();
   const [value, setValue] = useState("0");
   const [to, setTo] = useState<string>("");

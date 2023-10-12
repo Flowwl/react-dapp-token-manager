@@ -9,7 +9,6 @@ import { useApproveTo } from "../../hooks/useApproveTo.ts";
 import { useTransferFrom } from "../../hooks/useTransferFrom.ts";
 import { useCheckAllowance } from "../../hooks/useCheckAllowance.ts";
 import { computeBigIntToFloat } from "../../utils";
-import { useChainInfoContext } from "../../contexts/ChainInfoContext.tsx";
 import Input from "../atoms/Input.tsx";
 import Button from "../atoms/Button.tsx";
 import { useTransferOwnership } from "../../hooks/useTransferOwnership.ts";
@@ -20,8 +19,7 @@ interface UserActionsSectionProps {
 }
 
 const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
-  const { selectedToken } = useChainContext();
-  const { tokenDecimals } = useChainInfoContext();
+  const { selectedToken, tokenDecimals } = useChainContext();
 
   const [transferTo, setTransferTo] = useState<string>("");
   const [transferValue, setTransferValue] = useState<string>("0");
@@ -68,7 +66,7 @@ const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
         }}>
           <p>Send transaction</p>
           <div className="flex gap-4">
-            <Input type="text" label="To" onChange={(e) => setTransferTo(e.target.value)} />
+            <Input type="text" label="To" onChange={(e) => setTransferTo(e.target.value)}/>
             <Input type="number" label="Value" step="0.000001" onChange={(e) => setTransferValue(e.target.value)}/>
           </div>
           <Button type={"submit"}>Send</Button>

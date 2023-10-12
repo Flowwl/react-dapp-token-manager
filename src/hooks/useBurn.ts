@@ -1,12 +1,11 @@
-import { useChainContext, useChainInfoContext, useConnectedWalletContext } from "../contexts";
+import { useChainContext, useConnectedWalletContext } from "../contexts";
 import { useFetch } from "./useFetch.ts";
 import { TOKENS } from "../constants/tokens.ts";
 import { useState } from "react";
 import { computeFloatToBigInt } from "../utils";
 
 export const useBurn = () => {
-  const { walletClientActions, publicClientActions, selectedToken} = useChainContext();
-  const { tokenDecimals } = useChainInfoContext();
+  const { walletClientActions, publicClientActions, selectedToken, tokenDecimals} = useChainContext();
 
   const { address } = useConnectedWalletContext();
   const [value, setValue] = useState("0");
@@ -14,7 +13,7 @@ export const useBurn = () => {
     const { request } = await publicClientActions.simulateContract({
       account: address,
       address: TOKENS[selectedToken].address,
-      abi: TOKENS[selectedToken].abi,
+      abi: TOKENS[selectedToken]?.abi || [],
       functionName: 'burn',
       args: [computeFloatToBigInt(parseFloat(value), tokenDecimals)]
     });

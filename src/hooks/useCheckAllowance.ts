@@ -10,7 +10,7 @@ export const useCheckAllowance = (opts: Partial<FetchOptions<bigint>> = {}) => {
   const promise = async () => {
     return publicClientActions.readContract<bigint>({
       address: TOKENS[selectedToken].address,
-      abi: TOKENS[selectedToken].abi,
+      abi: TOKENS[selectedToken]?.abi || [],
       functionName: 'allowance',
       args: [address, of]
     })

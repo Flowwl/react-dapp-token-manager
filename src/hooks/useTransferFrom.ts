@@ -1,12 +1,11 @@
-import { useChainContext, useChainInfoContext, useConnectedWalletContext } from "../contexts";
+import { useChainContext, useConnectedWalletContext } from "../contexts";
 import { useFetch } from "./useFetch.ts";
 import { useState } from "react";
 import { computeFloatToBigInt } from "../utils";
 import { TOKENS } from "../constants/tokens.ts";
 
 export const useTransferFrom = () => {
-  const { walletClientActions, selectedToken, publicClientActions } = useChainContext();
-  const { tokenDecimals } = useChainInfoContext();
+  const { walletClientActions, selectedToken, publicClientActions, tokenDecimals } = useChainContext();
   const { address } = useConnectedWalletContext();
   const [value, setValue] = useState("0")
   const [to, setTo] = useState<string>("")
@@ -15,7 +14,7 @@ export const useTransferFrom = () => {
     const { request } = await publicClientActions.simulateContract({
       account: address,
       address: TOKENS[selectedToken].address,
-      abi: TOKENS[selectedToken].abi,
+      abi: TOKENS[selectedToken]?.abi || [],
       functionName: 'transferFrom',
       args: [from, to, computeFloatToBigInt(parseFloat(value), tokenDecimals)]
     });

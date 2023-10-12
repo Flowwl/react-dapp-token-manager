@@ -4,7 +4,6 @@ import { Chain } from "viem/chains";
 import { PublicClientActions, WalletClientActions } from "../interfaces";
 import { TokenName, TOKENS } from "../constants/tokens.ts";
 import { useSwitchToChain } from "../hooks/useSwitchToChain.ts";
-import ChainInfoContextProvider from "./ChainInfoContext.tsx";
 
 interface Props {
   children: ReactNode;
@@ -26,8 +25,7 @@ const ChainContextProvider: FC<Props> = ({ children }) => {
 
     if (hasConfirmed) {
       switchToChain();
-    }
-    else {
+    } else {
       window.location.reload();
     }
   };
@@ -51,11 +49,9 @@ const ChainContextProvider: FC<Props> = ({ children }) => {
       walletClientActions,
       selectedChain,
       selectedToken,
-
+      tokenDecimals: BigInt(TOKENS[selectedToken].chain.nativeCurrency.decimals)
     }}>
-      <ChainInfoContextProvider>
-        {children}
-      </ChainInfoContextProvider>
+      {children}
     </ChainContextBaseProvider>
   );
 };
@@ -67,6 +63,7 @@ export interface ChainContext {
   walletClientActions: WalletClientActions;
   selectedToken: TokenName;
   selectedChain: Chain;
+  tokenDecimals: bigint;
 }
 
 export const [useChainContext, ChainContextBaseProvider] = createCtx<ChainContext>();

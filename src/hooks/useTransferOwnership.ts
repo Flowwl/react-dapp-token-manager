@@ -11,7 +11,7 @@ export const useTransferOwnership = () => {
     const { request } = await publicClientActions.simulateContract({
       account: address,
       address: TOKENS[selectedToken].address,
-      abi: TOKENS[selectedToken].abi,
+      abi: TOKENS[selectedToken]?.abi || [],
       functionName: 'transferOwnership',
       args: [to]
     });

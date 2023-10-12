@@ -7,7 +7,7 @@ export function useGetDecimals(token: TokenName) {
   const promise = async () => {
    return publicClientActions.readContract<bigint>({
       address: TOKENS[token].address,
-      abi: TOKENS[token].abi,
+      abi: TOKENS[token]?.abi || [],
       functionName: 'decimals',
     })
   }

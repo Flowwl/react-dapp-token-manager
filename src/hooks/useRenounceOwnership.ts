@@ -9,7 +9,7 @@ export const useRenounceOwnership = () => {
     const { request } = await publicClientActions.simulateContract({
       account: address,
       address: TOKENS[selectedToken].address,
-      abi: TOKENS[selectedToken].abi,
+      abi: TOKENS[selectedToken]?.abi || [],
       functionName: 'renounceOwnership',
     });
     return walletClientActions.writeContract(request);

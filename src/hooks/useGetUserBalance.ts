@@ -1,11 +1,10 @@
 import { HexString } from "../types";
 import { computeBigIntToFloat } from "../utils";
-import { useChainContext, useChainInfoContext } from "../contexts";
+import { useChainContext } from "../contexts";
 import { useFetch } from "./useFetch.ts";
 
 export const useGetUserBalance = (address: HexString) => {
-  const { publicClientActions} = useChainContext();
-  const { tokenDecimals } = useChainInfoContext();
+  const { publicClientActions, tokenDecimals} = useChainContext();
   const promise = async () => {
     const balance = await publicClientActions.getBalance(address);
     return computeBigIntToFloat(balance, tokenDecimals);
