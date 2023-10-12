@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect } from "react";
+import { FC, ReactNode, useEffect, useState } from "react";
 import { createCtx } from "../utils";
 import { Chain } from "viem/chains";
 import { PublicClientActions, WalletClientActions } from "../interfaces";
@@ -10,7 +10,7 @@ interface Props {
 }
 
 const ChainContextProvider: FC<Props> = ({ children }) => {
-  const selectedToken = "MATIC";
+  const [selectedToken, setSelectedToken] = useState<TokenName>("MATIC")
   const selectedChain = TOKENS[selectedToken].chain;
   // @ts-expect-error typescript doesn't know about ethereum networkVersion
   const networkVersion = parseInt(window.ethereum?.networkVersion || "0");
@@ -19,6 +19,10 @@ const ChainContextProvider: FC<Props> = ({ children }) => {
   const walletClientActions = new WalletClientActions(selectedChain);
 
   const { switchToChain } = useSwitchToChain(selectedToken);
+  const changeTokenTo = (token: TokenName) => {
+    if (token === selectedToken) return;
+    setSelectedToken(token)
+  }
 
   const switchChainHandle = () => {
     const hasConfirmed = confirm("Please change your network before proceeding. Do you want to switch automatically ? ");
@@ -49,7 +53,8 @@ const ChainContextProvider: FC<Props> = ({ children }) => {
       walletClientActions,
       selectedChain,
       selectedToken,
-      tokenDecimals: BigInt(TOKENS[selectedToken].chain.nativeCurrency.decimals)
+      changeTokenTo,
+      tokenDecimals: BigInt(TOKENS[selectedToken].chain.nativeCurrency.decimals),
     }}>
       {children}
     </ChainContextBaseProvider>
@@ -64,6 +69,7 @@ export interface ChainContext {
   selectedToken: TokenName;
   selectedChain: Chain;
   tokenDecimals: bigint;
+  changeTokenTo: (token: TokenName) => void;
 }
 
 export const [useChainContext, ChainContextBaseProvider] = createCtx<ChainContext>();
