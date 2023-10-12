@@ -12,12 +12,12 @@ export const useCheckAllowance = (opts: Partial<FetchOptions<bigint>> = {}) => {
   const promise = async () => {
     const address = TOKENS[selectedToken].address
     assertAddressExists(address);
-    return publicClientActions.readContract<bigint>({
+    return publicClientActions.readContract({
       address,
       abi: TOKENS[selectedToken]?.abi || [],
       functionName: 'allowance',
       args: [account, of]
-    })
+    }) as Promise<bigint>
   };
 
   const checkAllowance = (to: string) => {

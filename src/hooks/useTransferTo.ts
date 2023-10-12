@@ -35,7 +35,7 @@ export const useTransferTo = () => {
   const transfer = (to: string, value: string) => {
     setTo(to);
     setValue(value);
-    fetchMethods.setEnabled(true);
+    fetchMethods.refetch();
   };
 
   const fetchMethods = useFetch(async () => toast.promise(promise(), { pending: `Transferring...`, success: "Transferred!" }), { isEnabled: false });

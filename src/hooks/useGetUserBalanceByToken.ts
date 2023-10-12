@@ -10,18 +10,18 @@ export function useGetUserBalanceByToken(token: TokenName, opts: Partial<FetchOp
   const promise = async () => {
     const address = TOKENS[token].address
     assertAddressExists(address);
-    const balance = await publicClientActions.readContract<bigint>({
+    const balance = await publicClientActions.readContract({
       address,
       abi: TOKENS[token]?.abi || [],
       functionName: 'balanceOf',
       args: [account],
-    })
+    }) as bigint
 
-    const tokenDecimals = await publicClientActions.readContract<bigint>({
+    const tokenDecimals = await publicClientActions.readContract({
       address,
       abi: TOKENS[token]?.abi || [],
       functionName: 'decimals'
-    })
+    }) as bigint
 
 
     return computeBigIntToFloat(balance, tokenDecimals);

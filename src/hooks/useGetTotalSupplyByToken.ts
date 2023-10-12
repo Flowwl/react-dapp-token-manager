@@ -9,11 +9,11 @@ export function useGetTotalSupply(token: TokenName) {
   const promise = async () => {
     const address = TOKENS[token].address
     assertAddressExists(address);
-    const totalSupply = await publicClientActions.readContract<bigint>({
+    const totalSupply = await publicClientActions.readContract({
       address,
       abi: TOKENS[token]?.abi || [],
       functionName: 'totalSupply',
-    })
+    }) as bigint
 
     return computeBigIntToFloat(totalSupply, tokenDecimals);
   }

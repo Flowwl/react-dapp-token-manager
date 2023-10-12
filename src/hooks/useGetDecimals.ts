@@ -9,11 +9,11 @@ export function useGetDecimals(token: TokenName) {
     const address = TOKENS[token].address
     assertAddressExists(address);
 
-   return publicClientActions.readContract<bigint>({
+   return publicClientActions.readContract({
       address,
       abi: TOKENS[token]?.abi || [],
       functionName: 'decimals',
-    })
+    }) as Promise<bigint>
   }
 
   return useFetch(async () => promise());

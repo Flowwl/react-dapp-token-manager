@@ -20,18 +20,20 @@ export const useFetch = <T, Err = Error>(promise: () => Promise<T>, options: Par
     const [data, setData] = useState<T | null>(null);
     const [enabled, setEnabled] = useState<boolean>(opts.isEnabled);
 
+    const refetch = () => {
+      setEnabled(true);
+      setData(null);
+    }
     useEffect(() => {
       if (data && !enabled) {
-        setEnabled(true);
-        setData(null);
+        refetch()
       }
     }, [...opts.deps])
 
   useEffect(() => {
     if (opts.refetchInterval) {
       const interval = setInterval(() => {
-        setEnabled(true);
-        setData(null);
+        refetch();
       }, opts.refetchInterval);
       return () => clearInterval(interval);
     }
@@ -68,6 +70,7 @@ export const useFetch = <T, Err = Error>(promise: () => Promise<T>, options: Par
 
     return {
       isLoading,
+      refetch,
       setEnabled: (isQueryEnabled: boolean) => setEnabled(isQueryEnabled),
       isError: !!error,
       error: error,

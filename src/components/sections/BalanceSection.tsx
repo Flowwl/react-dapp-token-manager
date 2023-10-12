@@ -6,6 +6,7 @@ import { useGetTotalSupply, useGetUserBalance, useGetUserBalanceByToken } from "
 import { useChainContext, useConnectedWalletContext } from "../../contexts";
 import dollarIcon from "../../assets/dollar-icon.png";
 import maticIcon from "../../assets/matic.svg";
+import { ArrowPathIcon } from "@heroicons/react/20/solid";
 
 interface BalanceSectionProps {
   className?: string;
@@ -16,14 +17,33 @@ const BalanceSection: FC<BalanceSectionProps> = ({ className }) => {
   const { account } = useConnectedWalletContext();
 
   const { data: totalSupply } = useGetTotalSupply(selectedToken);
-  const { data: userBalance, isLoading: isBalanceLoading } = useGetUserBalance(account);
-  const { data: busdUserBalance, isLoading: isBUSDBalanceLoading } = useGetUserBalanceByToken("BUSD", {
+  const { data: userBalance, isLoading: isBalanceLoading, refetch: refetchBalance } = useGetUserBalance(account, {
+    refetchInterval: 60 * 1000
+  });
+  const { data: busdUserBalance, isLoading: isBUSDBalanceLoading, refetch: refetchBUSD } = useGetUserBalanceByToken("BUSD", {
     deps: [account],
+    refetchInterval: 60 * 1000
   });
 
+  const onRefetch = () => {
+    refetchBalance();
+    refetchBUSD();
+  };
+
   return (
-    <div className={cx("bg-bg-700/70 rounded-lg flex flex-col", className)}>
-      <h2 className="text-3xl self-center py-4 px-8 font-title">Balances</h2>
+    <div className={cx("bg-bg-700/70 rounded-lg flex flex-col w-full", className)}>
+      <div className="flex items-center justify-between w-full">
+        <div/>
+        <h2 className="text-3xl self-center py-4 px-8 font-title">
+          Balances
+        </h2>
+        <ArrowPathIcon
+          className={cx("mr-4 text-gray-400 hover:text-gray-50 cursor-pointer h-7 w-7", {
+            "animate-spin": isBalanceLoading || isBUSDBalanceLoading
+          })}
+          onClick={onRefetch}
+        />
+      </div>
       <div className="flex flex-col gap-5 px-8 pt-4 pb-8">
         <div className="flex justify-between">
           <p>Total Supply</p>
