@@ -10,7 +10,8 @@ export default withMT({
     theme: {
         fontFamily: {
             sans: ["Roboto", "sans-serif"],
-            title: ['Proxima Nova', 'sans-serif'],
+            title: ['Pixelify Sans', 'sans-serif'],
+            button: ['Pixelify Sans', 'sans-serif'],
         },
         extend: {
             colors: {

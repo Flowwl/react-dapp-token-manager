@@ -21,7 +21,7 @@ const BalanceSection: FC<BalanceSectionProps> = ({ className }) => {
 
   return (
     <div className={cx("bg-bg-700 rounded-lg", className)}>
-      <h2 className="text-xl self-center py-4 px-8">Balances</h2>
+      <h2 className="text-3xl self-center py-4 px-8 font-title">Balances</h2>
       <div className="flex flex-col gap-1 px-8 pt-4 pb-8">
         <div className="flex justify-between">
           <p>Total Supply</p>
@@ -33,7 +33,7 @@ const BalanceSection: FC<BalanceSectionProps> = ({ className }) => {
             {TOKENS[selectedToken].label}
           </p>
           {!isBalanceLoading && <p className="pl-4">{userBalance || 0}</p>}
-          {isBalanceLoading && <Spinner className={"ml-0"}/>}
+          {isBalanceLoading && <Spinner className={"mr-0 h-4 w-4"}/>}
         </div>
         <div className="flex justify-between">
           <p className="flex items-center gap-2">
@@ -41,7 +41,7 @@ const BalanceSection: FC<BalanceSectionProps> = ({ className }) => {
             {TOKENS["BUSD"].label}
           </p>
           {!isBUSDBalanceLoading && <p className="pl-4">{busdUserBalance || 0}</p>}
-          {isBUSDBalanceLoading && <Spinner className={"ml-0"}/>}
+          {isBUSDBalanceLoading && <Spinner className={"mr-0 h-4 w-4"}/>}
         </div>
       </div>
     </div>

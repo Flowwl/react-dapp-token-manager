@@ -1,4 +1,10 @@
-import { createPublicClient, PublicClient, ReadContractParameters, SimulateContractParameters } from "viem";
+import {
+  createPublicClient,
+  PublicClient,
+  ReadContractParameters,
+  SimulateContractParameters,
+  WatchPendingTransactionsParameters
+} from "viem";
 import { getChainTransport } from "../utils";
 import { assertIsHexString } from "../asserts";
 import { Chain } from "viem/chains";
@@ -14,6 +20,10 @@ export class PublicClientActions {
   async getBalance(address: string) {
     assertIsHexString(address);
     return this.publicClient.getBalance({ address: address });
+  }
+
+  async watchPendingTransactions<T>(args: WatchPendingTransactionsParameters): Promise<T> {
+    return this.publicClient.watchPendingTransactions(args) as T;
   }
 
   async readContract<T>(args: ReadContractParameters): Promise<T> {

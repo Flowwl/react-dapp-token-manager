@@ -8,7 +8,7 @@ import TransactionsSection from "./components/sections/TransactionsSection.tsx";
 function App() {
   const { address } = useWalletAuthContext();
   return (
-    <div className="h-screen w-full bg-bg-900 p-4 flex flex-col items-center gap-4">
+    <div className="h-screen w-full p-4 flex flex-col items-center gap-4">
       <TopBar/>
       <div className="h-full w-10/12 mx-auto overflow-y-auto">
 

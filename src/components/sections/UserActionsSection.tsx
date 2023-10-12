@@ -51,7 +51,7 @@ const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
   const formClass = "flex flex-col justify-between gap-5 flex-wrap";
   return (
     <div className={cx("bg-bg-700 rounded-lg  flex flex-col", className)}>
-      <h2 className="text-xl self-center py-4 px-8 font-title">Actions</h2>
+      <h2 className="self-center py-4 px-8 font-title text-3xl">Actions</h2>
       <div className="overflow-y-auto flex flex-col gap-4 pt-4 pb-8 px-8">
         <form className={formClass} onSubmit={(e) => {
           e.preventDefault();
@@ -68,8 +68,8 @@ const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
         }}>
           <p>Send transaction</p>
           <div className="flex gap-4">
-            <Input type="text" label="To" onChange={(e) => setTransferTo(e.target.value)} pattern="0x[0-9a-f]*"/>
-            <Input type="number" label="Value" onChange={(e) => setTransferValue(e.target.value)}/>
+            <Input type="text" label="To" onChange={(e) => setTransferTo(e.target.value)} />
+            <Input type="number" label="Value" step="0.000001" onChange={(e) => setTransferValue(e.target.value)}/>
           </div>
           <Button type={"submit"}>Send</Button>
         </form>

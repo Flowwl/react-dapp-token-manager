@@ -11,9 +11,12 @@ interface TopBarProps {
 const TopBar: FC<TopBarProps> = ({ className }) => {
   const { address } = useWalletAuthContext();
   return (
-    <div className={cx("h-24 w-full text-white flex justify-center items-center px-4 rounded-lg", className)}>
+    <div className={cx("h-24 w-full text-white flex justify-between items-center px-4 rounded-lg", className)}>
+      <h1 className="font-title text-4xl">Smardex</h1>
+      <div>
         { address && <ConnectedStatus/> }
         {!address && <WalletButton/>}
+      </div>
     </div>
   );
 };
