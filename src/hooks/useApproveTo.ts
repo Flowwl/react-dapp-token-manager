@@ -4,6 +4,7 @@ import { useState } from "react";
 import { computeFloatToBigInt } from "../utils";
 import { TOKENS } from "../constants/tokens.ts";
 import { assertAddressExists } from "../asserts";
+import { toast } from "react-toastify";
 
 export const useApproveTo = () => {
   const { walletClientActions, selectedToken, publicClientActions, tokenDecimals} = useChainContext();
@@ -29,7 +30,7 @@ export const useApproveTo = () => {
     fetchMethods.setEnabled(true)
   }
 
-  const fetchMethods = useFetch(async () => promise(), { isEnabled: false })
+  const fetchMethods = useFetch(async () => toast.promise(promise(), { pending: "Approving...", success: "Approved!" }), { isEnabled: false })
   return {
     approve,
     ...fetchMethods

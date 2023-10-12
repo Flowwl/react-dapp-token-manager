@@ -4,7 +4,8 @@ import UserActionsSection from "./components/sections/UserActionsSection.tsx";
 import TopBar from "./components/sections/TopBar.tsx";
 import BalanceSection from "./components/sections/BalanceSection.tsx";
 import TransactionsSection from "./components/sections/TransactionsSection.tsx";
-
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 function App() {
   const { address } = useWalletAuthContext();
   return (
@@ -22,6 +23,7 @@ function App() {
           </ConnectedWalletContext>
         )}
       </div>
+      <ToastContainer theme="dark" autoClose={2000} limit={1} pauseOnFocusLoss={false} pauseOnHover={false}/>
     </div>
 
   );

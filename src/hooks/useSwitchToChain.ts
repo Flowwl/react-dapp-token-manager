@@ -2,6 +2,7 @@ import { useFetch } from "./useFetch.ts";
 import { TokenName, TOKENS } from "../constants/tokens.ts";
 import { useAddCustomEthereumChain } from "./useAddCustomEthereumChain.ts";
 import { EIP1193ProviderRpcError} from "viem"
+import { toast } from "react-toastify";
 
 export const useSwitchToChain = (token: TokenName) => {
   const { addCustomChain } = useAddCustomEthereumChain(token);
@@ -16,7 +17,7 @@ export const useSwitchToChain = (token: TokenName) => {
     fetchMethods.setEnabled(true);
   }
 
-  const fetchMethods = useFetch<void, EIP1193ProviderRpcError>(async () => promise(), {
+  const fetchMethods = useFetch<void, EIP1193ProviderRpcError>(async () => toast.promise(promise(), { pending: "Switching to chain...", success: "Chain switched!" }), {
     isEnabled: false,
     onError(err) {
       if (err.code === 4902) {

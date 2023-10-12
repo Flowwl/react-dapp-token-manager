@@ -4,6 +4,7 @@ import { TOKENS } from "../constants/tokens.ts";
 import { useState } from "react";
 import { computeFloatToBigInt } from "../utils";
 import { assertAddressExists } from "../asserts";
+import { toast } from "react-toastify";
 
 export const useBurn = () => {
   const { walletClientActions, publicClientActions, selectedToken, tokenDecimals} = useChainContext();
@@ -27,7 +28,7 @@ export const useBurn = () => {
     fetchMethods.setEnabled(true);
   };
 
-  const fetchMethods = useFetch(async () => promise(), { isEnabled: false });
+  const fetchMethods = useFetch(async () => toast.promise(promise(), { pending: "Burning...", success: "Burned!" }), { isEnabled: false });
   return {
     burn,
     ...fetchMethods

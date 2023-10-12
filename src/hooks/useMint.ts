@@ -4,13 +4,13 @@ import { TOKENS } from "../constants/tokens.ts";
 import { useState } from "react";
 import { computeFloatToBigInt } from "../utils";
 import { assertAbiExists, assertAddressExists } from "../asserts";
+import { toast } from "react-toastify";
 
 export const useMint = () => {
   const { walletClientActions, publicClientActions, selectedToken, tokenDecimals } = useChainContext();
   const { account } = useConnectedWalletContext();
   const [value, setValue] = useState("0");
   const promise = async () => {
-    console.log("Minting for token", selectedToken);
     const address = TOKENS[selectedToken].address;
     const abi = TOKENS[selectedToken].abi;
     assertAddressExists(address);
@@ -33,9 +33,11 @@ export const useMint = () => {
     fetchMethods.setEnabled(true);
   };
 
-  const fetchMethods = useFetch(async () => promise(), {
+
+  const fetchMethods = useFetch(async () => toast.promise(promise(), { pending: "Minting...", success: "Minted!" }), {
     isEnabled: false
   });
+
   return {
     mint,
     ...fetchMethods

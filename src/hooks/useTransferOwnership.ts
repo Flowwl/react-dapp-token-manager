@@ -3,6 +3,7 @@ import { useFetch } from "./useFetch.ts";
 import { useState } from "react";
 import { TOKENS } from "../constants/tokens.ts";
 import { assertAddressExists } from "../asserts";
+import { toast } from "react-toastify";
 
 export const useTransferOwnership = () => {
   const { walletClientActions, selectedToken, publicClientActions} = useChainContext();
@@ -26,7 +27,7 @@ export const useTransferOwnership = () => {
     fetchMethods.setEnabled(true)
   }
 
-  const fetchMethods = useFetch(async () => promise(), { isEnabled: false })
+  const fetchMethods = useFetch(async () => toast.promise(promise(), { pending: "Transferring Ownership...", success: "Ownership Transferred!" }), { isEnabled: false })
   return {
     transferOwnership,
     ...fetchMethods

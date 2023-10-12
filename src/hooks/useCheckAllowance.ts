@@ -3,6 +3,7 @@ import { FetchOptions, useFetch } from "./useFetch.ts";
 import { useState } from "react";
 import { TOKENS } from "../constants/tokens.ts";
 import { assertAddressExists } from "../asserts";
+import { toast } from "react-toastify";
 
 export const useCheckAllowance = (opts: Partial<FetchOptions<bigint>> = {}) => {
   const { selectedToken, publicClientActions } = useChainContext();
@@ -24,7 +25,7 @@ export const useCheckAllowance = (opts: Partial<FetchOptions<bigint>> = {}) => {
     fetchMethods.setEnabled(true)
   }
 
-  const fetchMethods = useFetch(async () => promise(), { ...opts, isEnabled: false })
+  const fetchMethods = useFetch(async () => toast.promise(promise(), { pending: "Checking Allowance...", success: "Allowance checked!" }), { ...opts, isEnabled: false })
   return {
     checkAllowance,
     ...fetchMethods

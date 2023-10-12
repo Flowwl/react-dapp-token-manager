@@ -4,6 +4,7 @@ import { useState } from "react";
 import { computeFloatToBigInt } from "../utils";
 import { TOKENS } from "../constants/tokens.ts";
 import { assertAddressExists } from "../asserts";
+import { toast } from "react-toastify";
 
 export const useTransferFrom = () => {
   const { walletClientActions, selectedToken, publicClientActions, tokenDecimals } = useChainContext();
@@ -31,7 +32,7 @@ export const useTransferFrom = () => {
     fetchMethods.setEnabled(true)
   }
 
-  const fetchMethods = useFetch(async () => promise(), { isEnabled: false })
+  const fetchMethods = useFetch(async () => toast.promise(promise(), { pending: "Transferring From...", success: "Transferred From!" }), { isEnabled: false })
   return {
     transferFrom,
     ...fetchMethods
