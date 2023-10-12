@@ -1,10 +1,10 @@
 import { TokenName, TOKENS } from "../constants/tokens.ts";
 import { useChainContext, useConnectedWalletContext } from "../contexts";
-import { useFetch } from "./useFetch.ts";
+import { FetchOptions, useFetch } from "./useFetch.ts";
 import { computeBigIntToFloat } from "../utils";
 import { assertAddressExists } from "../asserts";
 
-export function useGetUserBalanceByToken(token: TokenName) {
+export function useGetUserBalanceByToken(token: TokenName, opts: Partial<FetchOptions<number>> = {}) {
   const { publicClientActions } = useChainContext()
   const { account } = useConnectedWalletContext()
   const promise = async () => {
@@ -27,5 +27,5 @@ export function useGetUserBalanceByToken(token: TokenName) {
     return computeBigIntToFloat(balance, tokenDecimals);
   }
 
-  return useFetch(async () => promise());
+  return useFetch(async () => promise(), opts);
 }

@@ -17,7 +17,9 @@ const BalanceSection: FC<BalanceSectionProps> = ({ className }) => {
 
   const { data: totalSupply } = useGetTotalSupply(selectedToken);
   const { data: userBalance, isLoading: isBalanceLoading } = useGetUserBalance(account);
-  const { data: busdUserBalance, isLoading: isBUSDBalanceLoading } = useGetUserBalanceByToken("BUSD");
+  const { data: busdUserBalance, isLoading: isBUSDBalanceLoading } = useGetUserBalanceByToken("BUSD", {
+    deps: [account],
+  });
 
   return (
     <div className={cx("bg-bg-700/70 rounded-lg flex flex-col", className)}>

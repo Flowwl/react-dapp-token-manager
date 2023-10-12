@@ -10,7 +10,7 @@ interface Props {
 }
 
 const ChainContextProvider: FC<Props> = ({ children }) => {
-  const [selectedToken, setSelectedToken] = useState<TokenName>("MATIC")
+  const [selectedToken, setSelectedToken] = useState<TokenName>("BUSD")
   const selectedChain = TOKENS[selectedToken].chain;
   // @ts-expect-error typescript doesn't know about ethereum networkVersion
   const networkVersion = parseInt(window.ethereum?.networkVersion || "0");
