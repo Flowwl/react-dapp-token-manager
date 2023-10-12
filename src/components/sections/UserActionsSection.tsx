@@ -1,7 +1,6 @@
 import { FC, useState } from 'react';
 import cx from "classnames";
 import { useChainContext } from "../../contexts";
-import { TOKENS } from "../../constants/tokens.ts";
 import { useTransferTo } from "../../hooks/useTransferTo.ts";
 import { useMint } from "../../hooks/useMint.ts";
 import { useBurn } from "../../hooks/useBurn.ts";
@@ -19,7 +18,7 @@ interface UserActionsSectionProps {
 }
 
 const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
-  const { selectedToken, tokenDecimals } = useChainContext();
+  const {  tokenDecimals } = useChainContext();
 
   const [transferTo, setTransferTo] = useState<string>("");
   const [transferValue, setTransferValue] = useState<string>("0");
@@ -32,6 +31,7 @@ const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
   const [transferFromValue, setTransferFromValue] = useState<string>("0");
   const [allowanceOf, setAllowanceOf] = useState<string>("");
   const [transferOwnershipTo, setTransferOwnershipTo] = useState<string>("");
+  const [allowanceValue, setAllowanceValue] = useState<null | number>(null);
 
   const { transfer } = useTransferTo();
   const { mint } = useMint();
@@ -42,7 +42,7 @@ const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
   const { renounceOwnership } = useRenounceOwnership();
   const { checkAllowance } = useCheckAllowance({
     onSuccess: (allowance) => {
-      alert(`User allowance: ${computeBigIntToFloat(allowance, tokenDecimals)} ${TOKENS[selectedToken].label}`);
+      setAllowanceValue(computeBigIntToFloat(allowance, tokenDecimals))
     }
   });
 
@@ -58,8 +58,8 @@ const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
           <p>Check allowance of</p>
           <Input type="text" label="Of" onChange={(e) => setAllowanceOf(e.target.value)}/>
           <Button type={"submit"}>Check</Button>
+          {allowanceValue !== null && (<p>Allowance: {allowanceValue}</p>)}
         </form>
-        {/* TODO Add error handling */}
         <form className={formClass} onSubmit={(e) => {
           e.preventDefault();
           transfer(transferTo, transferValue);
