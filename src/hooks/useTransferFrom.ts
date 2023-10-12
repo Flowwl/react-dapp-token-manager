@@ -3,6 +3,7 @@ import { useFetch } from "./useFetch.ts";
 import { useState } from "react";
 import { computeFloatToBigInt } from "../utils";
 import { TOKENS } from "../constants/tokens.ts";
+import { assertAddressExists } from "../asserts";
 
 export const useTransferFrom = () => {
   const { walletClientActions, selectedToken, publicClientActions, tokenDecimals } = useChainContext();
@@ -11,9 +12,11 @@ export const useTransferFrom = () => {
   const [to, setTo] = useState<string>("")
   const [from, setFrom] = useState<string>("")
   const promise = async () => {
+    const address = TOKENS[selectedToken].address
+    assertAddressExists(address);
     const { request } = await publicClientActions.simulateContract({
       account,
-      address: TOKENS[selectedToken].address,
+      address,
       abi: TOKENS[selectedToken]?.abi || [],
       functionName: 'transferFrom',
       args: [from, to, computeFloatToBigInt(parseFloat(value), tokenDecimals)]

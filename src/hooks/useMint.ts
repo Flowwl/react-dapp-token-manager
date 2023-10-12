@@ -3,6 +3,7 @@ import { useFetch } from "./useFetch.ts";
 import { TOKENS } from "../constants/tokens.ts";
 import { useState } from "react";
 import { computeFloatToBigInt } from "../utils";
+import { assertAddressExists } from "../asserts";
 
 export const useMint = () => {
   const { walletClientActions, publicClientActions, selectedToken, tokenDecimals } = useChainContext();
@@ -10,9 +11,11 @@ export const useMint = () => {
   const [value, setValue] = useState("0");
   const promise = async () => {
     console.log("Minting for token", selectedToken)
+    const address = TOKENS[selectedToken].address
+    assertAddressExists(address);
     const { request } = await publicClientActions.simulateContract({
       account,
-      address: TOKENS[selectedToken].address,
+      address,
       abi: TOKENS[selectedToken]?.abi || [],
       functionName: 'mint',
       args: [computeFloatToBigInt(parseFloat(value), tokenDecimals)]

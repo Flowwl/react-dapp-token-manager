@@ -1,14 +1,17 @@
 import { useChainContext, useConnectedWalletContext } from "../contexts";
 import { useFetch } from "./useFetch.ts";
 import { TOKENS } from "../constants/tokens.ts";
+import { assertAddressExists } from "../asserts";
 
 export const useRenounceOwnership = () => {
   const { walletClientActions, selectedToken, publicClientActions} = useChainContext();
   const { account } = useConnectedWalletContext();
   const promise = async () => {
+    const address = TOKENS[selectedToken].address
+    assertAddressExists(address);
     const { request } = await publicClientActions.simulateContract({
       account,
-      address: TOKENS[selectedToken].address,
+      address,
       abi: TOKENS[selectedToken]?.abi || [],
       functionName: 'renounceOwnership',
     });

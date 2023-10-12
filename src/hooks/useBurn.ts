@@ -3,6 +3,7 @@ import { useFetch } from "./useFetch.ts";
 import { TOKENS } from "../constants/tokens.ts";
 import { useState } from "react";
 import { computeFloatToBigInt } from "../utils";
+import { assertAddressExists } from "../asserts";
 
 export const useBurn = () => {
   const { walletClientActions, publicClientActions, selectedToken, tokenDecimals} = useChainContext();
@@ -10,9 +11,11 @@ export const useBurn = () => {
   const { account } = useConnectedWalletContext();
   const [value, setValue] = useState("0");
   const promise = async () => {
+    const address = TOKENS[selectedToken].address
+    assertAddressExists(address);
     const { request } = await publicClientActions.simulateContract({
-      account: account,
-      address: TOKENS[selectedToken].address,
+      account,
+      address,
       abi: TOKENS[selectedToken]?.abi || [],
       functionName: 'burn',
       args: [computeFloatToBigInt(parseFloat(value), tokenDecimals)]

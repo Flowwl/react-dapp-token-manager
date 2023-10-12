@@ -1,21 +1,24 @@
 import { TokenName, TOKENS } from "../constants/tokens.ts";
-import { useChainContext, useWalletAuthContext } from "../contexts";
+import { useChainContext, useConnectedWalletContext } from "../contexts";
 import { useFetch } from "./useFetch.ts";
 import { computeBigIntToFloat } from "../utils";
+import { assertAddressExists } from "../asserts";
 
 export function useGetUserBalanceByToken(token: TokenName) {
   const { publicClientActions } = useChainContext()
-  const { address } = useWalletAuthContext()
+  const { account } = useConnectedWalletContext()
   const promise = async () => {
+    const address = TOKENS[token].address
+    assertAddressExists(address);
     const balance = await publicClientActions.readContract<bigint>({
-      address: TOKENS[token].address,
+      address,
       abi: TOKENS[token]?.abi || [],
       functionName: 'balanceOf',
-      args: [address],
+      args: [account],
     })
 
     const tokenDecimals = await publicClientActions.readContract<bigint>({
-      address: TOKENS[token].address,
+      address,
       abi: TOKENS[token]?.abi || [],
       functionName: 'decimals'
     })
