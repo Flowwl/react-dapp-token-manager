@@ -50,7 +50,7 @@ const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
 
   const formClass = "flex flex-col justify-between gap-5 flex-wrap";
   return (
-    <div className={cx("bg-bg-700 rounded-lg  flex flex-col", className)}>
+    <div className={cx("bg-bg-700/70 rounded-lg  flex flex-col", className)}>
       <h2 className="self-center py-4 px-8 font-title text-3xl">Actions</h2>
       <div className="overflow-y-auto flex flex-col gap-4 pt-4 pb-8 px-8">
         <form className={formClass} onSubmit={(e) => {

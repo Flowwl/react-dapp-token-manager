@@ -20,9 +20,9 @@ const BalanceSection: FC<BalanceSectionProps> = ({ className }) => {
   const { data: busdUserBalance, isLoading: isBUSDBalanceLoading } = useGetUserBalanceByToken("BUSD");
 
   return (
-    <div className={cx("bg-bg-700 rounded-lg", className)}>
+    <div className={cx("bg-bg-700/70 rounded-lg flex flex-col", className)}>
       <h2 className="text-3xl self-center py-4 px-8 font-title">Balances</h2>
-      <div className="flex flex-col gap-1 px-8 pt-4 pb-8">
+      <div className="flex flex-col gap-5 px-8 pt-4 pb-8">
         <div className="flex justify-between">
           <p>Total Supply</p>
           <p className="pl-4">{totalSupply || 0}</p>

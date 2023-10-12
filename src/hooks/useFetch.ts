@@ -4,6 +4,7 @@ export type FetchOptions<T, Err = Error> = {
   retry: boolean;
   isEnabled: boolean;
   deps: unknown[];
+  refetchInterval?: number;
   onSuccess?: (data: T) => void
   onError?: (error: Err) => void
 }
@@ -25,6 +26,16 @@ export const useFetch = <T, Err = Error>(promise: () => Promise<T>, options: Par
         setData(null);
       }
     }, [...opts.deps])
+
+  useEffect(() => {
+    if (opts.refetchInterval) {
+      const interval = setInterval(() => {
+        setEnabled(true);
+        setData(null);
+      }, opts.refetchInterval);
+      return () => clearInterval(interval);
+    }
+  }, [opts.refetchInterval]);
 
     useEffect(() => {
       if (!enabled) {
