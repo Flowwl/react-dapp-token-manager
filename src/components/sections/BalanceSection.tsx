@@ -13,10 +13,10 @@ interface BalanceSectionProps {
 
 const BalanceSection: FC<BalanceSectionProps> = ({ className }) => {
   const { selectedToken, changeTokenTo } = useChainContext();
-  const { address } = useConnectedWalletContext();
+  const { account } = useConnectedWalletContext();
 
   const { data: totalSupply } = useGetTotalSupply(selectedToken);
-  const { data: userBalance, isLoading: isBalanceLoading } = useGetUserBalance(address);
+  const { data: userBalance, isLoading: isBalanceLoading } = useGetUserBalance(account);
   const { data: busdUserBalance, isLoading: isBUSDBalanceLoading } = useGetUserBalanceByToken("BUSD");
 
   return (

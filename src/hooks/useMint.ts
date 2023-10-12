@@ -6,11 +6,12 @@ import { computeFloatToBigInt } from "../utils";
 
 export const useMint = () => {
   const { walletClientActions, publicClientActions, selectedToken, tokenDecimals } = useChainContext();
-  const { address } = useConnectedWalletContext();
+  const { account } = useConnectedWalletContext();
   const [value, setValue] = useState("0");
   const promise = async () => {
+    console.log("Minting for token", selectedToken)
     const { request } = await publicClientActions.simulateContract({
-      account: address,
+      account,
       address: TOKENS[selectedToken].address,
       abi: TOKENS[selectedToken]?.abi || [],
       functionName: 'mint',

@@ -7,11 +7,11 @@ import { computeFloatToBigInt } from "../utils";
 export const useBurn = () => {
   const { walletClientActions, publicClientActions, selectedToken, tokenDecimals} = useChainContext();
 
-  const { address } = useConnectedWalletContext();
+  const { account } = useConnectedWalletContext();
   const [value, setValue] = useState("0");
   const promise = async () => {
     const { request } = await publicClientActions.simulateContract({
-      account: address,
+      account: account,
       address: TOKENS[selectedToken].address,
       abi: TOKENS[selectedToken]?.abi || [],
       functionName: 'burn',

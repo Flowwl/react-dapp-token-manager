@@ -6,13 +6,13 @@ import { TOKENS } from "../constants/tokens.ts";
 
 export const useTransferFrom = () => {
   const { walletClientActions, selectedToken, publicClientActions, tokenDecimals } = useChainContext();
-  const { address } = useConnectedWalletContext();
+  const { account } = useConnectedWalletContext();
   const [value, setValue] = useState("0")
   const [to, setTo] = useState<string>("")
   const [from, setFrom] = useState<string>("")
   const promise = async () => {
     const { request } = await publicClientActions.simulateContract({
-      account: address,
+      account,
       address: TOKENS[selectedToken].address,
       abi: TOKENS[selectedToken]?.abi || [],
       functionName: 'transferFrom',

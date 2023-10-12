@@ -6,12 +6,12 @@ import { computeFloatToBigInt } from "../utils";
 
 export const useTransferTo = () => {
   const { walletClientActions, selectedChain, tokenDecimals } = useChainContext();
-  const { address } = useConnectedWalletContext();
+  const { account } = useConnectedWalletContext();
   const [value, setValue] = useState("0");
   const [to, setTo] = useState<string>("");
   const promise = async () => {
     return walletClientActions.sendTransaction({
-      account: address,
+      account,
       to: to as HexString,
       value: computeFloatToBigInt(parseFloat(value), tokenDecimals),
       chain: selectedChain

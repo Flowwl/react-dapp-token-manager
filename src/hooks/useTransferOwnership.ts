@@ -5,11 +5,11 @@ import { TOKENS } from "../constants/tokens.ts";
 
 export const useTransferOwnership = () => {
   const { walletClientActions, selectedToken, publicClientActions} = useChainContext();
-  const { address } = useConnectedWalletContext();
+  const { account } = useConnectedWalletContext();
   const [to, setTo] = useState<string>("")
   const promise = async () => {
     const { request } = await publicClientActions.simulateContract({
-      account: address,
+      account,
       address: TOKENS[selectedToken].address,
       abi: TOKENS[selectedToken]?.abi || [],
       functionName: 'transferOwnership',

@@ -5,14 +5,14 @@ import { TOKENS } from "../constants/tokens.ts";
 
 export const useCheckAllowance = (opts: Partial<FetchOptions<bigint>> = {}) => {
   const { selectedToken, publicClientActions } = useChainContext();
-  const { address } = useConnectedWalletContext();
+  const { account } = useConnectedWalletContext();
   const [of, setOf] = useState<string>("")
   const promise = async () => {
     return publicClientActions.readContract<bigint>({
       address: TOKENS[selectedToken].address,
       abi: TOKENS[selectedToken]?.abi || [],
       functionName: 'allowance',
-      args: [address, of]
+      args: [account, of]
     })
   };
 
