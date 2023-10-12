@@ -19,7 +19,7 @@ export const TOKENS: Record<TokenName, Token> = {
     chain: polygonMumbai
   },
   BUSD: {
-    address: "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
+    address: "0x15A40d37e6f8A478DdE2cB18c83280D472B2fC35",
     abi: parseAbi(Matic_Abi),
     label: "BUSD",
     chain: polygonMumbai
