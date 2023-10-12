@@ -1,9 +1,9 @@
 import { FC, ReactNode, useEffect, useState } from "react";
-import { createCtx } from "../utils";
+import { createCtx, getChainTransport } from "../utils";
 import { Chain } from "viem/chains";
-import { PublicClientActions, WalletClientActions } from "../interfaces";
 import { TokenName, TOKENS } from "../constants/tokens.ts";
 import { useSwitchToChain } from "../hooks/useSwitchToChain.ts";
+import { createPublicClient, createWalletClient, WalletClient, PublicClient } from "viem";
 
 interface Props {
   children: ReactNode;
@@ -14,9 +14,10 @@ const ChainContextProvider: FC<Props> = ({ children }) => {
   const selectedChain = TOKENS[selectedToken].chain;
   // @ts-expect-error typescript doesn't know about ethereum networkVersion
   const networkVersion = parseInt(window.ethereum?.networkVersion || "0");
+  const chainTransport = getChainTransport(selectedChain);
 
-  const publicClientActions = new PublicClientActions(selectedChain);
-  const walletClientActions = new WalletClientActions(selectedChain);
+  const publicClientActions = createPublicClient(chainTransport);
+  const walletClientActions = createWalletClient(chainTransport);
 
   const { switchToChain } = useSwitchToChain(selectedToken);
   const changeTokenTo = (token: TokenName) => {
@@ -47,6 +48,7 @@ const ChainContextProvider: FC<Props> = ({ children }) => {
   }, []);
 
 
+
   return (
     <ChainContextBaseProvider value={{
       publicClientActions,
@@ -64,8 +66,8 @@ const ChainContextProvider: FC<Props> = ({ children }) => {
 export default ChainContextProvider;
 
 export interface ChainContext {
-  publicClientActions: PublicClientActions;
-  walletClientActions: WalletClientActions;
+  publicClientActions: PublicClient;
+  walletClientActions: WalletClient;
   selectedToken: TokenName;
   selectedChain: Chain;
   tokenDecimals: bigint;
