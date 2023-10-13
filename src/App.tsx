@@ -28,7 +28,7 @@ function App() {
         autoClose={2000}
         limit={1}
         pauseOnFocusLoss={false}
-        pauseOnHover={false}
+        pauseOnHover={true}
         enableMultiContainer={false}
       />
     </div>
