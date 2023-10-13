@@ -4,6 +4,7 @@ import { Chain } from "viem/chains";
 import { TokenName, TOKENS } from "../constants/tokens.ts";
 import { useSwitchToChain } from "../hooks/useSwitchToChain.ts";
 import { createPublicClient, createWalletClient, WalletClient, PublicClient } from "viem";
+import { toast } from "react-toastify";
 
 interface Props {
   children: ReactNode;
@@ -31,7 +32,7 @@ const ChainContextProvider: FC<Props> = ({ children }) => {
     if (hasConfirmed) {
       switchToChain();
     } else {
-      window.location.reload();
+      toast.error("Please change your network before proceeding.", { autoClose: false, delay: 0, closeOnClick: false});
     }
   };
 
