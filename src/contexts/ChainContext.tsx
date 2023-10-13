@@ -1,10 +1,11 @@
-import { FC, ReactNode, useEffect, useState } from "react";
+import { FC, ReactNode, useState } from "react";
 import { createCtx, getChainTransport } from "../utils";
 import { Chain } from "viem/chains";
 import { TokenName, TOKENS } from "../constants/tokens.ts";
 import { useSwitchToChain } from "../hooks/useSwitchToChain.ts";
-import { createPublicClient, createWalletClient, WalletClient, PublicClient } from "viem";
+import { createPublicClient, createWalletClient, PublicClient, toHex, WalletClient } from "viem";
 import { toast } from "react-toastify";
+import { useGetUserChainId } from "../hooks/useGetUserChainId.ts";
 
 interface Props {
   children: ReactNode;
@@ -13,10 +14,8 @@ interface Props {
 const ChainContextProvider: FC<Props> = ({ children }) => {
   const [selectedToken, setSelectedToken] = useState<TokenName>("BUSD")
   const selectedChain = TOKENS[selectedToken].chain;
-  // @ts-expect-error typescript doesn't know about ethereum networkVersion
-  const networkVersion = parseInt(window.ethereum?.networkVersion || "0");
-  const chainTransport = getChainTransport(selectedChain);
 
+  const chainTransport = getChainTransport(selectedChain);
   const publicClientActions = createPublicClient(chainTransport);
   const walletClientActions = createWalletClient(chainTransport);
 
@@ -37,18 +36,19 @@ const ChainContextProvider: FC<Props> = ({ children }) => {
   };
 
   window.ethereum?.on('chainChanged', (chainId) => {
-    if (chainId !== `0x${selectedChain.id.toString(16)}`) {
+    if (chainId !== toHex(selectedChain.id)) {
       window.location.reload();
     }
   });
 
-  useEffect(() => {
-    if (networkVersion !== selectedChain.id) {
-      switchChainHandle();
+  useGetUserChainId({
+    isEnabled: true,
+    onSuccess(chainId) {
+      if (chainId !== toHex(selectedChain.id)) {
+        switchChainHandle();
+      }
     }
-  }, []);
-
-
+  })
 
   return (
     <ChainContextBaseProvider value={{

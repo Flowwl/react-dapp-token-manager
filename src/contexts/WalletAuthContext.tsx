@@ -34,9 +34,8 @@ const WalletAuthContextProvider: FC<Props> = ({ children }) => {
     if (accounts.length === 0) {
       localStorage.removeItem(LOCAL_STORAGE_KEYS.WALLET_ADDRESS);
       setAddress(null);
-    } else {
-      setAddressData(accounts);
     }
+    window.location.reload()
   });
 
   window.ethereum?.on("connect", () => {

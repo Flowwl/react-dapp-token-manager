@@ -21,7 +21,6 @@ export const useTransferFrom = (opts: Partial<FetchOptions<boolean>> = {}) => {
       functionName: 'transferFrom',
       args: [from, to, computeFloatToBigInt(parseFloat(value), tokenDecimals)]
     });
-    console.log(request);
     return walletClientActions.writeContract(request) as unknown as boolean;
   };
 

@@ -11,7 +11,6 @@ export const useApproveTo = (opts: Partial<FetchOptions<boolean>> = {}) => {
   const [value, setValue] = useState("0");
   const [to, setTo] = useState<string>("");
   const promise = async () => {
-    console.log("Calling approve")
     const address = TOKENS[selectedToken].address;
     try {
       assertAddressExists(address);
