@@ -1,10 +1,9 @@
 import { useChainContext, useConnectedWalletContext } from "../contexts";
-import { useFetch } from "./useFetch.ts";
+import { FetchOptions, useFetch } from "./useFetch.ts";
 import { TOKENS } from "../constants/tokens.ts";
 import { assertAddressExists } from "../asserts";
-import { toast } from "react-toastify";
 
-export const useRenounceOwnership = () => {
+export const useRenounceOwnership = (opts: Partial<FetchOptions<void>> = {}) => {
   const { walletClientActions, selectedToken, publicClientActions} = useChainContext();
   const { account } = useConnectedWalletContext();
   const promise = async () => {
@@ -16,14 +15,14 @@ export const useRenounceOwnership = () => {
       abi: TOKENS[selectedToken]?.abi || [],
       functionName: 'renounceOwnership',
     });
-    return walletClientActions.writeContract(request);
+    return walletClientActions.writeContract(request) as unknown as void;
   };
 
   const renounceOwnership = () => {
     fetchMethods.setEnabled(true)
   }
 
-  const fetchMethods = useFetch(async () => toast.promise(promise(), { pending: "Renouncing Ownership...", success: "Bye bye!" }), { isEnabled: false })
+  const fetchMethods = useFetch(async () => promise(), { isEnabled: false, ...opts })
   return {
     renounceOwnership,
     ...fetchMethods

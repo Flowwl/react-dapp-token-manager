@@ -1,12 +1,11 @@
 import { useChainContext, useConnectedWalletContext } from "../contexts";
-import { useFetch } from "./useFetch.ts";
+import { FetchOptions, useFetch } from "./useFetch.ts";
 import { TOKENS } from "../constants/tokens.ts";
 import { useState } from "react";
 import { computeFloatToBigInt } from "../utils";
 import { assertAbiExists, assertAddressExists } from "../asserts";
-import { toast } from "react-toastify";
 
-export const useMint = () => {
+export const useMint = (opts: Partial<FetchOptions<boolean>> = {}) => {
   const { walletClientActions, publicClientActions, selectedToken, tokenDecimals } = useChainContext();
   const { account } = useConnectedWalletContext();
   const [value, setValue] = useState("0");
@@ -15,7 +14,6 @@ export const useMint = () => {
     const abi = TOKENS[selectedToken].abi;
     assertAddressExists(address);
     assertAbiExists(abi);
-    try {
       const { request } = await publicClientActions.simulateContract({
         account,
         address,
@@ -23,11 +21,7 @@ export const useMint = () => {
         functionName: 'mint',
         args: [computeFloatToBigInt(parseFloat(value), tokenDecimals)]
       });
-      return walletClientActions.writeContract(request);
-    } catch (e) {
-      toast.error(`${e}`)
-      throw e
-    }
+      return walletClientActions.writeContract(request) as unknown as boolean;
   };
   const mint = (value: string) => {
     setValue(value);
@@ -35,9 +29,7 @@ export const useMint = () => {
   };
 
 
-  const fetchMethods = useFetch(async () => toast.promise(promise(), { pending: "Minting...", success: "Minted!" }), {
-    isEnabled: false
-  });
+  const fetchMethods = useFetch(async () => promise(), { isEnabled: false, ...opts });
 
   return {
     mint,

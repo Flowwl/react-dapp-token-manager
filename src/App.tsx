@@ -23,7 +23,14 @@ function App() {
           </ConnectedWalletContext>
         )}
       </div>
-      <ToastContainer theme="dark" autoClose={2000} limit={1} pauseOnFocusLoss={false} pauseOnHover={false}/>
+      <ToastContainer
+        theme="dark"
+        autoClose={2000}
+        limit={1}
+        pauseOnFocusLoss={false}
+        pauseOnHover={false}
+        enableMultiContainer={false}
+      />
     </div>
 
   );
