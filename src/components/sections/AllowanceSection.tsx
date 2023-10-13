@@ -38,7 +38,7 @@ const AllowanceSection: FC<AllowanceSectionProps> = ({ className }) => {
       <div className="px-8 pt-4 pb-8">
         {isLoading && <Spinner/>}
         {allowances && Object.entries(allowances).map(([spender, allowance]) => (
-          <div className="flex flex-row justify-between">
+          <div className="flex flex-row justify-between" key={spender}>
             <p className="w-24 truncate">{spender}</p>
             {computeBigIntToFloat(allowance, tokenDecimals)}
           </div>
