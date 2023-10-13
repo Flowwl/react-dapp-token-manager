@@ -12,7 +12,6 @@ export const useGetOwner = (token: TokenName, opts: Partial<FetchOptions<HexStri
     assertAddressExists(address);
     assertAbiExists(abi);
     try {
-      console.log("requesting transaction by hash", address);
       return publicClientActions.readContract({
         address,
         abi,
