@@ -39,6 +39,10 @@ const WalletAuthContextProvider: FC<Props> = ({ children }) => {
     }
   });
 
+  window.ethereum?.on("connect", () => {
+    connect()
+  })
+
   window.ethereum?.on('disconnect', () => {
    console.log("Wallet disconnected. Please reconnect and refresh the page.");
   });
