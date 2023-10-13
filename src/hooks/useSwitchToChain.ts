@@ -13,7 +13,7 @@ export const useSwitchToChain = (token: TokenName) => {
     });
   };
   const switchToChain = () => {
-    fetchMethods.setEnabled(true);
+    fetchMethods.refetch()
   }
 
   const fetchMethods = useFetch<void, EIP1193ProviderRpcError>(async () => promise(), {

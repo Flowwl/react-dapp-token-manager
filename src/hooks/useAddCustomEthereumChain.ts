@@ -16,7 +16,7 @@ export const useAddCustomEthereumChain = (token: TokenName) => {
     });
   };
   const addCustomChain = () => {
-    fetchMethods.setEnabled(true);
+    fetchMethods.refetch();
   }
 
   const fetchMethods = useFetch(async () => promise(), { isEnabled: false });

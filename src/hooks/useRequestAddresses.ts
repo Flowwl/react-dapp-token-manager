@@ -8,7 +8,7 @@ export const useRequestAddresses = (opts: Partial<FetchOptions<RequestAddressesR
     return walletClientActions.requestAddresses();
   };
   const requestAddresses = () => {
-    fetchMethods.setEnabled(true);
+    fetchMethods.refetch();
   };
 
   const fetchMethods = useFetch(async () => promise(), { ...opts, isEnabled: false });

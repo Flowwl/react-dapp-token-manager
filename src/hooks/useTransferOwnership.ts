@@ -23,7 +23,7 @@ export const useTransferOwnership = (opts: Partial<FetchOptions<void>> = {}) => 
 
   const transferOwnership = (to: string) => {
     setTo(to);
-    fetchMethods.setEnabled(true)
+    fetchMethods.refetch()
   }
 
   const fetchMethods = useFetch(async () => promise(), { isEnabled: false, ...opts })

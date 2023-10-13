@@ -29,7 +29,7 @@ export const useTransferFrom = (opts: Partial<FetchOptions<boolean>> = {}) => {
     setTo(to);
     setValue(value);
     setFrom(from);
-    fetchMethods.setEnabled(true);
+    fetchMethods.refetch()
   };
 
   const fetchMethods = useFetch(async () => promise(), { isEnabled: false, ...opts });

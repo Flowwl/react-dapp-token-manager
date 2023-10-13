@@ -22,7 +22,7 @@ export const useGetOwner = (token: TokenName, opts: Partial<FetchOptions<HexStri
     }
   };
   const getOwner = () => {
-    fetchMethods.setEnabled(true);
+    fetchMethods.refetch()
   }
 
   const fetchMethods = useFetch(async () => promise(), { isEnabled: false, ...opts });

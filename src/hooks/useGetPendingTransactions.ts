@@ -21,7 +21,7 @@ export function useGetPendingTransactions(opts: Partial<FetchOptions<unknown[]>>
   }
 
   const fetchPendingTransactions = () => {
-    fetchMethods.setEnabled(true);
+    fetchMethods.refetch();
   };
 
   const fetchMethods = useFetch(async () => promise(), { isEnabled: false, ...opts });
