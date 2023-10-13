@@ -16,6 +16,8 @@ export const useTransferFrom = () => {
     const address = TOKENS[selectedToken].address;
     assertAddressExists(address);
     try {
+      console.log(address)
+      console.log(from, to)
       const { request } = await publicClientActions.simulateContract({
         account,
         address,
@@ -23,9 +25,11 @@ export const useTransferFrom = () => {
         functionName: 'transferFrom',
         args: [from, to, computeFloatToBigInt(parseFloat(value), tokenDecimals)]
       });
+      console.log(request)
       return walletClientActions.writeContract(request);
     } catch (e) {
-      console.log(e);
+      toast.error(`${e}`)
+      throw e;
     }
   };
 
@@ -36,7 +40,7 @@ export const useTransferFrom = () => {
     fetchMethods.setEnabled(true);
   };
 
-  const fetchMethods = useFetch(async () => toast.promise(promise(), { pending: "Transferring From...", success: "Transferred From!" }), { isEnabled: false });
+  const fetchMethods = useFetch(async () => toast.promise(promise(), { pending: "Transferring From...", success: "Transferred From!", error: "Transfer failed" }), { isEnabled: false });
   return {
     transferFrom,
     ...fetchMethods

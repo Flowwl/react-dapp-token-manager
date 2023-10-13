@@ -14,18 +14,24 @@ export const useBurn = () => {
   const promise = async () => {
     const address = TOKENS[selectedToken].address
     assertAddressExists(address);
-    const { request } = await publicClientActions.simulateContract({
-      account,
-      address,
-      abi: TOKENS[selectedToken]?.abi || [],
-      functionName: 'burn',
-      args: [computeFloatToBigInt(parseFloat(value), tokenDecimals)]
-    });
-    return walletClientActions.writeContract(request);
+    try {
+      const { request } = await publicClientActions.simulateContract({
+        account,
+        address,
+        abi: TOKENS[selectedToken]?.abi || [],
+        functionName: 'burn',
+        args: [computeFloatToBigInt(parseFloat(value), tokenDecimals)]
+      });
+      return walletClientActions.writeContract(request);
+    }
+    catch (e) {
+      toast.error(`${e}`)
+      throw e
+    }
   };
   const burn = (value: string) => {
     setValue(value);
-    fetchMethods.setEnabled(true);
+    fetchMethods.refetch()
   };
 
   const fetchMethods = useFetch(async () => toast.promise(promise(), { pending: "Burning...", success: "Burned!" }), { isEnabled: false });

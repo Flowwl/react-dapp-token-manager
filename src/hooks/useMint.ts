@@ -25,12 +25,13 @@ export const useMint = () => {
       });
       return walletClientActions.writeContract(request);
     } catch (e) {
-      console.log(e);
+      toast.error(`${e}`)
+      throw e
     }
   };
   const mint = (value: string) => {
     setValue(value);
-    fetchMethods.setEnabled(true);
+    fetchMethods.refetch()
   };
 
 

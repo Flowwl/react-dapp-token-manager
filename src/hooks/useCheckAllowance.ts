@@ -12,17 +12,22 @@ export const useCheckAllowance = (opts: Partial<FetchOptions<bigint>> = {}) => {
   const promise = async () => {
     const address = TOKENS[selectedToken].address
     assertAddressExists(address);
-    return publicClientActions.readContract({
-      address,
-      abi: TOKENS[selectedToken]?.abi || [],
-      functionName: 'allowance',
-      args: [account, of]
-    }) as Promise<bigint>
+    try {
+      return publicClientActions.readContract({
+        address,
+        abi: TOKENS[selectedToken]?.abi || [],
+        functionName: 'allowance',
+        args: [account, of]
+      }) as Promise<bigint>
+    } catch (e) {
+      toast.error(`${e}`)
+      throw e
+    }
   };
 
   const checkAllowance = (to: string) => {
     setOf(to);
-    fetchMethods.setEnabled(true)
+    fetchMethods.refetch()
   }
 
   const fetchMethods = useFetch(async () => toast.promise(promise(), { pending: "Checking Allowance...", success: "Allowance checked!" }), { ...opts, isEnabled: false })

@@ -27,7 +27,8 @@ export const useTransferTo = () => {
       });
       return walletClientActions.writeContract(request);
     } catch (e) {
-      console.log(e);
+      toast.error(`${e}`)
+      throw e;
     }
 
   };
