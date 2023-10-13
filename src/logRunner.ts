@@ -18,5 +18,5 @@ export async function logRunner(startingBlock: bigint, nbTarget: number, callbac
     fromBlock -= 1000n;
   }
 
-  return Object.values(map)
+  return map
 }

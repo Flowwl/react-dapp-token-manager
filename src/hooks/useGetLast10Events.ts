@@ -11,7 +11,7 @@ export function useGetLast10Events(opts: Partial<FetchOptions<unknown[]>> = {}) 
     const address = TOKENS[selectedToken].address;
     assertAddressExists(address);
     const blockNumber = await publicClientActions.getBlockNumber();
-    return logRunner(blockNumber, 10, async (fromBlock, toBlock) => {
+    const logsByTransactions = await logRunner(blockNumber, 10, async (fromBlock, toBlock) => {
       return publicClientActions.getLogs({
         address,
         events: parseAbi([
@@ -22,6 +22,7 @@ export function useGetLast10Events(opts: Partial<FetchOptions<unknown[]>> = {}) 
         toBlock,
       });
     })
+    return Object.values(logsByTransactions);
   };
 
   const fetchLast10Events = () => {

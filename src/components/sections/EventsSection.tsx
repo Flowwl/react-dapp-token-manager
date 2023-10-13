@@ -42,7 +42,7 @@ const EventsSection: FC<EventsSectionProps> = ({ className }) => {
             )}
             {areLast10AccountEventsLoading && (<Spinner/>)}
             {(last10AccountEvents?.length || 0) > 0 && last10AccountEvents?.map((log) => (
-                <div className="w-full" key={log.logIndex}>
+                <div className="w-full" key={log.transactionHash}>
                   <a href={`https://mumbai.polygonscan.com/tx/${log.transactionHash}`} target="_blank">
                     <p className="truncate w-full">{log.transactionHash}</p>
                   </a>

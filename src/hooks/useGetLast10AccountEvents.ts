@@ -35,7 +35,8 @@ export function useGetLast10AccountEvents(opts: Partial<FetchOptions<unknown[]>>
 
     const [approvals, transfers] = await Promise.all([fetchApprovals, fetchTransfers])
 
-    return [...approvals, ...transfers].sort((a, b) => Number(b.blockNumber) - Number(a.blockNumber)).slice(0, 10);
+    const logsByTransactions = {...approvals, ...transfers}
+    return Object.values(logsByTransactions).sort((a, b) => Number(b.blockNumber) - Number(a.blockNumber)).slice(0, 10);
   }
 
   const fetchLast10AccountEvents = () => {
