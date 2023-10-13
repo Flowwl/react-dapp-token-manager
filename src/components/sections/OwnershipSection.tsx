@@ -6,6 +6,7 @@ import { useTransferOwnership } from "../../hooks/useTransferOwnership.ts";
 import { useRenounceOwnership } from "../../hooks/useRenounceOwnership.ts";
 import { useGetOwner } from "../../hooks/useGetOwner.ts";
 import { useChainContext, useConnectedWalletContext } from "../../contexts";
+import { isAddressEqual } from "viem";
 
 interface OwnershipSectionProps {
   className?: string;
@@ -14,13 +15,14 @@ interface OwnershipSectionProps {
 const OwnershipSection: FC<OwnershipSectionProps> = ({ className }) => {
   const { selectedToken } = useChainContext();
   const { account } = useConnectedWalletContext();
-  const { data: owner } = useGetOwner(selectedToken, { isEnabled: true  });
+  const { data: owner} = useGetOwner(selectedToken, { isEnabled: true  });
   const [transferOwnershipTo, setTransferOwnershipTo] = useState<string>("");
   const { transferOwnership } = useTransferOwnership();
   const { renounceOwnership } = useRenounceOwnership();
 
 
-  const isOwner = owner === account;
+  if (! owner) { return null; }
+  const isOwner = isAddressEqual(owner, account);
   if (! isOwner) { return null; }
   return (
     <>
