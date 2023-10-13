@@ -44,7 +44,6 @@ export const useFetch = <T, Err = Error>(promise: () => Promise<T>, options: Par
       if (!enabled || isLoading || data || error) {
         return;
       }
-      console.log("Launching promise", enabled, isLoading, data, options.retry, promise)
       setIsLoading(true);
       promise()
         .then((res) => {

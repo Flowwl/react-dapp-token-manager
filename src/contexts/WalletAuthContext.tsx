@@ -48,7 +48,6 @@ const WalletAuthContextProvider: FC<Props> = ({ children }) => {
   });
 
 
-
   if (!data && isLoading) {
     return <Spinner/>
   }
