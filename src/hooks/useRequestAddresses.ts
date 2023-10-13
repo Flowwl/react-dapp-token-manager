@@ -11,7 +11,7 @@ export const useRequestAddresses = (opts: Partial<FetchOptions<RequestAddressesR
     fetchMethods.refetch();
   };
 
-  const fetchMethods = useFetch(async () => promise(), { ...opts, isEnabled: false });
+  const fetchMethods = useFetch(async () => promise(), { isEnabled: false, ...opts });
   return {
     requestAddresses,
     ...fetchMethods

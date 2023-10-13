@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect, useState } from "react";
+import { FC, ReactNode, useState } from "react";
 import { createCtx } from "../utils";
 import { LOCAL_STORAGE_KEYS } from "../constants";
 import { HexString } from "../types";
@@ -14,6 +14,7 @@ const WalletAuthContextProvider: FC<Props> = ({ children }) => {
   const [address, setAddress] = useState<HexString | null>((localStorage.getItem(LOCAL_STORAGE_KEYS.WALLET_ADDRESS) as HexString) || null);
 
   const { requestAddresses: connect, isLoading, data } = useRequestAddresses({
+    isEnabled: !!window.ethereum,
     onSuccess: (addresses) => {
       setAddressData(addresses);
     }
@@ -43,10 +44,6 @@ const WalletAuthContextProvider: FC<Props> = ({ children }) => {
   });
 
 
-
-  useEffect(() => {
-      connect()
-  }, [connect])
 
   if (!data && isLoading) {
     return <Spinner/>
