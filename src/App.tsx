@@ -5,6 +5,7 @@ import TopBar from "./components/sections/TopBar.tsx";
 import BalanceSection from "./components/sections/BalanceSection.tsx";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import EventsSection from "./components/sections/EventsSection.tsx";
 
 function App() {
   const { address } = useWalletAuthContext();
@@ -18,7 +19,7 @@ function App() {
             <div className="flex h-full w-full gap-4 text-gray-50">
               <BalanceSection className="w-3/12"/>
               <UserActionsSection className="w-9/12"/>
-              {/*<TransactionsSection className="w-4/12 flex-grow"/>*/}
+              <EventsSection className="w-4/12 flex-grow"/>
             </div>
           </ConnectedWalletContext>
         )}
