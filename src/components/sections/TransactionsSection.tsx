@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import cx from "classnames";
-import { useGetPendingTransactions } from "../../hooks/useGetPendingTransactions.ts";
 import { ArrowPathIcon } from "@heroicons/react/20/solid";
 import Spinner from "../atoms/Spinner.tsx";
 import { useGetLastLogs } from "../../hooks/useGetLastLogs.ts";
@@ -10,7 +9,7 @@ interface TransactionsSectionProps {
 }
 
 const TransactionsSection: FC<TransactionsSectionProps> = ({ className }) => {
-  const { data: pendingTransactions } = useGetPendingTransactions({ isEnabled: true });
+  // const { data: pendingTransactions } = useGetPendingTransactions({ isEnabled: true });
   const { data: logs, isLoading: areLogsLoading, fetchLastLogs } = useGetLastLogs({ isEnabled: true, refetchInterval: 60000 });
 
   const onRefetch = () => {
@@ -33,13 +32,13 @@ const TransactionsSection: FC<TransactionsSectionProps> = ({ className }) => {
           <h3 className="font-title text-lg">Pending transactions</h3>
           <div className="flex justify-center h-full items-center">
 
-            {pendingTransactions?.length === 0 && (
-              <p className="text-center">No pending transactions</p>
-            )}
-            {pendingTransactions?.map(() => (
-                <p>{}</p>
-              )
-            )}
+            {/*{pendingTransactions?.length === 0 && (*/}
+            {/*  <p className="text-center">No pending transactions</p>*/}
+            {/*)}*/}
+            {/*{pendingTransactions?.map(() => (*/}
+            {/*    <p>{}</p>*/}
+            {/*  )*/}
+            {/*)}*/}
           </div>
         </div>
         {/*<div className="border-purple-500 border-t "/>*/}
