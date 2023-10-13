@@ -12,14 +12,14 @@ function App() {
   return (
     <div className="h-screen w-full p-4 flex flex-col items-center gap-4">
       <TopBar/>
-      <div className="h-full w-10/12 mx-auto overflow-y-auto">
+      <div className="h-full w-11/12 mx-auto overflow-y-auto">
 
         {address && (
           <ConnectedWalletContext address={address}>
             <div className="flex h-full w-full gap-4 text-gray-50">
-              <BalanceSection className="w-3/12"/>
-              <UserActionsSection className="w-9/12"/>
-              <EventsSection className="w-4/12 flex-grow"/>
+              <BalanceSection className="!w-3/12"/>
+              <UserActionsSection className="!w-9/12"/>
+              <EventsSection className="!w-4/12"/>
             </div>
           </ConnectedWalletContext>
         )}

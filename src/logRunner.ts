@@ -1,13 +1,13 @@
 import { HexString } from "./types";
 import { Log } from "viem";
 
-export async function logRunner(startingBlock: bigint, nbTarget: number, callback: (fromBlock: bigint, toBlock: bigint) => Promise<Log[]>) {
+export async function logRunner(startingBlock: bigint, nbTarget: number, callback: (fromBlock: bigint, toBlock: bigint) => Promise<Log[]>, timeOut: number = 15 * 1000 ) {
   const map: Record<HexString, Log> = {};
 
   let timedOut = false;
   setTimeout(() => {
     timedOut = true;
-  }, 15 * 1000);
+  }, timeOut);
 
   let fromBlock = startingBlock - 1000n;
   let toBlock = startingBlock;

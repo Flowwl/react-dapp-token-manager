@@ -15,11 +15,11 @@ const EventsSection: FC<EventsSectionProps> = ({ className }) => {
 
 
   useEffect(() => {
-      onRefetch()
-  }, [])
+    onRefetch();
+  }, []);
   const onRefetch = () => {
-      fetchLast10Events();
-      fetchLast10AccountEvents();
+    fetchLast10Events();
+    fetchLast10AccountEvents();
   };
   return (
     <div className={cx("bg-bg-700/70 rounded-lg flex flex-col", className)}>
@@ -51,23 +51,23 @@ const EventsSection: FC<EventsSectionProps> = ({ className }) => {
             )}
           </div>
         </div>
-        <div className="flex flex-col gap-3 h-1/2">
-          <h3 className="font-title text-lg">Last 10 events</h3>
-          <div className="flex flex-col overflow-y-auto h-full">
-            {last10Events?.length === 0 && (
-              <p className="text-center">No events</p>
-            )}
-            {areLast10EventsLoading && (<Spinner/>)}
-            {(last10Events?.length || 0) > 0 && last10Events?.map((log) => (
-                <div className="w-full" key={log.transactionHash}>
-                  <a href={`https://mumbai.polygonscan.com/tx/${log.transactionHash}`} target="_blank">
-                    <p className="truncate w-full">{log.transactionHash}</p>
-                  </a>
-                </div>
-              )
-            )}
+          <div className="flex flex-col gap-3 h-1/2">
+            <h3 className="font-title text-lg">Last 10 events</h3>
+            <div className="flex flex-col overflow-y-auto h-full">
+              {last10Events?.length === 0 && (
+                <p className="text-center">No event</p>
+              )}
+              {areLast10EventsLoading && (<Spinner/>)}
+              {(last10Events?.length || 0) > 0 && last10Events?.map((log) => (
+                  <div className="w-full" key={log.transactionHash}>
+                    <a href={`https://mumbai.polygonscan.com/tx/${log.transactionHash}`} target="_blank">
+                      <p className="truncate w-full">{log.transactionHash}</p>
+                    </a>
+                  </div>
+                )
+              )}
+            </div>
           </div>
-        </div>
       </div>
     </div>
   );

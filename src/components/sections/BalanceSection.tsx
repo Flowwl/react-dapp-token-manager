@@ -7,6 +7,7 @@ import { useChainContext, useConnectedWalletContext } from "../../contexts";
 import dollarIcon from "../../assets/dollar-icon.png";
 import maticIcon from "../../assets/matic.svg";
 import { ArrowPathIcon } from "@heroicons/react/20/solid";
+import AllowanceSection from "./AllowanceSection.tsx";
 
 interface BalanceSectionProps {
   className?: string;
@@ -72,6 +73,7 @@ const BalanceSection: FC<BalanceSectionProps> = ({ className }) => {
           {isBUSDBalanceLoading && <Spinner className={"mr-0 h-4 w-4"}/>}
         </div>
       </div>
+      <AllowanceSection/>
     </div>
   );
 };
