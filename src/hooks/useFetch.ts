@@ -23,6 +23,7 @@ export const useFetch = <T, Err = Error>(promise: () => Promise<T>, options: Par
     const refetch = () => {
       setEnabled(true);
       setData(null);
+      setError(null);
     }
     useEffect(() => {
       if (data && !enabled) {
@@ -40,14 +41,7 @@ export const useFetch = <T, Err = Error>(promise: () => Promise<T>, options: Par
   }, [opts.refetchInterval]);
 
     useEffect(() => {
-      if (!enabled) {
-        return;
-      }
-      if (isLoading) {
-        return;
-      }
-
-      if (data) {
+      if (!enabled || isLoading || data || error) {
         return;
       }
       setIsLoading(true);
@@ -66,7 +60,7 @@ export const useFetch = <T, Err = Error>(promise: () => Promise<T>, options: Par
             setEnabled(false);
           }
         });
-    }, [enabled, isLoading, promise, options.retry, data, opts]);
+    }, [enabled, isLoading, promise, opts, data]);
 
     return {
       isLoading,

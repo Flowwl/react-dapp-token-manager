@@ -11,6 +11,7 @@ import { computeBigIntToFloat } from "../../utils";
 import Input from "../atoms/Input.tsx";
 import Button from "../atoms/Button.tsx";
 import OwnershipSection from "./OwnershipSection.tsx";
+import { toast } from "react-toastify";
 
 interface UserActionsSectionProps {
   className?: string;
@@ -31,15 +32,32 @@ const UserActionsSection: FC<UserActionsSectionProps> = ({ className }) => {
   const [allowanceOf, setAllowanceOf] = useState<string>("");
   const [allowanceValue, setAllowanceValue] = useState<null | number>(null);
 
-  const { transfer } = useTransferTo();
-  const { mint } = useMint();
-  const { burn } = useBurn();
-  const { approve } = useApproveTo();
-  const { transferFrom } = useTransferFrom();
+  const { transfer } = useTransferTo({
+    onSuccess: () => toast.success("Transferred", { toastId: "transfer" }),
+    onError: (err) => toast.error(err.message ?? "Error while transeferring", { toastId: "transfer" })
+  });
+  const { mint } = useMint({
+    onSuccess: () => toast.success("Minted", { toastId: "mint" }),
+    onError: (err) => toast.error(err.message ?? "Error while minting", { toastId: "mint" })
+  });
+  const { burn } = useBurn({
+    onSuccess: () => toast.success("Burnt", { toastId: "burn" }),
+    onError: (err) => toast.error(err.message ?? "Error while burning", { toastId: "burn" })
+  });
+  const { approve } = useApproveTo({
+    onSuccess: () => toast.success("Approved", { toastId: "approve" }),
+    onError: (err) => toast.error(err.message ?? "Error while approving", { toastId: "approve" })
+  });
+  const { transferFrom } = useTransferFrom({
+    onSuccess: () => toast.success("Transferred", { toastId: "transferFrom" }),
+    onError: (err) => toast.error(err.message ?? "Error while transferring", { toastId: "transferFrom" })
+  });
   const { checkAllowance } = useCheckAllowance({
     onSuccess: (allowance) => {
+      toast.success("Allowance set!", { toastId: "allowance" })
       setAllowanceValue(computeBigIntToFloat(allowance, tokenDecimals));
-    }
+    },
+    onError: (err) => toast.error(err.message ?? "Error while setting allowance", { toastId: "allowance" })
   });
 
   const formClass = "flex flex-col justify-between gap-5 flex-wrap";

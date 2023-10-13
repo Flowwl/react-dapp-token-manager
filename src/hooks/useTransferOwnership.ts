@@ -1,11 +1,10 @@
 import { useChainContext, useConnectedWalletContext } from "../contexts";
-import { useFetch } from "./useFetch.ts";
+import { FetchOptions, useFetch } from "./useFetch.ts";
 import { useState } from "react";
 import { TOKENS } from "../constants/tokens.ts";
 import { assertAddressExists } from "../asserts";
-import { toast } from "react-toastify";
 
-export const useTransferOwnership = () => {
+export const useTransferOwnership = (opts: Partial<FetchOptions<void>> = {}) => {
   const { walletClientActions, selectedToken, publicClientActions} = useChainContext();
   const { account } = useConnectedWalletContext();
   const [to, setTo] = useState<string>("")
@@ -19,15 +18,15 @@ export const useTransferOwnership = () => {
       functionName: 'transferOwnership',
       args: [to]
     });
-    return walletClientActions.writeContract(request);
+    return walletClientActions.writeContract(request) as unknown as void;
   };
 
   const transferOwnership = (to: string) => {
     setTo(to);
-    fetchMethods.setEnabled(true)
+    fetchMethods.refetch()
   }
 
-  const fetchMethods = useFetch(async () => toast.promise(promise(), { pending: "Transferring Ownership...", success: "Ownership Transferred!" }), { isEnabled: false })
+  const fetchMethods = useFetch(async () => promise(), { isEnabled: false, ...opts })
   return {
     transferOwnership,
     ...fetchMethods

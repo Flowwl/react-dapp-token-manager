@@ -14,7 +14,7 @@ export function useGetLastLogs(opts: Partial<FetchOptions<unknown[]>> = {}) {
   }
 
   const fetchLastLogs = () => {
-    fetchMethods.setEnabled(true);
+    fetchMethods.refetch();
   };
 
   const fetchMethods = useFetch(async () => promise(), { isEnabled: true, ...opts });
