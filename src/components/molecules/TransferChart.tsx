@@ -68,7 +68,6 @@ const TransferChart: FC<TransferChartProps> = ({ className, transfers }) => {
 };
 
 function prepareLogsToSeries(logs: Log[]) {
-  console.log(logs);
   const nbTransactionsByBlocks: Record<string, number> = {};
 
   logs.forEach((log) => {
