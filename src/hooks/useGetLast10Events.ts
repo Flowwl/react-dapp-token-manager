@@ -5,6 +5,7 @@ import { Log, parseAbi } from "viem";
 import { assertAddressExists } from "../asserts";
 import { logRunner } from "../logRunner.ts";
 import { HexString } from "../types";
+import { uniqueArrayByKey } from "../utils/uniqueArrayByKey.ts";
 
 export function useGetLast10Events(opts: Partial<FetchOptions<unknown[]>> = {}) {
   const { publicClientActions, selectedToken } = useChainContext();
@@ -22,7 +23,9 @@ export function useGetLast10Events(opts: Partial<FetchOptions<unknown[]>> = {}) 
   };
 
   function getLast10Logs(logs: Log[]) {
-    return logs.sort((a, b) => Number(b.blockNumber) - Number(a.blockNumber)).slice(0, 10);
+    return uniqueArrayByKey(logs, "transactionHash")
+      .sort((a, b) => Number(b.blockNumber) - Number(a.blockNumber))
+      .slice(0, 10);
   }
   const getLogs = async (address: HexString, fromBlock: bigint, toBlock: bigint | "latest"): Promise<Array<Log>> => publicClientActions.getLogs({
     address,

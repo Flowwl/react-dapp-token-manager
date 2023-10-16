@@ -5,6 +5,7 @@ import { Log, parseAbiItem } from "viem";
 import { assertAddressExists } from "../asserts";
 import { HexString } from "../types";
 import { logRunner } from "../logRunner.ts";
+import { uniqueArrayByKey } from "../utils/uniqueArrayByKey.ts";
 
 export function useGetLast10AccountEvents(opts: Partial<FetchOptions<unknown[]>> = {}) {
   const { publicClientActions, selectedToken } = useChainContext();
@@ -16,8 +17,7 @@ export function useGetLast10AccountEvents(opts: Partial<FetchOptions<unknown[]>>
       const approvals = await getApprovals(address, account, TOKENS[selectedToken].deployBlock, "latest");
       const transfers = await getTransfers(address, account, TOKENS[selectedToken].deployBlock, "latest");
       return getLast10Logs(approvals, transfers);
-    }
-    catch (e) {
+    } catch (e) {
       const blockNumber = await publicClientActions.getBlockNumber();
       const fetchApprovals = logRunner(blockNumber, 10, async (fromBlock, toBlock) => getApprovals(address, account, fromBlock, toBlock));
       const fetchTransfers = logRunner(blockNumber, 10, async (fromBlock, toBlock) => getTransfers(address, account, fromBlock, toBlock));
@@ -29,15 +29,18 @@ export function useGetLast10AccountEvents(opts: Partial<FetchOptions<unknown[]>>
 
 
   function getLast10Logs(approvals: Log[], transfers: Log[]) {
-    return [...approvals, ...transfers].sort((a, b) => Number(b.blockNumber) - Number(a.blockNumber)).slice(0, 10);
+    return uniqueArrayByKey([...approvals, ...transfers], "transactionHash")
+      .sort((a, b) => Number(b.blockNumber) - Number(a.blockNumber))
+      .slice(0, 10);
   }
+
   const getApprovals = async (address: HexString, account: HexString, fromBlock: bigint, toBlock: bigint | "latest") => publicClientActions.getLogs({
-      address,
-      event: parseAbiItem('event Approval(address indexed owner, address indexed sender, uint256 value)'),
-      args: { owner: account },
-      fromBlock,
-      toBlock
-    });
+    address,
+    event: parseAbiItem('event Approval(address indexed owner, address indexed sender, uint256 value)'),
+    args: { owner: account },
+    fromBlock,
+    toBlock
+  });
 
   const getTransfers = async (address: HexString, account: HexString, fromBlock: bigint, toBlock: bigint | "latest") => publicClientActions.getLogs({
     address,
