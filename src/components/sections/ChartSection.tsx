@@ -3,6 +3,7 @@ import cx from "classnames";
 import { ArrowPathIcon } from "@heroicons/react/20/solid";
 import { useGetAllTransfers } from "../../hooks";
 import Spinner from "../atoms/Spinner.tsx";
+import TransferChart from "../molecules/TransferChart.tsx";
 
 interface ChartSectionProps {
   className?: string;
@@ -32,11 +33,9 @@ const ChartSection: FC<ChartSectionProps> = ({ className }) => {
           onClick={refetch}
         />
       </div>
-      <div className="h-full w-full mx-auto">
-        {!transfers && <Spinner/>}
-        {transfers && (
-          <div>Chart</div>
-        )}
+      <div className="h-full w-full flex flex-col mx-auto">
+        {!transfers && <Spinner className="h-16 w-16"/>}
+        {transfers && <TransferChart transfers={transfers}/>}
       </div>
     </div>
   );
