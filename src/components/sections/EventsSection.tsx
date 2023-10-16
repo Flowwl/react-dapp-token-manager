@@ -33,10 +33,10 @@ const EventsSection: FC<EventsSectionProps> = ({ className }) => {
           onClick={onRefetch}
         />
       </div>
-      <div className="flex flex-col gap-1 px-8 pt-4 pb-8 h-full overflow-y-auto">
-        <div className="flex flex-col gap-3 h-1/2">
+      <div className="flex flex-col gap-1 px-8 h-full overflow-y-auto">
+        <div className="flex flex-col gap-3">
           <h3 className="font-title text-lg">Last 10 of your events</h3>
-          <div className="flex flex-col overflow-y-auto h-full">
+          <div className="flex flex-col overflow-y-auto h-36">
             {last10AccountEvents?.length === 0 && (
               <p className="text-center">No event</p>
             )}
@@ -51,9 +51,9 @@ const EventsSection: FC<EventsSectionProps> = ({ className }) => {
             )}
           </div>
         </div>
-        <div className="flex flex-col gap-3 h-1/2">
+        <div className="flex flex-col gap-3">
           <h3 className="font-title text-lg">Last 10 events</h3>
-          <div className="flex flex-col overflow-y-auto h-full">
+          <div className="flex flex-col overflow-y-auto h-36">
             {last10Events?.length === 0 && (
               <p className="text-center">No event</p>
             )}

@@ -19,7 +19,7 @@ function App() {
             <div className="flex h-full w-full gap-4">
               <BalanceSection className="!w-3/12"/>
               <UserActionsSection className="!w-9/12"/>
-              <EventsSection className="!w-4/12"/>
+              <EventsSection className="!w-4/12 p-2"/>
             </div>
           </div>
           <ChartSection className="w-11/12 h-1/2"/>

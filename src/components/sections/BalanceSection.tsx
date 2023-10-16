@@ -45,7 +45,7 @@ const BalanceSection: FC<BalanceSectionProps> = ({ className }) => {
           onClick={onRefetch}
         />
       </div>
-      <div className="flex flex-col gap-5 px-8 pt-4 pb-8">
+      <div className="flex flex-col gap-5 px-8 pt-4">
         <div className="flex justify-between">
           <p>Total Supply</p>
           <p className="pl-4">{totalSupply || 0}</p>

@@ -35,7 +35,7 @@ const AllowanceSection: FC<AllowanceSectionProps> = ({ className }) => {
           onClick={onRefetch}
         />
       </div>
-      <div className="px-8 pb-8 h-44 overflow-y-auto">
+      <div className="px-8 h-44 overflow-y-auto">
         {isLoading && <Spinner/>}
         {allowances && Object.entries(allowances).map(([spender, allowance]) => (
           <div className="flex flex-row justify-between" key={spender}>
