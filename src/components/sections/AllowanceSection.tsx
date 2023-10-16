@@ -22,7 +22,7 @@ const AllowanceSection: FC<AllowanceSectionProps> = ({ className }) => {
     fetchAllAllowances();
   }
   return (
-    <div className={cx(className)}>
+    <div className={cx("h-full overflow-y-auto", className)}>
       <div className="flex items-center justify-between w-full">
         <div/>
         <h2 className="text-3xl self-center py-4 px-8 font-title">
@@ -35,7 +35,7 @@ const AllowanceSection: FC<AllowanceSectionProps> = ({ className }) => {
           onClick={onRefetch}
         />
       </div>
-      <div className="px-8 pt-4 pb-8">
+      <div className="px-8 h-44 overflow-y-auto">
         {isLoading && <Spinner/>}
         {allowances && Object.entries(allowances).map(([spender, allowance]) => (
           <div className="flex flex-row justify-between" key={spender}>

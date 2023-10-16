@@ -1,6 +1,5 @@
 import { FC, ReactNode } from "react";
 import { createCtx } from "../utils";
-import cx from "classnames";
 import { HexString } from "../types";
 
 interface Props {
@@ -13,7 +12,7 @@ const ConnectedWalletContextProvider: FC<Props> = ({ children, address }) => {
     <ConnectedWalletContextBaseProvider value={{
       account: address,
     }}>
-      <div className={cx("h-full")}>{children}</div>
+      {children}
     </ConnectedWalletContextBaseProvider>
   );
 };

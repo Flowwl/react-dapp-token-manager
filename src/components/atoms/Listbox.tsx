@@ -17,7 +17,7 @@ interface ListboxProps {
 const Listbox: FC<ListboxProps> = ({ className, onSelect, selectedValue, values }) => {
 
   return (
-    <div className={cx("w-56", className)}>
+    <div className={cx("w-56 text-gray-50", className)}>
       <HListbox value={selectedValue} onChange={onSelect}>
         <div className="relative">
           <HListbox.Button
