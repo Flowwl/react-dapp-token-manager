@@ -1,16 +1,16 @@
 import { FC, useEffect } from 'react';
 import cx from "classnames";
 import { ArrowPathIcon } from "@heroicons/react/20/solid";
-import { useGetAllTransfers } from "../../hooks";
 import Spinner from "../atoms/Spinner.tsx";
 import TransferChart from "../molecules/TransferChart.tsx";
+import { useGetAllTransfersByTimestamps } from "../../hooks/useGetAllTransfersByTimestamps.ts";
 
 interface ChartSectionProps {
   className?: string;
 }
 
 const ChartSection: FC<ChartSectionProps> = ({ className }) => {
-  const { data: transfers, isLoading: areTransfersLoading, fetchAllTransfers } = useGetAllTransfers({ isEnabled: false });
+  const { data: transfers, isLoading: areTransfersLoading, fetchAllTransfers } = useGetAllTransfersByTimestamps({ isEnabled: false });
 
   useEffect(() => {
     refetch();
