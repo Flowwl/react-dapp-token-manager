@@ -10,9 +10,7 @@ export type Token = {
   abi?: Abi;
   label: string;
   chain: Chain;
-  block: string;
   alchemyNetwork: Network;
-  events?: Record<string, HexString>;
 }
 
 const Tokens = ["MATIC", "BUSD"] as const;
@@ -21,7 +19,6 @@ export const TOKENS: Record<TokenName, Token> = {
   MATIC: {
     label: "MATIC",
     chain: polygonMumbai,
-    block: "0",
     alchemyNetwork: Network.MATIC_MUMBAI
   },
   BUSD: {
@@ -29,12 +26,7 @@ export const TOKENS: Record<TokenName, Token> = {
     abi: parseAbi(Matic_Abi),
     label: "BUSD",
     chain: polygonMumbai,
-    alchemyNetwork: Network.MATIC_MUMBAI,
-    block: "22069112",
-    events: {
-      Transfer: "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
-      Approval: "0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925"
-    }
+    alchemyNetwork: Network.MATIC_MUMBAI
   }
 } as const
 
