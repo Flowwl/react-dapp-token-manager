@@ -12,7 +12,7 @@ const TransferChart: FC<TransferChartProps> = ({ className, transfers }) => {
   const nbTransactionsByBlocks = prepareLogsToSeries(transfers)
   const series = [
     {
-      name: "Transfers count",
+      name: "Transfers",
       data: Object.values(nbTransactionsByBlocks)
     }
   ];
