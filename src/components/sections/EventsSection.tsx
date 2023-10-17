@@ -47,7 +47,7 @@ const EventsSection: FC<EventsSectionProps> = ({ className }) => {
               key={log.transactionHash} log={log}/>)}
           </div>
         </div>
-        <div className="h-0 w-full border-[0.001em] border-gray-50"/>
+        <div className="h-0 w-full border-b-[0.001em] border-gray-50 rounded-full"/>
         <div className="flex flex-col gap-3">
           <h3 className="font-title text-lg">Last 10 events</h3>
           <div className="flex flex-col overflow-y-auto h-28 gap-2">

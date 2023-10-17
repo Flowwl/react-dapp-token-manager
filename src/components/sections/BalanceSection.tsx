@@ -4,8 +4,6 @@ import Spinner from "../atoms/Spinner.tsx";
 import { TOKENS } from "../../constants/tokens.ts";
 import { useGetTotalSupply, useGetUserBalance, useGetUserBalanceByToken } from "../../hooks";
 import { useChainContext, useConnectedWalletContext } from "../../contexts";
-import dollarIcon from "../../assets/dollar-icon.png";
-import maticIcon from "../../assets/matic.svg";
 import { ArrowPathIcon } from "@heroicons/react/20/solid";
 
 interface BalanceSectionProps {
@@ -44,31 +42,33 @@ const BalanceSection: FC<BalanceSectionProps> = ({ className }) => {
           onClick={onRefetch}
         />
       </div>
-      <div className="flex flex-col gap-5">
-        <div className="flex justify-between">
-          <p>Total Supply</p>
-          <p className="pl-4">{totalSupply || 0}</p>
+      <div className="flex flex-col gap-1">
+        <div className="flex text-gray-400">
+          <p className="font-title w-2/3">Total Supply</p>
+          <p className="text-left w-1/3">{totalSupply || 0}</p>
         </div>
         <div
-          className={cx("flex justify-between cursor-pointer hover:opacity-50", { "text-purple-500": selectedToken === "MATIC" })}
+          className={cx("flex cursor-pointer hover:opacity-50 text-gray-400", { "text-gray-50": selectedToken === "MATIC" })}
           onClick={() => changeTokenTo("MATIC")}
         >
-          <p className={cx("flex items-center gap-2")}>
-            <img src={maticIcon} className="h-6 w-6 scale-125"/>
+          <p className={cx("flex items-center gap-2 font-title w-2/3")}>
+            {/*<img src={maticIcon} className="h-6 w-6 scale-125"/>*/}
+            {selectedToken === "MATIC" && "> "}
             {TOKENS["MATIC"].label}
           </p>
-          {!isBalanceLoading && <p className="pl-4">{userBalance || 0}</p>}
+          {!isBalanceLoading && <p className="text-left w-1/3">{userBalance || 0}</p>}
           {isBalanceLoading && <Spinner className={"mr-0 h-4 w-4"}/>}
         </div>
         <div
-          className={cx("flex justify-between cursor-pointer hover:opacity-50", { "text-purple-500": selectedToken === "BUSD" })}
+          className={cx("flex justify-between cursor-pointer hover:opacity-50 text-gray-400", { "text-gray-50": selectedToken === "BUSD" })}
           onClick={() => changeTokenTo("BUSD")}
         >
-          <p className="flex items-center gap-3">
-            <img src={dollarIcon} className="h-5 w-5"/>
+          <p className="flex items-center gap-3 font-title w-2/3">
+            {/*<img src={dollarIcon} className="h-5 w-5"/>*/}
+            {selectedToken === "BUSD" && "> "}
             {TOKENS["BUSD"].label}
           </p>
-          {!isBUSDBalanceLoading && <p className="pl-4">{busdUserBalance || 0}</p>}
+          {!isBUSDBalanceLoading && <p className="w-1/3 text-left">{busdUserBalance || 0}</p>}
           {isBUSDBalanceLoading && <Spinner className={"mr-0 h-4 w-4"}/>}
         </div>
       </div>
