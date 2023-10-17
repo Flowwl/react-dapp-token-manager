@@ -13,14 +13,17 @@ import AmongUsParticles from "./components/atoms/AmongUsParticles.tsx";
 import ConfettisParticles from "./components/atoms/ConfettisParticles.tsx";
 
 function App() {
-  const [particlesActivated, setParticlesActivated] = useState<boolean>(localStorage.getItem("particlesActivated") === "true" || true);
+  const areParticlesVisible = localStorage.getItem("particlesActivated") === "true";
+  const [particlesActivated, setParticlesActivated] = useState<boolean>(areParticlesVisible);
 
   const onParticlesClick = () => {
-    setParticlesActivated((state) => !state);
+    setParticlesActivated((state) => {
+      localStorage.setItem("particlesActivated", `${!state}`);
+      return !state
+    });
   };
 
   useEffect(() => {
-    localStorage.setItem("particlesActivated", particlesActivated.toString());
   }, [particlesActivated]);
   const { address } = useWalletAuthContext();
   return (

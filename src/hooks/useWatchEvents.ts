@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { TOKENS } from "../constants/tokens.ts";
 import { arrayToObjectByKey } from "../utils/arrayToObjectByKey.ts";
 import { uniqueArrayByKey } from "../utils/uniqueArrayByKey.ts";
-import { toast } from "react-toastify";
 
 export function useWatchEvents() {
   const { webSocketPublicClientActions, selectedToken } = useChainContext();
@@ -19,7 +18,7 @@ export function useWatchEvents() {
       onLogs: (logs) => {
         const approvalsByHash = arrayToObjectByKey(logs, 'transactionHash');
         setApprovals((approvals) => ({ ...approvals, ...approvalsByHash }));
-        toast.info("Someone approved on the chain!")
+        // toast.info("Someone approved on the chain!")
       },
       event: parseAbiItem('event Approval(address indexed owner, address indexed sender, uint256 value)'),
     });
@@ -28,7 +27,7 @@ export function useWatchEvents() {
       onLogs: (logs) => {
         const transfersByHash = arrayToObjectByKey(logs, 'transactionHash');
         setTransfers((transfers) => ({ ...transfers, ...transfersByHash }));
-        toast.info("Someone transferred on the chain!")
+        // toast.info("Someone transferred on the chain!")
       },
       event: parseAbiItem('event Transfer(address indexed from, address indexed to, uint256 value)'),
     });
