@@ -1,5 +1,5 @@
 import { FC, ReactNode, useState } from "react";
-import { createCtx, getPublicChainTransport, getWalletChainTransport } from "../utils";
+import { createCtx, getPublicChainTransport, getWalletChainTransport, getWebsocketChainTransport } from "../utils";
 import { Chain } from "viem/chains";
 import { TokenName, TOKENS } from "../constants/tokens.ts";
 import { useSwitchToChain } from "../hooks/useSwitchToChain.ts";
@@ -17,6 +17,7 @@ const ChainContextProvider: FC<Props> = ({ children }) => {
 
   const publicClientActions = createPublicClient(getPublicChainTransport(selectedChain));
   const walletClientActions = createWalletClient(getWalletChainTransport(selectedChain));
+  const webSocketPublicClientActions = createPublicClient(getWebsocketChainTransport(selectedChain));
 
   const { switchToChain } = useSwitchToChain(selectedToken);
   const changeTokenTo = (token: TokenName) => {
@@ -53,6 +54,7 @@ const ChainContextProvider: FC<Props> = ({ children }) => {
     <ChainContextBaseProvider value={{
       publicClientActions,
       walletClientActions,
+      webSocketPublicClientActions,
       selectedChain,
       selectedToken,
       changeTokenTo,
@@ -68,6 +70,7 @@ export default ChainContextProvider;
 export interface ChainContext {
   publicClientActions: PublicClient;
   walletClientActions: WalletClient;
+  webSocketPublicClientActions: PublicClient;
   selectedToken: TokenName;
   selectedChain: Chain;
   tokenDecimals: bigint;
