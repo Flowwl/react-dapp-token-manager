@@ -31,7 +31,7 @@ const BalanceSection: FC<BalanceSectionProps> = ({ className }) => {
   };
 
   return (
-    <div className={cx("flex flex-col", className)}>
+    <div className={cx("flex flex-col gap-6", className)}>
       <div className="flex items-center justify-between w-full">
         <div/>
         <h2 className="text-3xl self-center font-title">
