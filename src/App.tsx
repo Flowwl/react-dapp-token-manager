@@ -11,7 +11,7 @@ import LeftPanel from "./components/sections/LeftPanel.tsx";
 function App() {
   const { address } = useWalletAuthContext();
   return (
-    <div className="h-screen w-full p-4 flex flex-col items-center gap-4 text-gray-50">
+    <div className="h-screen w-full p-4 flex flex-col items-center gap-4 text-gray-50 scrollbar scrollbar-thumb-gray-400 scrollbar-track-gray-100">
       <TopBar/>
       {address && (
         <ConnectedWalletContext address={address}>
