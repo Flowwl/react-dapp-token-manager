@@ -57,7 +57,7 @@ const BalanceSection: FC<BalanceSectionProps> = ({ className }) => {
             {TOKENS["MATIC"].label}
           </p>
           {!isBalanceLoading && <p className="text-left w-1/3">{userBalance || 0}</p>}
-          {isBalanceLoading && <Spinner className={"mr-0 h-4 w-4"}/>}
+          {isBalanceLoading && <Spinner className={"ml-0 h-4 w-4"}/>}
         </div>
         <div
           className={cx("flex justify-between cursor-pointer hover:opacity-50 text-gray-400", { "text-gray-50": selectedToken === "BUSD" })}
@@ -69,7 +69,7 @@ const BalanceSection: FC<BalanceSectionProps> = ({ className }) => {
             {TOKENS["BUSD"].label}
           </p>
           {!isBUSDBalanceLoading && <p className="w-1/3 text-left">{busdUserBalance || 0}</p>}
-          {isBUSDBalanceLoading && <Spinner className={"mr-0 h-4 w-4"}/>}
+          {isBUSDBalanceLoading && <Spinner className={"ml-0 h-4 w-4"}/>}
         </div>
       </div>
     </div>

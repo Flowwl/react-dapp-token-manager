@@ -5,14 +5,15 @@ import { HexString } from "../types";
 interface Props {
   children: ReactNode;
   address: HexString;
+  className?: string
 }
 
-const ConnectedWalletContextProvider: FC<Props> = ({ children, address }) => {
+const ConnectedWalletContextProvider: FC<Props> = ({ className, children, address }) => {
   return (
     <ConnectedWalletContextBaseProvider value={{
       account: address,
     }}>
-      {children}
+      <div className={className}>{children}</div>
     </ConnectedWalletContextBaseProvider>
   );
 };
