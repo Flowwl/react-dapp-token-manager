@@ -4,22 +4,6 @@
 @import 'react-tooltip/dist/react-tooltip.css';
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap');
 
-::-webkit-scrollbar {
-    width: 4px;
-}
-::-webkit-scrollbar:hover{
-    //opacity: 1;
-}
-/* Track */
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-    @apply rounded-full bg-gray-400;
-}
-
 
 body {
     min-height: 100vh;

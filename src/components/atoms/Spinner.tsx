@@ -1,11 +1,20 @@
 import { FC } from "react";
 import cx from "classnames";
+import "./Spinner.scss";
 
 interface SpinnerProps {
   className?: string;
 }
 
 const Spinner: FC<SpinnerProps> = ({ className }) => {
+  const areParticlesVisible = localStorage.getItem("particlesActivated") === "true";
+  if (areParticlesVisible) {
+    return (
+      <div className={cx(className, "my-auto mx-auto mt-5", "spinner")}>
+        <div className="spinnerin"></div>
+      </div>
+    );
+  }
   return (
     <div
       style={{ borderTopColor: "transparent" }}

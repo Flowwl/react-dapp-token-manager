@@ -11,7 +11,7 @@ export default withMT({
         fontFamily: {
             sans: ["Roboto", "sans-serif"],
             title: ['Pixelify Sans', 'sans-serif'],
-            button: ['Pixelify Sans', 'sans-serif'],
+            button: ['Pixelify Sans', 'sans-serif']
         },
         extend: {
             colors: {
@@ -22,6 +22,8 @@ export default withMT({
             }
         }
     },
-    plugins: []
+    plugins: [
+        require('tailwind-scrollbar')
+    ]
 });
 
