@@ -1,8 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@import 'react-tooltip/dist/react-tooltip.css';
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap');
+
+::-webkit-scrollbar {
+    width: 4px;
+}
+::-webkit-scrollbar:hover{
+    //opacity: 1;
+}
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-gray-400;
+}
+
 
 body {
     min-height: 100vh;
@@ -11,6 +28,9 @@ body {
     background-color: #0c002e;
     background-image: radial-gradient(at 100% 100%, rgb(84, 2, 103) 0px, transparent 50%), radial-gradient(at 0% 0%, rgb(97, 0, 118) 0px, transparent 50%);
     overscroll-behavior-y: none;
+
+    scrollbar-color: #6969dd #e0e0e0;
+    scrollbar-width: thin;
 }
 
 #root {

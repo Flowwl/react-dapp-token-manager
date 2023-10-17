@@ -7,7 +7,6 @@ import { useChainContext, useConnectedWalletContext } from "../../contexts";
 import dollarIcon from "../../assets/dollar-icon.png";
 import maticIcon from "../../assets/matic.svg";
 import { ArrowPathIcon } from "@heroicons/react/20/solid";
-import AllowanceSection from "./AllowanceSection.tsx";
 
 interface BalanceSectionProps {
   className?: string;
@@ -32,20 +31,20 @@ const BalanceSection: FC<BalanceSectionProps> = ({ className }) => {
   };
 
   return (
-    <div className={cx("bg-bg-700/70 rounded-lg flex flex-col", className)}>
+    <div className={cx("flex flex-col gap-3", className)}>
       <div className="flex items-center justify-between w-full">
         <div/>
-        <h2 className="text-3xl self-center py-4 px-8 font-title">
+        <h2 className="text-3xl self-center font-title">
           Balances
         </h2>
         <ArrowPathIcon
-          className={cx("mr-4 text-gray-400 hover:text-gray-50 cursor-pointer h-7 w-7", {
+          className={cx("mr-4 text-gray-400 hover:text-gray-50 cursor-pointer h-6 w-6", {
             "animate-spin": isBalanceLoading || isBUSDBalanceLoading
           })}
           onClick={onRefetch}
         />
       </div>
-      <div className="flex flex-col gap-5 px-8 pt-4">
+      <div className="flex flex-col gap-5">
         <div className="flex justify-between">
           <p>Total Supply</p>
           <p className="pl-4">{totalSupply || 0}</p>
@@ -65,15 +64,14 @@ const BalanceSection: FC<BalanceSectionProps> = ({ className }) => {
           className={cx("flex justify-between cursor-pointer hover:opacity-50", { "text-purple-500": selectedToken === "BUSD" })}
           onClick={() => changeTokenTo("BUSD")}
         >
-          <p className="flex items-center gap-2">
-            <img src={dollarIcon} className="h-6 w-6"/>
+          <p className="flex items-center gap-3">
+            <img src={dollarIcon} className="h-5 w-5"/>
             {TOKENS["BUSD"].label}
           </p>
           {!isBUSDBalanceLoading && <p className="pl-4">{busdUserBalance || 0}</p>}
           {isBUSDBalanceLoading && <Spinner className={"mr-0 h-4 w-4"}/>}
         </div>
       </div>
-      <AllowanceSection/>
     </div>
   );
 };
