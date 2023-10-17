@@ -4,6 +4,25 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap');
 
+::-webkit-scrollbar {
+    //width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    //background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    //background: red;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    //background: red;
+}
+
 body {
     min-height: 100vh;
     padding: 0;
@@ -11,6 +30,9 @@ body {
     background-color: #0c002e;
     background-image: radial-gradient(at 100% 100%, rgb(84, 2, 103) 0px, transparent 50%), radial-gradient(at 0% 0%, rgb(97, 0, 118) 0px, transparent 50%);
     overscroll-behavior-y: none;
+
+    scrollbar-color: #6969dd #e0e0e0;
+    scrollbar-width: thin;
 }
 
 #root {

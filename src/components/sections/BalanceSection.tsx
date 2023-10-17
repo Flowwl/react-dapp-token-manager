@@ -7,7 +7,6 @@ import { useChainContext, useConnectedWalletContext } from "../../contexts";
 import dollarIcon from "../../assets/dollar-icon.png";
 import maticIcon from "../../assets/matic.svg";
 import { ArrowPathIcon } from "@heroicons/react/20/solid";
-import AllowanceSection from "./AllowanceSection.tsx";
 
 interface BalanceSectionProps {
   className?: string;
@@ -32,10 +31,10 @@ const BalanceSection: FC<BalanceSectionProps> = ({ className }) => {
   };
 
   return (
-    <div className={cx("bg-bg-700/70 rounded-lg flex flex-col", className)}>
+    <div className={cx("flex flex-col", className)}>
       <div className="flex items-center justify-between w-full">
         <div/>
-        <h2 className="text-3xl self-center py-4 px-8 font-title">
+        <h2 className="text-3xl self-center font-title">
           Balances
         </h2>
         <ArrowPathIcon
@@ -45,7 +44,7 @@ const BalanceSection: FC<BalanceSectionProps> = ({ className }) => {
           onClick={onRefetch}
         />
       </div>
-      <div className="flex flex-col gap-5 px-8 pt-4">
+      <div className="flex flex-col gap-5">
         <div className="flex justify-between">
           <p>Total Supply</p>
           <p className="pl-4">{totalSupply || 0}</p>
@@ -73,7 +72,6 @@ const BalanceSection: FC<BalanceSectionProps> = ({ className }) => {
           {isBUSDBalanceLoading && <Spinner className={"mr-0 h-4 w-4"}/>}
         </div>
       </div>
-      <AllowanceSection/>
     </div>
   );
 };
