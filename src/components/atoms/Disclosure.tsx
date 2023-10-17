@@ -19,13 +19,9 @@ const Disclosure: FC<DisclosureProps> = ({ className, header, body }) => {
         {({ open }) => (
           <div className="flex flex-col w-full mx-auto">
             <HDisclosure.Button
-              className="flex w-full justify-between text-left text-sm font-medium">
-              {header}
-              <ChevronUpIcon
-                className={`${
-                  open ? 'rotate-180 transform' : ''
-                } h-5 w-5 text-gray-400`}
-              />
+              className="flex justify-between gap-3 text-left text-sm font-medium pr-5">
+              <div className="w-11/12">{header}</div>
+              <ChevronUpIcon className={cx({ 'rotate-180 transform' : open}, "h-5 w-5 text-gray-400")}/>
             </HDisclosure.Button>
             <HDisclosure.Panel className="text-sm font-light text-gray-500 pl-8">
               {body}
