@@ -27,6 +27,7 @@ export function useGetAllTransfers(opts: Partial<FetchOptions<Log[]>> = {}) {
     fromBlock,
     toBlock
   });
+
   const fetchAllTransfers = () => {
     fetchMethods.refetch();
   };
