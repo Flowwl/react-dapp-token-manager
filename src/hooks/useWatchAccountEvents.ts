@@ -13,7 +13,6 @@ export function useWatchAccountEvents() {
   const [approvals, setApprovals] = useState<Record<string, Log>>({});
 
   useEffect(() => {
-    console.log("Watching events...");
     const address = TOKENS[selectedToken].address;
     const unwatchApprovals = webSocketPublicClientActions.watchEvent({
       ...(address ? { address } : {}),

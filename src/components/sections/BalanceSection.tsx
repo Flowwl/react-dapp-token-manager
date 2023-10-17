@@ -5,6 +5,7 @@ import { TOKENS } from "../../constants/tokens.ts";
 import { useGetTotalSupply, useGetUserBalance, useGetUserBalanceByToken } from "../../hooks";
 import { useChainContext, useConnectedWalletContext } from "../../contexts";
 import { ArrowPathIcon } from "@heroicons/react/20/solid";
+import { useOnTransfersChanges } from "../../hooks/useOnTransfersChanges.ts";
 
 interface BalanceSectionProps {
   className?: string;
@@ -22,6 +23,8 @@ const BalanceSection: FC<BalanceSectionProps> = ({ className }) => {
     deps: [account],
     refetchInterval: 60 * 1000
   });
+
+  useOnTransfersChanges(() => onRefetch())
 
   const onRefetch = () => {
     refetchBalance();
