@@ -15,7 +15,7 @@ interface Last10EventsProps {
 
 const Last10Events: FC<Last10EventsProps> = ({ className, search, changeIsLoading, shouldRefetch }) => {
   const { data: last10Events, isLoading: areLast10EventsLoading, fetchLast10Events } = useGetLast10Events({ isEnabled: false, refetchInterval: 600000 });
-  const { events } = useWatchEvents();
+  const { events, emptyEvents } = useWatchEvents();
   const [showEvents, setShowEvents] = useState(false);
   const onRefetch = () => fetchLast10Events();
 
@@ -24,7 +24,11 @@ const Last10Events: FC<Last10EventsProps> = ({ className, search, changeIsLoadin
     setTimeout(() => setShowEvents(false), 1000);
   }, [events.length]);
   useEffect(() => { changeIsLoading(areLast10EventsLoading); }, [areLast10EventsLoading]);
-  useEffect(() => { onRefetch(); }, [shouldRefetch]);
+  useEffect(() => {
+    onRefetch();
+    emptyEvents();
+  }, [shouldRefetch]);
+
 
   const filteredLast10Events = (last10Events || []).filter((log) => search === "" || log.transactionHash?.includes(search));
   const filteredEvents = events.filter((log) => search === "" || log.transactionHash?.includes(search));
@@ -33,19 +37,19 @@ const Last10Events: FC<Last10EventsProps> = ({ className, search, changeIsLoadin
       <h3 className="font-title text-lg">Last 10 events</h3>
       <div className="flex flex-col overflow-y-auto h-28 gap-2">
         {!areLast10EventsLoading && filteredLast10Events?.length === 0 && (<p className="text-center">No event</p>)}
-        <Transition
-          show={showEvents}
-          enter="transition-translation duration-500"
-          enterFrom="translate-x-full"
-          enterTo="translate-x-0"
-        >
-          {filteredEvents.length > 0 && filteredEvents.map((log, index) =>
+        {filteredEvents.length > 0 && filteredEvents.map((log) =>
+          <Transition
+            show={showEvents}
+            enter="transition-translation duration-500"
+            enterFrom="translate-x-full"
+            enterTo="translate-x-0"
+          >
             <LogEventRow
-              key={index}
+              key={log.transactionHash}
               log={log}
             />
-          )}
-        </Transition>
+          </Transition>
+        )}
         {!areLast10EventsLoading && (filteredLast10Events?.length || 0) > 0 && filteredLast10Events?.map((log) =>
           <LogEventRow key={log.transactionHash} log={log}/>)
         }

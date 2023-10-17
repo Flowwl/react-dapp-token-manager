@@ -15,7 +15,7 @@ interface Last10AccountEventsProps {
 
 const Last10AccountEvents: FC<Last10AccountEventsProps> = ({ className, search, changeIsLoading, shouldRefetch }) => {
   const { data: last10AccountEvents, isLoading: areLast10AccountEventsLoading, fetchLast10AccountEvents } = useGetLast10AccountEvents({ isEnabled: false, refetchInterval: 600000 });
-  const { events: accountEvents } = useWatchAccountEvents();
+  const { events: accountEvents, emptyEvents } = useWatchAccountEvents();
   const [showAccountEvents, setShowAccountEvents] = useState(false);
   const onRefetch = () => fetchLast10AccountEvents();
 
@@ -24,7 +24,10 @@ const Last10AccountEvents: FC<Last10AccountEventsProps> = ({ className, search, 
     setTimeout(() => setShowAccountEvents(false), 1000);
   }, [accountEvents.length]);
   useEffect(() => { changeIsLoading(areLast10AccountEventsLoading); }, [areLast10AccountEventsLoading]);
-  useEffect(() => { onRefetch(); }, [shouldRefetch]);
+  useEffect(() => {
+      onRefetch();
+      emptyEvents();
+    }, [shouldRefetch]);
 
   const filteredLast10AccountEvents = [...accountEvents, ...(last10AccountEvents || [])].filter((log) => search === "" || log.transactionHash?.includes(search));
   const filteredAccountEvents = accountEvents.filter((log) => search === "" || log.transactionHash?.includes(search));
@@ -35,22 +38,22 @@ const Last10AccountEvents: FC<Last10AccountEventsProps> = ({ className, search, 
         {!areLast10AccountEventsLoading && filteredLast10AccountEvents?.length === 0 && (
           <p className="text-center">No event</p>)}
 
-        <Transition
-          show={showAccountEvents}
-          enter="transition-translation duration-500"
-          enterFrom="translate-x-full"
-          enterTo="translate-x-0"
-        >
-          {filteredAccountEvents.length > 0 && filteredAccountEvents.map((log) =>
+        {filteredAccountEvents.length > 0 && filteredAccountEvents.map((log) =>
+          <Transition
+            show={showAccountEvents}
+            enter="transition-translation duration-500"
+            enterFrom="translate-x-full"
+            enterTo="translate-x-0"
+          >
             <LogEventRow
               key={log.transactionHash}
               log={log}
             />
-          )}
-        </Transition>
-        {!areLast10AccountEventsLoading && (filteredLast10AccountEvents?.length || 0) > 0 && filteredLast10AccountEvents?.map((log, index) =>
+          </Transition>
+        )}
+        {!areLast10AccountEventsLoading && (filteredLast10AccountEvents?.length || 0) > 0 && filteredLast10AccountEvents?.map((log) =>
           <LogEventRow
-            key={index}
+            key={log.transactionHash}
             log={log}
           />
         )}

@@ -61,5 +61,13 @@ export function useWatchAccountEvents() {
       .slice(0, 10);
   }
 
-  return { events: getLast10Logs(Object.values(approvals), Object.values(transfers)) };
+  const emptyEvents = () => {
+    setApprovals({});
+    setTransfers({});
+  }
+
+  return {
+    events: getLast10Logs(Object.values(approvals), Object.values(transfers)),
+    emptyEvents
+  };
 }
