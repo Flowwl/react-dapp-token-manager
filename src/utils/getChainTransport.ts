@@ -18,6 +18,6 @@ export const getWalletChainTransport = (chain: Chain): ClientConfig => {
 
 
 export const getWebsocketChainTransport = (chain: Chain): ClientConfig => {
-  const alchemy = webSocket(`ws://polygon-mumbai.g.alchemy.com/v2/${ENV_CONFIG.ALCHEMY_API_KEY}`, { retryCount: 1, retryDelay: 2000 });
+  const alchemy = webSocket(`wss://polygon-mumbai.g.alchemy.com/v2/${ENV_CONFIG.ALCHEMY_API_KEY}`, { retryCount: 1, retryDelay: 2000 });
   return { chain, transport: alchemy }
 }
