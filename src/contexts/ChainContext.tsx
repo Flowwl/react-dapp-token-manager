@@ -1,5 +1,5 @@
 import { FC, ReactNode, useState } from "react";
-import { createCtx, getChainTransport } from "../utils";
+import { createCtx, getPublicChainTransport, getWalletChainTransport } from "../utils";
 import { Chain } from "viem/chains";
 import { TokenName, TOKENS } from "../constants/tokens.ts";
 import { useSwitchToChain } from "../hooks/useSwitchToChain.ts";
@@ -15,9 +15,8 @@ const ChainContextProvider: FC<Props> = ({ children }) => {
   const [selectedToken, setSelectedToken] = useState<TokenName>("BUSD")
   const selectedChain = TOKENS[selectedToken].chain;
 
-  const chainTransport = getChainTransport(selectedChain);
-  const publicClientActions = createPublicClient(chainTransport);
-  const walletClientActions = createWalletClient(chainTransport);
+  const publicClientActions = createPublicClient(getPublicChainTransport(selectedChain));
+  const walletClientActions = createWalletClient(getWalletChainTransport(selectedChain));
 
   const { switchToChain } = useSwitchToChain(selectedToken);
   const changeTokenTo = (token: TokenName) => {
