@@ -14,8 +14,7 @@ export function useGetAllTransfersByTimestamps(opts: Partial<FetchOptions<Record
     try {
       const transfers = await getTransfers(address, TOKENS[selectedToken].deployBlock, "latest");
       return prepareLogsToSeries(transfers);
-    }
-    catch (e) {
+    } catch (e) {
       const blockNumber = await publicClientActions.getBlockNumber();
       const logs = await logRunner(blockNumber, 10, async (fromBlock, toBlock) => getTransfers(address, fromBlock, toBlock));
       return prepareLogsToSeries(Object.values(logs));
@@ -34,20 +33,34 @@ export function useGetAllTransfersByTimestamps(opts: Partial<FetchOptions<Record
   };
 
   async function prepareLogsToSeries(logs: Log[]) {
-    const nbTransactionsByBlocks: Record<string, number> = {};
+    const granularity = 1_000_000n;
+    const blockNumberByTimestamp: Record<string, string> = {};
+    const nbTransactionsByBlockNumber: Record<string, number> = {};
 
+    // get nb transactions by block number
+    logs.map((log) => {
+      const blockNumber = (log?.blockNumber || 0n) / granularity;
+      if (!nbTransactionsByBlockNumber[`${blockNumber}`]) {
+        nbTransactionsByBlockNumber[`${blockNumber}`] = 0;
+      }
+      nbTransactionsByBlockNumber[`${blockNumber}`] += 1;
+    });
+
+    //fetch all blocks and get timestamp
     await Promise.all(
-      logs.map(async (log) => {
-        const blockNumber = (log?.blockNumber || 0n) / 1_000_000n;
-        const block = await publicClientActions.getBlock({ blockNumber: blockNumber * 1_000_000n });
-        if (!nbTransactionsByBlocks[`${block.timestamp}`]) {
-          nbTransactionsByBlocks[`${block.timestamp}`] = 0;
-        }
-        nbTransactionsByBlocks[`${block.timestamp}`] += 1;
+      Object.keys(nbTransactionsByBlockNumber).map(async (blockNumber) => {
+        const block = await publicClientActions.getBlock({ blockNumber: BigInt(blockNumber) * granularity });
+        blockNumberByTimestamp[`${blockNumber}`] = `${block.timestamp}`;
       })
     );
 
-    return nbTransactionsByBlocks;
+    //get entries
+    const nbTransactionsByTimestampEntries = logs.map((log) => {
+      const blockNumber = (log?.blockNumber || 0n) / granularity;
+      return [blockNumberByTimestamp[`${blockNumber}`], nbTransactionsByBlockNumber[`${blockNumber}`]];
+    });
+
+    return Object.fromEntries(nbTransactionsByTimestampEntries);
   }
 
   const fetchMethods = useFetch(async () => promise(), { isEnabled: true, ...opts });
