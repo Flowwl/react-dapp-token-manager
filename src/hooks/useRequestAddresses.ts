@@ -6,13 +6,7 @@ import { HexString } from "../types";
 export const useRequestAddresses = (opts: Partial<FetchOptions<RequestAddressesReturnType>> = {}) => {
   const { walletClientActions} = useChainContext();
   const promise = async (): Promise<Array<HexString>> => {
-    try {
-      const addresses = await walletClientActions.request({ method: "eth_requestAccounts"});
-      return addresses || [];
-    } catch (error) {
-      const addresses = await window.ethereum?.request({ method: "eth_requestAccounts" });
-      return addresses || [];
-    }
+      return walletClientActions.request({ method: "eth_requestAccounts"});
   };
   const requestAddresses = () => {
     fetchMethods.refetch();
