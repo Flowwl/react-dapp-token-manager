@@ -10,7 +10,7 @@ interface LeftPanelProps {
 const LeftPanel: FC<LeftPanelProps> = ({ className }) => {
 
   return (
-    <div className={cx("bg-bg-700/70 rounded-lg flex flex-col gap-3 overflow-y-auto p-4", className)}>
+    <div className={cx("bg-bg-700/70 rounded-lg flex flex-col gap-3 overflow-y-auto px-8 py-4", className)}>
       <BalanceSection />
       <AllowanceSection />
     </div>

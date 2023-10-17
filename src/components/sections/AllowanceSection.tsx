@@ -23,7 +23,7 @@ const AllowanceSection: FC<AllowanceSectionProps> = ({ className }) => {
     fetchAllAllowances();
   }
   return (
-    <div className={cx("flex flex-col gap-6",className)}>
+    <div className={cx("flex flex-col gap-3",className)}>
       <div className="flex items-center justify-between w-full">
         <div/>
         <h2 className="text-3xl self-center font-title">
@@ -41,7 +41,7 @@ const AllowanceSection: FC<AllowanceSectionProps> = ({ className }) => {
         {allowances && Object.entries(allowances).map(([spender, allowance]) => (
           <div className="flex flex-row justify-between gap-12" key={spender}>
             <p className="truncate" data-tooltip-id="allowance-big-number" data-tooltip-content={spender}>{spender}</p>
-            <p className="w-24 truncate" data-tooltip-id="allowance-big-number" data-tooltip-content={formatBigInt(allowance, tokenDecimals).toString()}>{formatBigInt(allowance, tokenDecimals).toString()}</p>
+            <p className="w-32 truncate" data-tooltip-id="allowance-big-number" data-tooltip-content={formatBigInt(allowance, tokenDecimals).toString()}>{formatBigInt(allowance, tokenDecimals).toString()}</p>
           </div>
         )
         )}

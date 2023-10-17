@@ -31,14 +31,14 @@ const BalanceSection: FC<BalanceSectionProps> = ({ className }) => {
   };
 
   return (
-    <div className={cx("flex flex-col gap-6", className)}>
+    <div className={cx("flex flex-col gap-3", className)}>
       <div className="flex items-center justify-between w-full">
         <div/>
         <h2 className="text-3xl self-center font-title">
           Balances
         </h2>
         <ArrowPathIcon
-          className={cx("mr-4 text-gray-400 hover:text-gray-50 cursor-pointer h-7 w-7", {
+          className={cx("mr-4 text-gray-400 hover:text-gray-50 cursor-pointer h-6 w-6", {
             "animate-spin": isBalanceLoading || isBUSDBalanceLoading
           })}
           onClick={onRefetch}
@@ -64,8 +64,8 @@ const BalanceSection: FC<BalanceSectionProps> = ({ className }) => {
           className={cx("flex justify-between cursor-pointer hover:opacity-50", { "text-purple-500": selectedToken === "BUSD" })}
           onClick={() => changeTokenTo("BUSD")}
         >
-          <p className="flex items-center gap-2">
-            <img src={dollarIcon} className="h-6 w-6"/>
+          <p className="flex items-center gap-3">
+            <img src={dollarIcon} className="h-5 w-5"/>
             {TOKENS["BUSD"].label}
           </p>
           {!isBUSDBalanceLoading && <p className="pl-4">{busdUserBalance || 0}</p>}
