@@ -5,23 +5,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap');
 
 ::-webkit-scrollbar {
-    //width: 10px;
+    width: 4px;
 }
-
+::-webkit-scrollbar:hover{
+    //opacity: 1;
+}
 /* Track */
 ::-webkit-scrollbar-track {
-    //background: #f1f1f1;
+    background: transparent;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    //background: red;
+    @apply rounded-full bg-gray-400;
 }
 
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-    //background: red;
-}
 
 body {
     min-height: 100vh;

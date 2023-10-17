@@ -13,14 +13,13 @@ interface LogEventRowProps {
 const LogEventRow: FC<LogEventRowProps> = ({ className, log }) => {
 
   const { tokenDecimals } = useChainContext();
-  console.log(log);
 
   const TransferParams = () => {
     return (
       <>
-        {log.topics[0] && <LogParam name="From" value={log.topics[0]}/>}
-        {log.topics[1] && <LogParam name="To" value={trim(log.topics[1])}/>}
-        {log.topics[2] && <LogParam name="Value" value={formatBigInt(BigInt(log.topics[2]), tokenDecimals).toString()}/>}
+        {log.topics[1] && <LogParam name="From" value={trim(log.topics[1])}/>}
+        {log.topics[2] && <LogParam name="To" value={trim(log.topics[2])}/>}
+        {log.data && <LogParam name="Value" value={formatBigInt(BigInt(log.data), tokenDecimals).toString()}/>}
       </>
     );
   };
@@ -28,9 +27,9 @@ const LogEventRow: FC<LogEventRowProps> = ({ className, log }) => {
   const ApprovalParams = () => {
     return (
       <>
-        {log.topics[0] && <LogParam name="Owner" value={log.topics[0]}/>}
-        {log.topics[1] && <LogParam name="Spender" value={trim(log.topics[1])}/>}
-        {log.topics[2] && <LogParam name="Value" value={formatBigInt(BigInt(log.topics[2]), tokenDecimals).toString()}/>}
+        {log.topics[1] && <LogParam name="Owner" value={trim(log.topics[1])}/>}
+        {log.topics[2] && <LogParam name="Spender" value={trim(log.topics[2])}/>}
+        {log.data && <LogParam name="Value" value={formatBigInt(BigInt(log.data), tokenDecimals).toString()}/>}
       </>
     );
   };
@@ -70,7 +69,7 @@ const LogParam = ({ name, value }: { name: string; value: string }) => (
   <p className="w-full flex gap-14">
     <span className="w-14">{name}</span>
     <span
-      className="w-56 text-right truncate"
+      className="w-56 text-left truncate"
       data-tooltip-id="event-address"
       data-tooltip-content={value}
     >

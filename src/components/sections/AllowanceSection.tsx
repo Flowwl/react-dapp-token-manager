@@ -39,8 +39,8 @@ const AllowanceSection: FC<AllowanceSectionProps> = ({ className }) => {
       <div className="h-44 overflow-y-auto">
         {isLoading && <Spinner/>}
         {allowances && Object.entries(allowances).map(([spender, allowance]) => (
-          <div className="flex flex-row justify-between gap-12" key={spender}>
-            <p className="truncate" data-tooltip-id="allowance-big-number" data-tooltip-content={spender}>{spender}</p>
+          <div className="flex flex-row justify-between gap-12 items-center" key={spender}>
+            <p className="text-sm truncate" data-tooltip-id="allowance-big-number" data-tooltip-content={spender}>{spender}</p>
             <p className="w-32 truncate" data-tooltip-id="allowance-big-number" data-tooltip-content={formatBigInt(allowance, tokenDecimals).toString()}>{formatBigInt(allowance, tokenDecimals).toString()}</p>
           </div>
         )

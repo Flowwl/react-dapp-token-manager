@@ -15,14 +15,16 @@ export function useGetLast10AccountEvents(opts: Partial<FetchOptions<unknown[]>>
     assertAddressExists(address);
     try {
       const approvals = await getApprovals(address, account, TOKENS[selectedToken].deployBlock, "latest");
-      const transfers = await getTransfers(address, account, TOKENS[selectedToken].deployBlock, "latest");
-      return getLast10Logs(approvals, transfers);
+      const transfersFrom = await getTransfersFrom(address, account, TOKENS[selectedToken].deployBlock, "latest");
+      const transfersTo = await getTransfersTo(address, account, TOKENS[selectedToken].deployBlock, "latest");
+      return getLast10Logs(approvals, [...transfersFrom, ...transfersTo]);
     } catch (e) {
       const blockNumber = await publicClientActions.getBlockNumber();
       const fetchApprovals = logRunner(blockNumber, 10, async (fromBlock, toBlock) => getApprovals(address, account, fromBlock, toBlock));
-      const fetchTransfers = logRunner(blockNumber, 10, async (fromBlock, toBlock) => getTransfers(address, account, fromBlock, toBlock));
-      const [approvals, transfers] = await Promise.all([fetchApprovals, fetchTransfers]);
-      return getLast10Logs(Object.values(approvals), Object.values(transfers));
+      const fetchTransfersFrom = logRunner(blockNumber, 10, async (fromBlock, toBlock) => getTransfersFrom(address, account, fromBlock, toBlock));
+      const fetchTransfersTo = logRunner(blockNumber, 10, async (fromBlock, toBlock) => getTransfersTo(address, account, fromBlock, toBlock));
+      const [approvals, transfersFrom, transfersTo] = await Promise.all([fetchApprovals, fetchTransfersFrom, fetchTransfersTo]);
+      return getLast10Logs(Object.values(approvals), [...Object.values(transfersFrom), ...Object.values(transfersTo)]);
 
     }
   };
@@ -42,10 +44,18 @@ export function useGetLast10AccountEvents(opts: Partial<FetchOptions<unknown[]>>
     toBlock
   });
 
-  const getTransfers = async (address: HexString, account: HexString, fromBlock: bigint, toBlock: bigint | "latest") => publicClientActions.getLogs({
+  const getTransfersFrom = async (address: HexString, account: HexString, fromBlock: bigint, toBlock: bigint | "latest") => publicClientActions.getLogs({
     address,
     event: parseAbiItem('event Transfer(address indexed from, address indexed to, uint256 value)'),
     args: { from: account },
+    fromBlock,
+    toBlock
+  });
+
+  const getTransfersTo = async (address: HexString, account: HexString, fromBlock: bigint, toBlock: bigint | "latest") => publicClientActions.getLogs({
+    address,
+    event: parseAbiItem('event Transfer(address indexed from, address indexed to, uint256 value)'),
+    args: { to: account },
     fromBlock,
     toBlock
   });
