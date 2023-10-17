@@ -30,7 +30,7 @@ const TransferChart: FC<TransferChartProps> = ({ className, transfers }) => {
         return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
       }),
       title: {
-        text: "Block number (in Millions)"
+        text: "Time period (day/month/year)"
       }
     },
     yaxis: {
