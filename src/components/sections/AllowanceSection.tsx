@@ -23,7 +23,7 @@ const AllowanceSection: FC<AllowanceSectionProps> = ({ className }) => {
     fetchAllAllowances();
   }
   return (
-    <div className={cx("flex flex-col gap-3 bg-bg-700/70 rounded-lg overflow-y-auto px-8 py-4",className)}>
+    <div className={cx("flex flex-col gap-3 bg-bg-700/70 rounded-lg shadow-xl overflow-y-auto px-8 py-4",className)}>
       <div className="flex items-center justify-between w-full">
         <div/>
         <h2 className="text-3xl self-center font-title">
