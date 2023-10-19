@@ -1,11 +1,11 @@
-import { FC } from 'react';
+import {FC} from 'react';
 import cx from "classnames";
 import Spinner from "../atoms/Spinner.tsx";
-import { TOKENS } from "../../constants/tokens.ts";
-import { useGetTotalSupply, useGetUserBalance, useGetUserBalanceByToken } from "../../hooks";
-import { useChainContext, useConnectedWalletContext } from "../../contexts";
-import { ArrowPathIcon } from "@heroicons/react/20/solid";
-import { useOnTransfersChanges } from "../../hooks/useOnTransfersChanges.ts";
+import {TOKENS} from "../../constants";
+import {useGetTotalSupply, useGetUserBalance, useGetUserBalanceByToken} from "../../hooks";
+import {useChainContext, useConnectedWalletContext} from "../../contexts";
+import {ArrowPathIcon} from "@heroicons/react/20/solid";
+import {useOnTransfersChanges} from "../../hooks/useOnTransfersChanges.ts";
 
 interface BalanceSectionProps {
   className?: string;
@@ -24,11 +24,17 @@ const BalanceSection: FC<BalanceSectionProps> = ({ className }) => {
     refetchInterval: 60 * 1000
   });
 
+  const { data: wbtcUserBalance, isLoading: isWBTCBalanceLoading, refetch: refetchWBTC } = useGetUserBalanceByToken("WBTC", {
+    deps: [account],
+    refetchInterval: 60 * 1000
+  });
+
   useOnTransfersChanges(() => onRefetch());
 
   const onRefetch = () => {
     refetchBalance();
     refetchBUSD();
+    refetchWBTC()
   };
 
   return (
@@ -50,30 +56,37 @@ const BalanceSection: FC<BalanceSectionProps> = ({ className }) => {
           <p className="font-title w-2/3">Total Supply</p>
           <p className="text-right w-1/3 truncate">{totalSupply || 0}</p>
         </div>
+        {[
+          {token: TOKENS.MATIC.label, isLoading: isBalanceLoading, balance: userBalance},
+          {token: TOKENS.BUSD.label, isLoading: isBUSDBalanceLoading, balance: busdUserBalance},
+          {token: TOKENS.WBTC.label, isLoading: isWBTCBalanceLoading, balance: wbtcUserBalance},
+         ].map(({ token, isLoading, balance}) => (
         <div
-          className={cx("flex cursor-pointer hover:opacity-50 text-gray-400", { "text-gray-50": selectedToken === "MATIC" })}
-          onClick={() => changeTokenTo("MATIC")}
+          key={token}
+          className={cx("flex cursor-pointer hover:opacity-50 text-gray-400", { "text-gray-50": selectedToken === token })}
+          onClick={() => changeTokenTo(token)}
         >
           <p className={cx("flex items-center gap-2 font-title w-2/3")}>
-            {/*<img src={maticIcon} className="h-6 w-6 scale-125"/>*/}
-            {selectedToken === "MATIC" && "> "}
-            {TOKENS["MATIC"].label}
+            {selectedToken === token && "> "}
+            {TOKENS[token].label}
           </p>
-          {!isBalanceLoading && <p className="text-right w-1/3">{userBalance || 0}</p>}
-          {isBalanceLoading && <Spinner className={"ml-0 h-4 w-4"}/>}
+          {!isLoading && <p className="text-right w-1/3">{balance || 0}</p>}
+          {isLoading && <Spinner className={"ml-0 h-4 w-4"}/>}
         </div>
-        <div
-          className={cx("flex cursor-pointer hover:opacity-50 text-gray-400", { "text-gray-50": selectedToken === "BUSD" })}
-          onClick={() => changeTokenTo("BUSD")}
-        >
-          <p className="flex items-center gap-3 font-title w-2/3">
-            {/*<img src={dollarIcon} className="h-5 w-5"/>*/}
-            {selectedToken === "BUSD" && "> "}
-            {TOKENS["BUSD"].label}
-          </p>
-          {!isBUSDBalanceLoading && <p className="w-1/3 text-right">{busdUserBalance || 0}</p>}
-          {isBUSDBalanceLoading && <Spinner className={"ml-0 h-4 w-4"}/>}
-        </div>
+          )
+        )}
+        {/*<div*/}
+        {/*  className={cx("flex cursor-pointer hover:opacity-50 text-gray-400", { "text-gray-50": selectedToken === "BUSD" })}*/}
+        {/*  onClick={() => changeTokenTo("BUSD")}*/}
+        {/*>*/}
+        {/*  <p className="flex items-center gap-3 font-title w-2/3">*/}
+        {/*    /!*<img src={dollarIcon} className="h-5 w-5"/>*!/*/}
+        {/*    {selectedToken === "BUSD" && "> "}*/}
+        {/*    {TOKENS["BUSD"].label}*/}
+        {/*  </p>*/}
+        {/*  {!isBUSDBalanceLoading && <p className="w-1/3 text-right">{busdUserBalance || 0}</p>}*/}
+        {/*  {isBUSDBalanceLoading && <Spinner className={"ml-0 h-4 w-4"}/>}*/}
+        {/*</div>*/}
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ import {Chain, polygonMumbai} from "viem/chains";
 export type Token = {
   address?: HexString;
   abi?: Abi;
-  label: string;
+  label: TokenName;
   chain: Chain;
   deployBlock: bigint;
 }
