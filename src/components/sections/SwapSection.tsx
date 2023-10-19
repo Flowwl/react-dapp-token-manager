@@ -2,14 +2,15 @@ import {FC, useState} from 'react';
 import cx from "classnames"
 import {ArrowsUpDownIcon} from "@heroicons/react/20/solid";
 import NumericInput from "../atoms/NumericInput.tsx";
+import {TOKENS} from "../../constants/tokens.ts";
 
 interface SwapSectionProps {
   className?: string
 }
 
 const tokenValue = {
-  "WBTC": 1,
-  "BUSD": 2
+  [TOKENS.WBTC.label]: 1,
+  [TOKENS.BUSD.label]: 2
 } as const;
 
 const SwapSection: FC<SwapSectionProps> = ({className}) => {
