@@ -1,35 +1,39 @@
-import { HexString } from "../types";
-import Matic_Abi from "./matic_abi.json";
-import { Abi } from "viem";
-import { assertIsAbi } from "../asserts";
-import { Chain, polygonMumbai } from "viem/chains";
-import { Network } from "alchemy-sdk";
+import {HexString} from "../types";
+import busdABI from "./abis/busd_abi.json";
+import wbtcABI from "./abis/wbtc_abi.json";
+import {Abi} from "viem";
+import {assertIsAbi} from "../asserts";
+import {Chain, polygonMumbai} from "viem/chains";
 
 export type Token = {
   address?: HexString;
   abi?: Abi;
   label: string;
   chain: Chain;
-  alchemyNetwork: Network;
   deployBlock: bigint;
 }
 
-const Tokens = ["MATIC", "BUSD"] as const;
+const Tokens = ["MATIC", "BUSD", "WBTC"] as const;
 export type TokenName = typeof Tokens[number];
 export const TOKENS: Record<TokenName, Token> = {
   MATIC: {
     label: "MATIC",
     chain: polygonMumbai,
-    alchemyNetwork: Network.MATIC_MUMBAI,
     deployBlock: 0n
   },
   BUSD: {
     address: "0x15A40d37e6f8A478DdE2cB18c83280D472B2fC35",
-    abi: parseAbi(Matic_Abi),
+    abi: parseAbi(busdABI),
     label: "BUSD",
     chain: polygonMumbai,
-    alchemyNetwork: Network.MATIC_MUMBAI,
     deployBlock: 22069112n,
+  },
+  WBTC: {
+    address: "0x49755175C0D8A9a2513C0BAEf726E06699eD90AF",
+    abi: parseAbi(wbtcABI),
+    label: "WBTC",
+    chain: polygonMumbai,
+    deployBlock: 28939895n
   }
 } as const
 
