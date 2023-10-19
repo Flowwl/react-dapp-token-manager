@@ -34,7 +34,7 @@ const EventsSection: FC<EventsSectionProps> = ({ className }) => {
         />
       </div>
       <Input label="Search" type={"text"} onChange={(e) => setSearch(e.target.value)}/>
-      <div className="flex flex-col gap-1 h-full overflow-y-auto">
+      <div className="flex flex-col gap-1 h-full overflow-y-auto justify-between">
         <Last10AccountEvents
           search={search}
           changeIsLoading={changeIsLoading}

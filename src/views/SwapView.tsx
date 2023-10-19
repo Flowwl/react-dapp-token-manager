@@ -8,7 +8,7 @@ interface SwapViewProps {
 const SwapView: FC<SwapViewProps> = ({ className }) => {
 
   return (
-    <div className={cx(className)}>
+    <div className={cx("bg-bg-700/70 rounded-lg mx-auto w-1/2", className)}>
       <p>SwapView</p>
     </div>
   );

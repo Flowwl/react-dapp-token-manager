@@ -25,19 +25,16 @@ const Last10AccountEvents: FC<Last10AccountEventsProps> = ({ className, search, 
   }, [accountEvents.length]);
   useEffect(() => { changeIsLoading(areLast10AccountEventsLoading); }, [areLast10AccountEventsLoading]);
   useEffect(() => {
-      onRefetch();
-      emptyEvents();
-    }, [shouldRefetch]);
+    onRefetch();
+    emptyEvents();
+  }, [shouldRefetch]);
 
   const filteredLast10AccountEvents = [...accountEvents, ...(last10AccountEvents || [])].filter((log) => search === "" || log.transactionHash?.includes(search));
   const filteredAccountEvents = accountEvents.filter((log) => search === "" || log.transactionHash?.includes(search));
   return (
-    <div className={cx("flex flex-col gap-3", className)}>
+    <div className={cx("flex flex-col gap-3 h-full", className)}>
       <h3 className="font-title text-lg">Last 10 of your events</h3>
-      <div className={cx("flex flex-col overflow-y-auto h-28 gap-2")}>
-        {!areLast10AccountEventsLoading && filteredLast10AccountEvents?.length === 0 && (
-          <p className="text-center">No event</p>)}
-
+      <div className={cx("flex flex-col overflow-y-auto h-48 gap-2")}>
         {filteredAccountEvents.length > 0 && filteredAccountEvents.map((log) =>
           <Transition
             show={showAccountEvents}
@@ -57,6 +54,11 @@ const Last10AccountEvents: FC<Last10AccountEventsProps> = ({ className, search, 
             log={log}
           />
         )}
+        {!areLast10AccountEventsLoading
+          && filteredAccountEvents.length === 0
+          && filteredLast10AccountEvents?.length === 0
+          && (<p className="text-center">No event</p>)
+        }
         {areLast10AccountEventsLoading && (<Spinner/>)}
       </div>
     </div>
