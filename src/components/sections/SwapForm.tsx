@@ -1,12 +1,10 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import cx from "classnames"
 import NumericInput from "../atoms/NumericInput.tsx";
 import { ArrowsUpDownIcon } from "@heroicons/react/20/solid";
-import { useGetUserBalanceByToken } from "../../hooks";
-import { useConnectedWalletContext } from "../../contexts";
 import Button from "../atoms/Button.tsx";
 import { useSwapExactTokensForTokens } from "../../hooks/useSwapExactTokensForTokens.ts";
-import { useGetTokenPrice } from "../../hooks/useGetTokenPrice.ts";
+import { useSwapContext } from "../../contexts/SwapContext.tsx";
 
 interface SwapFormProps {
   className?: string
@@ -17,24 +15,24 @@ interface SwapFormProps {
 // - verifier que le amountIn est plus petit ou egal a la balance de l'utilisateur
 // - mettre un bouton "max" sur le token a vendre
 const SwapForm: FC<SwapFormProps> = ({className}) => {
-  const [token0, setToken0] = useState<"BUSD" | "WBTC">("WBTC");
-  const [token1, setToken1] = useState<"BUSD" | "WBTC">("BUSD");
-  const {account} = useConnectedWalletContext();
-  const {swapExactTokensForTokens} = useSwapExactTokensForTokens(token0, token1)
-  const {data, isLoading: isTokenPriceLoading, getTokenPrice} = useGetTokenPrice();
-  const ratio0 = (data ? data[token0] / data[token1] : 0).toFixed(10);
-  const ratio1 = (data ? data[token1] / data[token0] : 0).toFixed(10);
   const {
-    data: token1UserBalance,
-    isLoading: isTokenUserBalanceLoading,
-    refetch: refetchTokenUserBalance
-  } = useGetUserBalanceByToken(token0, {deps: [account]});
+    token0,
+    token1,
+    token0UserBalance,
+    isTokenUserBalanceLoading,
+    areTokenPricesLoading,
+    ratio0,
+    ratio1,
+    changeToken1,
+    changeToken0
+  } = useSwapContext()
 
+  const {swapExactTokensForTokens} = useSwapExactTokensForTokens(token0, token1)
   const [token0Amount, setToken0Amount] = useState<string>("0.0")
   const [token1Amount, setToken1Amount] = useState<string>("0.0")
   const onSwap = () => {
-    setToken0((prevState) => prevState === "WBTC" ? "BUSD" : "WBTC");
-    setToken1((prevState) => prevState === "WBTC" ? "BUSD" : "WBTC");
+    changeToken0(token0 === "WBTC" ? "BUSD" : "WBTC");
+    changeToken1(token1 === "WBTC" ? "BUSD" : "WBTC");
     const token0AmountMem = token0Amount;
     const token1AmountMem = token1Amount;
     setToken0Amount(token1AmountMem)
@@ -57,16 +55,8 @@ const SwapForm: FC<SwapFormProps> = ({className}) => {
     swapExactTokensForTokens(token0Amount)
   }
 
-  useEffect(() => {
-    refetchTokenUserBalance();
-  }, [token0]);
-
-  useEffect(() => {
-    getTokenPrice()
-  }, []);
-
   return (
-    <div className={cx("flex flex-col gap-4 h-full mt-4 overflow-y-auto", className)}>
+    <div className={cx("flex flex-col gap-4 mt-4 overflow-y-auto", className)}>
       <div className="flex flex-col gap-1 relative">
         <div className="flex justify-between">
           <div className="text-xl font-title flex items-center gap-4">
@@ -75,7 +65,7 @@ const SwapForm: FC<SwapFormProps> = ({className}) => {
           <div className="flex gap-2 mr-3 items-baseline font serif text-sm text-gray-400">
             <p>Balance:</p>
             {isTokenUserBalanceLoading && "-"}
-            {!isTokenUserBalanceLoading && token1UserBalance && (<p>{token1UserBalance}</p>)}
+            {!isTokenUserBalanceLoading && token0UserBalance && (<p>{token0UserBalance}</p>)}
           </div>
         </div>
         <NumericInput
@@ -85,15 +75,15 @@ const SwapForm: FC<SwapFormProps> = ({className}) => {
         />
         <p
           className="text-purple-700 absolute top-auto left-auto right-4 bottom-8 cursor-pointer hover:text-purple-500"
-          onClick={() => onToken1AmountChange(token1UserBalance?.toString() || "0.0")}
+          onClick={() => onToken1AmountChange(token0UserBalance?.toString() || "0.0")}
         >
           Max
         </p>
         <div className="flex text-gray-400 font serif text-sm justify-between">
           <div className="flex gap-2 ml-3 items-baseline">
             <p>Ratio: 1 {token0} =</p>
-            {isTokenPriceLoading && "-"}
-            {!isTokenPriceLoading && (<p>{ratio0} {token1}</p>)}
+            {areTokenPricesLoading && "-"}
+            {!areTokenPricesLoading && (<p>{ratio0} {token1}</p>)}
           </div>
 
         </div>
