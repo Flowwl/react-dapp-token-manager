@@ -8,6 +8,7 @@ export const SWAP = {
     routerABI: uniswapRouterABI,
     factory: "0xfD171dB72120812Edbdb77f7A80ea0288FE4da38",
     factoryABI: uniswapFactoryABI,
+    //0xE78410E1E0410429AEA83696A065DF1a6551c553
     pair_wbtc_busd: "0xE78410E1E0410429AEA83696A065DF1a6551c553",
     pair_wbtc_busd_ABI: uniswapPairWBTC_BUSD_ABI,
   }
