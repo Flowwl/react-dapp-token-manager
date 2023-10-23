@@ -1,11 +1,11 @@
-export function swapExactTokenForToken(amountIn: number, reserveIn: number, reserveOut: number) {
-  const numerator = amountIn * 997 * reserveOut
-  const denominator = (reserveIn * 1000) + (amountIn * 997)
+export function swapExactTokenForToken(amountIn: bigint, reserveIn: bigint, reserveOut: bigint) {
+  const numerator = amountIn * 997n * reserveOut
+  const denominator = (reserveIn * 1000n) + (amountIn * 997n)
   return numerator / denominator
 }
 
-export function swapTokenForExactToken(amountOut: number, reserveIn: number, reserveOut: number) {
-  const numerator = reserveIn * amountOut * 1000
-  const denominator = (reserveOut - amountOut) * 997;
-  return (numerator / denominator) + 1;
+export function swapTokenForExactToken(amountOut: bigint, reserveIn: bigint, reserveOut: bigint) {
+  const numerator = reserveIn * amountOut * 1000n
+  const denominator = (reserveOut - amountOut) * 997n;
+  return (numerator / denominator) + 1n;
 }
