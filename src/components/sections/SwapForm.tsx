@@ -18,7 +18,6 @@ const SwapForm: FC<SwapFormProps> = ({className}) => {
   const {swapTokensForTokens} = useSwapTokensForTokens({
     onSuccess: () => {
       refetchTokenUserBalance()
-      // toast.success("Swap successful")
     }
   })
 
@@ -89,7 +88,13 @@ const SwapForm: FC<SwapFormProps> = ({className}) => {
         </p>
         )}
       </div>
-      <Button onClick={onSwapClicked}>Swap</Button>
+      <Button onClick={onSwapClicked} disabled={
+        (!isAmountInValid || !isAmountOutValid)
+        || parseFloat(swapTokens.IN.amount) === 0
+        || parseFloat(swapTokens.OUT.amount) === 0
+      }>
+        Swap
+      </Button>
     </div>
   );
 };
