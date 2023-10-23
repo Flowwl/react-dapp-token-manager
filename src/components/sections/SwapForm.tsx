@@ -3,7 +3,7 @@ import cx from "classnames"
 import NumericInput from "../atoms/NumericInput.tsx";
 import { ArrowsUpDownIcon } from "@heroicons/react/20/solid";
 import Button from "../atoms/Button.tsx";
-import { useSwapExactTokensForTokens } from "../../hooks/useSwapExactTokensForTokens.ts";
+import { useSwapTokensForTokens } from "../../hooks/useSwapTokensForTokens.ts";
 import { useSwapContext } from "../../contexts/SwapContext.tsx";
 import { useSwapTokens } from "../../hooks/useSwapTokens.ts";
 import { computeBigIntToFloat } from "../../utils";
@@ -13,12 +13,17 @@ interface SwapFormProps {
 }
 
 const SwapForm: FC<SwapFormProps> = ({className}) => {
-  const {token0UserBalance, isTokenUserBalanceLoading, tokenMode} = useSwapContext()
+  const {token0UserBalance, isTokenUserBalanceLoading, tokenMode, refetchTokenUserBalance} = useSwapContext()
   const {onSwapTokens, onToken1AmountChange, onToken0AmountChange, ratio, swapTokens} = useSwapTokens()
-  const {swapExactTokensForTokens} = useSwapExactTokensForTokens(swapTokens.IN.token, swapTokens.OUT.token)
+  const {swapTokensForTokens} = useSwapTokensForTokens({
+    onSuccess: () => {
+      refetchTokenUserBalance()
+      // toast.success("Swap successful")
+    }
+  })
 
   const onSwapClicked = () => {
-    swapExactTokensForTokens(swapTokens.IN.amount)
+    swapTokensForTokens()
   }
   const isAmountInValid = parseFloat(swapTokens.IN.amount) > 0 && parseFloat(swapTokens.IN.amount) <= (token0UserBalance || 0)
   const isAmountOutValid = parseFloat(swapTokens.OUT.amount) <= computeBigIntToFloat(swapTokens.OUT.reserve, swapTokens.OUT.decimals)

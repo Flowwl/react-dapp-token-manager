@@ -93,6 +93,7 @@ const SwapContextProvider: FC<Props> = ({children, className}) => {
         changeTokenMode,
         changeSwapTokens,
         token0UserBalance,
+        refetchTokenUserBalance,
         isTokenUserBalanceLoading
       }}>
         <div className={cx(className)}>{children}</div>
@@ -107,6 +108,7 @@ export interface SwapContext {
   swapTokens: SwapInterface;
   changeSwapTokens: (value: Partial<SwapInterface>) => void;
   tokenMode: "IN" | "OUT";
+  refetchTokenUserBalance: () => void;
   changeTokenMode: (value: "IN" | "OUT") => void;
   isTokenUserBalanceLoading: boolean;
   token0UserBalance: number | null;
