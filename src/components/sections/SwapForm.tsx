@@ -6,20 +6,22 @@ import Button from "../atoms/Button.tsx";
 import { useSwapExactTokensForTokens } from "../../hooks/useSwapExactTokensForTokens.ts";
 import { useSwapContext } from "../../contexts/SwapContext.tsx";
 import { useSwapTokens } from "../../hooks/useSwapTokens.ts";
+import { computeBigIntToFloat } from "../../utils";
 
 interface SwapFormProps {
   className?: string
 }
 
 const SwapForm: FC<SwapFormProps> = ({className}) => {
-  const {token0UserBalance, isTokenUserBalanceLoading} = useSwapContext()
+  const {token0UserBalance, isTokenUserBalanceLoading, tokenMode} = useSwapContext()
   const {onSwapTokens, onToken1AmountChange, onToken0AmountChange, ratio, swapTokens} = useSwapTokens()
   const {swapExactTokensForTokens} = useSwapExactTokensForTokens(swapTokens.IN.token, swapTokens.OUT.token)
-
 
   const onSwapClicked = () => {
     swapExactTokensForTokens(swapTokens.IN.amount)
   }
+  const isAmountInValid = parseFloat(swapTokens.IN.amount) > 0 && parseFloat(swapTokens.IN.amount) <= (token0UserBalance || 0)
+  const isAmountOutValid = parseFloat(swapTokens.OUT.amount) <= computeBigIntToFloat(swapTokens.OUT.reserve, swapTokens.OUT.decimals)
   return (
     <div className={cx("flex flex-col gap-4 mt-4 overflow-y-auto", className)}>
       <div className="flex flex-col gap-1 relative">
@@ -34,10 +36,11 @@ const SwapForm: FC<SwapFormProps> = ({className}) => {
           </div>
         </div>
         <NumericInput
+          error={!isAmountInValid}
           max={token0UserBalance || 0}
           label="Amount"
           onChange={(e) => onToken0AmountChange(e.target.value)}
-          value={swapTokens.IN.amount}
+          value={Math.max(parseFloat(swapTokens.IN.amount), 0)}
         />
         <p
           className="text-purple-700 absolute top-auto left-auto right-4 bottom-2 cursor-pointer hover:text-purple-500"
@@ -45,6 +48,12 @@ const SwapForm: FC<SwapFormProps> = ({className}) => {
         >
           Max
         </p>
+        {!isAmountInValid && (
+          <p className="absolute text-red-700 -bottom-6 text-sm left-4">
+            {parseFloat(swapTokens.IN.amount) > (token0UserBalance || 0) && "Insufficient balance"}
+            {parseFloat(swapTokens.IN.amount) === 0 && "Amount must be greater than 0"}
+        </p>
+        )}
       </div>
       <div className="flex w-full justify-center ml-auto gap-4 items-center relative">
         <ArrowsUpDownIcon
@@ -52,7 +61,7 @@ const SwapForm: FC<SwapFormProps> = ({className}) => {
           onClick={onSwapTokens}
         />
       </div>
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1 relative">
         <div className="flex justify-between">
           <div className="text-xl font-title flex items-center gap-4">
             {swapTokens.OUT.token}
@@ -64,10 +73,16 @@ const SwapForm: FC<SwapFormProps> = ({className}) => {
           </div>
         </div>
         <NumericInput
+          error={!isAmountOutValid}
           label="Amount"
           onChange={(e) => onToken1AmountChange(e.target.value)}
-          value={swapTokens.OUT.amount}
+          value={(tokenMode === "IN" && !isAmountOutValid) ? 0 : swapTokens.OUT.amount}
         />
+        {!isAmountOutValid && (
+          <p className="absolute text-red-700 -bottom-6 left-4 text-sm">
+          {parseFloat(swapTokens.OUT.amount) > computeBigIntToFloat(swapTokens.OUT.reserve, swapTokens.OUT.decimals) && "Insufficient liquidity"}
+        </p>
+        )}
       </div>
       <Button onClick={onSwapClicked}>Swap</Button>
     </div>

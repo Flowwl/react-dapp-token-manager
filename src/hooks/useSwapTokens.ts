@@ -56,7 +56,7 @@ export const useSwapTokens = () => {
       setRatio(null)
     }
     else {
-      setRatio((floatAmountIn / floatAmountOut) || null)
+      setRatio(Math.max(floatAmountIn / floatAmountOut, 0) || null)
     }
   }, [swapTokens.OUT.amount, swapTokens.IN.amount])
 
