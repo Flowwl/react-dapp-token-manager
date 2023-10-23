@@ -20,7 +20,7 @@ const ChartSection: FC<ChartSectionProps> = ({ className }) => {
     fetchAllTransfers();
   };
   return (
-    <div className={cx("bg-bg-700/70 rounded-lg flex flex-col mx-auto", className)}>
+    <div className={cx("bg-bg-700/70 rounded-lg shadow-xl flex flex-col mx-auto", className)}>
       <div className="flex items-center justify-between w-full">
         <div/>
         <h2 className="text-3xl self-center py-4 px-8 font-title">

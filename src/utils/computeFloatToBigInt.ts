@@ -1,3 +1,3 @@
 export const computeFloatToBigInt = (value: number, decimals: bigint) => {
-  return BigInt(value * (10 ** Number(decimals)));
+  return BigInt(Math.trunc(value * (10 ** Number(decimals))));
 }

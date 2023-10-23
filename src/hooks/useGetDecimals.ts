@@ -1,20 +1,22 @@
-import { TokenName, TOKENS } from "../constants/tokens.ts";
+import { TokenName, TOKENS } from "../constants";
 import { useChainContext } from "../contexts";
-import { useFetch } from "./useFetch.ts";
+import { FetchOptions, useFetch } from "./useFetch.ts";
 import { assertAddressExists } from "../asserts";
 
-export function useGetDecimals(token: TokenName) {
+export function useGetDecimals(token: TokenName, opts: Partial<FetchOptions<bigint>> = {}) {
   const { publicClientActions } = useChainContext()
   const promise = async () => {
     const address = TOKENS[token].address
     assertAddressExists(address);
 
-   return publicClientActions.readContract({
+   const decimal = await publicClientActions.readContract({
       address,
       abi: TOKENS[token]?.abi || [],
       functionName: 'decimals',
-    }) as Promise<bigint>
+    }) as number
+
+    return BigInt(decimal);
   }
 
-  return useFetch(async () => promise());
+  return useFetch(async () => promise(), {...opts});
 }

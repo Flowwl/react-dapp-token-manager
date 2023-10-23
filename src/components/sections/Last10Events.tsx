@@ -33,10 +33,9 @@ const Last10Events: FC<Last10EventsProps> = ({ className, search, changeIsLoadin
   const filteredLast10Events = (last10Events || []).filter((log) => search === "" || log.transactionHash?.includes(search));
   const filteredEvents = events.filter((log) => search === "" || log.transactionHash?.includes(search));
   return (
-    <div className={cx("flex flex-col gap-3", className)}>
+    <div className={cx("flex flex-col gap-3 h-full", className)}>
       <h3 className="font-title text-lg">Last 10 events</h3>
-      <div className="flex flex-col overflow-y-auto h-28 gap-2">
-        {!areLast10EventsLoading && filteredLast10Events?.length === 0 && (<p className="text-center">No event</p>)}
+      <div className="flex flex-col h-48 overflow-y-auto gap-2">
         {filteredEvents.length > 0 && filteredEvents.map((log) =>
           <Transition
             show={showEvents}
@@ -52,6 +51,11 @@ const Last10Events: FC<Last10EventsProps> = ({ className, search, changeIsLoadin
         )}
         {!areLast10EventsLoading && (filteredLast10Events?.length || 0) > 0 && filteredLast10Events?.map((log) =>
           <LogEventRow key={log.transactionHash} log={log}/>)
+        }
+        {!areLast10EventsLoading
+          && filteredEvents.length === 0
+          && filteredLast10Events?.length === 0
+          && (<p className="text-center">No event</p>)
         }
         {areLast10EventsLoading && (<Spinner/>)}
       </div>

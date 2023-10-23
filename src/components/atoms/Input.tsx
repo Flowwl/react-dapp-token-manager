@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { Input as MTInput, InputProps as MTInputProps } from "@material-tailwind/react";
 import cx from "classnames";
+
 const Input: FC<MTInputProps> = ({ className, color="white", ...props }) => {
 
   return (

@@ -24,7 +24,7 @@ const EventsSection: FC<EventsSectionProps> = ({ className }) => {
     }
   }, [isLoading, shouldRefetch]);
   return (
-    <div className={cx("bg-bg-700/70 rounded-lg flex flex-col gap-3 px-8 py-4", className)}>
+    <div className={cx("bg-bg-700/70 rounded-lg shadow-xl flex flex-col gap-3 px-8 py-4", className)}>
       <div className="flex items-center justify-between">
         <div/>
         <h2 className="font-title text-3xl">Events</h2>
@@ -34,7 +34,7 @@ const EventsSection: FC<EventsSectionProps> = ({ className }) => {
         />
       </div>
       <Input label="Search" type={"text"} onChange={(e) => setSearch(e.target.value)}/>
-      <div className="flex flex-col gap-1 h-full overflow-y-auto">
+      <div className="flex flex-col gap-1 h-full overflow-y-auto justify-between">
         <Last10AccountEvents
           search={search}
           changeIsLoading={changeIsLoading}
