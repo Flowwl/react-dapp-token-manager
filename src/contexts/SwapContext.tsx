@@ -32,6 +32,8 @@ const SwapContextProvider: FC<Props> = ({children, className}) => {
       IN: {token: token0, amount: "0.0", reserve: 0n, decimals: 0n},
       OUT: {token: token1, amount: "0.0", reserve: 0n, decimals: 0n}
     })
+    const [tokenMode, setTokenMode] = useState<"IN" | "OUT">("IN")
+
     const {account} = useConnectedWalletContext();
     const {
       data: token0UserBalance,
@@ -69,7 +71,12 @@ const SwapContextProvider: FC<Props> = ({children, className}) => {
     });
 
 
-    const changeSwapTokens = (value: Partial<SwapInterface>) => setSwapTokens(prevState => ({...prevState, ...value}));
+    const changeSwapTokens = (value: Partial<SwapInterface>) => {
+      setSwapTokens(prevState => ({...prevState, ...value}));
+    }
+    const changeTokenMode = (value: "IN" | "OUT") => {
+      setTokenMode(value);
+    }
 
     useEffect(() => {
       getReserves()
@@ -82,6 +89,8 @@ const SwapContextProvider: FC<Props> = ({children, className}) => {
     return (
       <SwapContextBaseProvider value={{
         swapTokens,
+        tokenMode,
+        changeTokenMode,
         changeSwapTokens,
         token0UserBalance,
         isTokenUserBalanceLoading
@@ -97,6 +106,8 @@ export default SwapContextProvider;
 export interface SwapContext {
   swapTokens: SwapInterface;
   changeSwapTokens: (value: Partial<SwapInterface>) => void;
+  tokenMode: "IN" | "OUT";
+  changeTokenMode: (value: "IN" | "OUT") => void;
   isTokenUserBalanceLoading: boolean;
   token0UserBalance: number | null;
 }

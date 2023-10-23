@@ -12,7 +12,7 @@ interface SwapFormProps {
 }
 
 const SwapForm: FC<SwapFormProps> = ({className}) => {
-  const { token0UserBalance, isTokenUserBalanceLoading,} = useSwapContext()
+  const {token0UserBalance, isTokenUserBalanceLoading} = useSwapContext()
   const {onSwapTokens, onToken1AmountChange, onToken0AmountChange, ratio, swapTokens} = useSwapTokens()
   const {swapExactTokensForTokens} = useSwapExactTokensForTokens(swapTokens.IN.token, swapTokens.OUT.token)
 
@@ -20,7 +20,6 @@ const SwapForm: FC<SwapFormProps> = ({className}) => {
   const onSwapClicked = () => {
     swapExactTokensForTokens(swapTokens.IN.amount)
   }
-
   return (
     <div className={cx("flex flex-col gap-4 mt-4 overflow-y-auto", className)}>
       <div className="flex flex-col gap-1 relative">
@@ -35,6 +34,7 @@ const SwapForm: FC<SwapFormProps> = ({className}) => {
           </div>
         </div>
         <NumericInput
+          max={token0UserBalance || 0}
           label="Amount"
           onChange={(e) => onToken0AmountChange(e.target.value)}
           value={swapTokens.IN.amount}
@@ -58,7 +58,7 @@ const SwapForm: FC<SwapFormProps> = ({className}) => {
             {swapTokens.OUT.token}
           </div>
           <div
-            className={cx("flex gap-2 mr-3 items-baseline font serif text-sm text-gray-400", {"invisible": ratio === null})}>
+            className={cx("flex gap-2 mr-3 items-baseline font serif text-sm text-gray-400", {"invisible": ratio === null || ratio === 0})}>
             <p>Ratio: 1 {swapTokens.OUT.token} =</p>
             <p>{ratio || 0} {swapTokens.IN.token}</p>
           </div>
