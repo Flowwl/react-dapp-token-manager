@@ -62,7 +62,7 @@ export const useSwapTokensForTokens = (opt: Partial<FetchOptions<void>> = {}) =>
       await webSocketPublicClientActions.waitForTransactionReceipt({ hash: txHash, confirmations: 1 })
     }
 
-    toast.update(toastId, { render: "Swap successful", autoClose: false, isLoading: false, type: "success" })
+    toast.update(toastId, { render: "Swap successful", autoClose: 500, isLoading: false, type: "success" })
   }
   const swapTokensForTokens = () => {
     fetchMethods.refetch()
