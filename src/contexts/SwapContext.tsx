@@ -1,70 +1,104 @@
 import { FC, ReactNode, useEffect, useState } from "react";
 import { createCtx } from "../utils";
 import cx from "classnames"
-import { useGetTokenPrice } from "../hooks/useGetTokenPrice.ts";
 import { useGetUserBalanceByToken } from "../hooks";
 import { useConnectedWalletContext } from "./ConnectedWalletContext.tsx";
+import { useGetReserves } from "../hooks/useGetReserves.ts";
+import { useGetDecimals } from "../hooks/useGetDecimals.ts";
 
 interface Props {
   children: ReactNode;
   className?: string
 }
 
-const SwapContextProvider: FC<Props> = ({ children, className }) => {
-  const [token0, setToken0] = useState<"BUSD" | "WBTC">("WBTC");
-  const [token1, setToken1] = useState<"BUSD" | "WBTC">("BUSD");
-
-  const {account} = useConnectedWalletContext();
-  const {data: token0UserBalance, isLoading: isTokenUserBalanceLoading, refetch: refetchTokenUserBalance} = useGetUserBalanceByToken(token0, {deps: [account]});
-
-  const {data: tokenPrices, isLoading: areTokenPricesLoading, getTokenPrice} = useGetTokenPrice();
-  const ratio0 = (tokenPrices ? tokenPrices[token0] / tokenPrices[token1] : 0).toFixed(10);
-  const ratio1 = (tokenPrices ? tokenPrices[token1] / tokenPrices[token0] : 0).toFixed(10);
-
-  const changeToken0 = (value: "BUSD" | "WBTC") => {
-    setToken0(value);
+type SwapInterface = {
+  IN: {
+    token: "BUSD" | "WBTC";
+    amount: string;
+    reserve: bigint;
+    decimals: bigint;
+  },
+  OUT: {
+    token: "BUSD" | "WBTC";
+    amount: string;
+    reserve: bigint;
+    decimals: bigint;
   }
+}
+const SwapContextProvider: FC<Props> = ({children, className}) => {
+    const token0 = "BUSD"
+    const token1 = "WBTC"
+    const [swapTokens, setSwapTokens] = useState<SwapInterface>({
+      IN: {token: token0, amount: "0.0", reserve: 0n, decimals: 0n},
+      OUT: {token: token1, amount: "0.0", reserve: 0n, decimals: 0n}
+    })
+    const {account} = useConnectedWalletContext();
+    const {
+      data: token0UserBalance,
+      isLoading: isTokenUserBalanceLoading,
+      refetch: refetchTokenUserBalance
+    } = useGetUserBalanceByToken(swapTokens.IN.token, {deps: [account]});
 
-  const changeToken1 = (value: "BUSD" | "WBTC") => {
-    setToken1(value);
+    const {getReserves} = useGetReserves({
+      onSuccess: (data) => {
+        setSwapTokens(prevState => ({
+          IN: {...prevState.IN, reserve: data[prevState.IN.token]},
+          OUT: {...prevState.OUT, reserve: data[prevState.OUT.token]}
+        }))
+      }
+    });
+
+    useGetDecimals(token0, {
+      onSuccess: (data) => {
+        if (swapTokens.IN.token === token0) setSwapTokens(prevState => ({
+          ...prevState,
+          IN: {...prevState.IN, decimals: data}
+        }))
+        else setSwapTokens(prevState => ({...prevState, OUT: {...prevState.OUT, decimals: data}}))
+      }
+    });
+
+    useGetDecimals(token1, {
+      onSuccess: (data) => {
+        if (swapTokens.IN.token === token1) setSwapTokens(prevState => ({
+          ...prevState,
+          IN: {...prevState.IN, decimals: data}
+        }))
+        else setSwapTokens(prevState => ({...prevState, OUT: {...prevState.OUT, decimals: data}}))
+      }
+    });
+
+
+    const changeSwapTokens = (value: Partial<SwapInterface>) => setSwapTokens(prevState => ({...prevState, ...value}));
+
+    useEffect(() => {
+      getReserves()
+    }, []);
+
+    useEffect(() => {
+      refetchTokenUserBalance();
+    }, [swapTokens.IN.token]);
+
+    return (
+      <SwapContextBaseProvider value={{
+        swapTokens,
+        changeSwapTokens,
+        token0UserBalance,
+        isTokenUserBalanceLoading
+      }}>
+        <div className={cx(className)}>{children}</div>
+      </SwapContextBaseProvider>
+    );
   }
-  useEffect(() => {
-    getTokenPrice()
-  }, []);
-
-  useEffect(() => {
-    refetchTokenUserBalance();
-  }, [token0]);
-
-  return (
-    <SwapContextBaseProvider value={{
-      token0,
-      token1,
-      changeToken0,
-      changeToken1,
-      ratio0,
-      ratio1,
-      areTokenPricesLoading,
-      token0UserBalance,
-      isTokenUserBalanceLoading
-    }}>
-      <div className={cx(className)}>{children}</div>
-    </SwapContextBaseProvider>
-  );
-};
+;
 
 export default SwapContextProvider;
 
 export interface SwapContext {
-  token0: "BUSD" | "WBTC";
-  token1: "BUSD" | "WBTC";
-  changeToken0: (value: "BUSD" | "WBTC") => void;
-  changeToken1: (value: "BUSD" | "WBTC") => void;
-  ratio0: string;
-  ratio1: string;
+  swapTokens: SwapInterface;
+  changeSwapTokens: (value: Partial<SwapInterface>) => void;
   isTokenUserBalanceLoading: boolean;
   token0UserBalance: number | null;
-  areTokenPricesLoading: boolean;
 }
 
 export const [useSwapContext, SwapContextBaseProvider] = createCtx<SwapContext>();
