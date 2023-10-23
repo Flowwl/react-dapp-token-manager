@@ -1,28 +1,22 @@
-import { useFetch } from "./useFetch.ts";
+import { FetchOptions, useFetch } from "./useFetch.ts";
 import { useChainContext } from "../contexts";
 import { toast } from "react-toastify";
 import { SWAP } from "../constants";
 
-export const useGetTokenPrice = () => {
-  const { publicClientActions} = useChainContext()
+export const useGetReserves = (opts: Partial<FetchOptions<{ WBTC: bigint; BUSD: bigint; }>> = {}) => {
+  const {publicClientActions} = useChainContext()
   const promise = async () => {
-    try {
-      const reserves = await publicClientActions.readContract({
-        address: SWAP.UNISWAP_V2.pair_wbtc_busd,
-        abi: SWAP.UNISWAP_V2.pair_wbtc_busd_ABI || [],
-        functionName: 'getReserves',
-      }) as { reserve0: bigint, reserve1: bigint };
-      console.log(reserves)
-      return {
-        reserveToken0: reserves.reserve0 || 0n,
-        reserveToken1: reserves.reserve1 || 0n
-      }
-    }
-    catch (err) {
-      console.log(err)
+    const reserves = await publicClientActions.readContract({
+      address: SWAP.UNISWAP_V2.pair_wbtc_busd,
+      abi: SWAP.UNISWAP_V2.pair_wbtc_busd_ABI || [],
+      functionName: 'getReserves',
+    }) as [bigint, bigint];
+    return {
+      "BUSD": BigInt(reserves[0]) || 0n,
+      "WBTC": BigInt(reserves[1]) || 0n
     }
   };
-  const getTokenPrice = () => {
+  const getReserves = () => {
     fetchMethods.refetch()
   }
 
@@ -30,10 +24,11 @@ export const useGetTokenPrice = () => {
     isEnabled: false,
     onError(err) {
       toast.error(err.message)
-    }
+    },
+    ...opts
   });
   return {
-    getTokenPrice,
+    getReserves,
     ...fetchMethods
   };
 };
