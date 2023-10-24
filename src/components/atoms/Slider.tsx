@@ -8,7 +8,7 @@ const Slider: FC<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, H
         <input type="range" {...props} onChange={onChange} className="bg-gray-300 w-2/3 level"/>
         {props.value !== undefined && (
           <p className="text-gray-400 text-sm text-center">
-            {parseFloat(props.value.toString()).toFixed(1)}
+            {parseFloat(props.value.toString()).toFixed(1)}%
           </p>
         )}
       </div>
