@@ -16,7 +16,7 @@ const SwapView: FC<SwapViewProps> = ({className}) => {
   return (
     <ConnectedWalletContextProvider address={address} className={cx("flex h-full w-full gap-4", className)}>
       {/*<BalanceSection className="my-auto !w-1/2 h-1/2"/>*/}
-      <SwapSection className={"!w-1/2 h-1/2"}/>
+      <SwapSection className={"!w-1/2 h-3/5"}/>
     </ConnectedWalletContextProvider>
   );
 };
