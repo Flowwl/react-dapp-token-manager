@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import cx from "classnames"
 import NumericInput from "../atoms/NumericInput.tsx";
 import { ArrowsUpDownIcon } from "@heroicons/react/20/solid";
@@ -7,6 +7,7 @@ import { useSwapTokensForTokens } from "../../hooks/useSwapTokensForTokens.ts";
 import { useSwapContext } from "../../contexts/SwapContext.tsx";
 import { useSwapTokens } from "../../hooks/useSwapTokens.ts";
 import { computeBigIntToFloat } from "../../utils";
+import Slider from "../atoms/Slider.tsx";
 
 interface SwapFormProps {
   className?: string
@@ -15,6 +16,8 @@ interface SwapFormProps {
 const SwapForm: FC<SwapFormProps> = ({className}) => {
   const {token0UserBalance, isTokenUserBalanceLoading, tokenMode, refetchTokenUserBalance} = useSwapContext()
   const {onSwapTokens, onToken1AmountChange, onToken0AmountChange, ratio, swapTokens} = useSwapTokens()
+  const [slippage, setSlippage] = useState(1)
+
   const {swapTokensForTokens} = useSwapTokensForTokens({
     onSuccess: () => {
       refetchTokenUserBalance()
@@ -22,7 +25,7 @@ const SwapForm: FC<SwapFormProps> = ({className}) => {
   })
 
   const onSwapClicked = () => {
-    swapTokensForTokens()
+    swapTokensForTokens(slippage)
   }
   const isAmountInValid = parseFloat(swapTokens.IN.amount) > 0 && parseFloat(swapTokens.IN.amount) <= (token0UserBalance || 0)
   const isAmountOutValid = parseFloat(swapTokens.OUT.amount) <= computeBigIntToFloat(swapTokens.OUT.reserve, swapTokens.OUT.decimals)
@@ -56,7 +59,7 @@ const SwapForm: FC<SwapFormProps> = ({className}) => {
           <p className="absolute text-red-700 -bottom-6 text-sm left-4">
             {parseFloat(swapTokens.IN.amount) > (token0UserBalance || 0) && "Insufficient balance"}
             {parseFloat(swapTokens.IN.amount) === 0 && "Amount must be greater than 0"}
-        </p>
+          </p>
         )}
       </div>
       <div className="flex w-full justify-center ml-auto gap-4 items-center relative">
@@ -84,9 +87,20 @@ const SwapForm: FC<SwapFormProps> = ({className}) => {
         />
         {!isAmountOutValid && (
           <p className="absolute text-red-700 -bottom-6 left-4 text-sm">
-          {parseFloat(swapTokens.OUT.amount) > computeBigIntToFloat(swapTokens.OUT.reserve, swapTokens.OUT.decimals) && "Insufficient liquidity"}
-        </p>
+            {parseFloat(swapTokens.OUT.amount) > computeBigIntToFloat(swapTokens.OUT.reserve, swapTokens.OUT.decimals) && "Insufficient liquidity"}
+          </p>
         )}
+      </div>
+      <div className="flex gap-8 my-4">
+        <p className="font-title text-lg">Slippage</p>
+      <Slider
+        className="gap-8 w-2/3 ml-auto"
+        value={slippage}
+        onChange={(e) => setSlippage(parseFloat(e.target.value))}
+        min={0}
+        max={3}
+        step={0.5}
+      />
       </div>
       <Button onClick={onSwapClicked} disabled={
         (!isAmountInValid || !isAmountOutValid)
