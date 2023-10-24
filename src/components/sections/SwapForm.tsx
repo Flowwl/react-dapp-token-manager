@@ -95,7 +95,6 @@ const SwapForm: FC<SwapFormProps> = ({className}) => {
         <p className="font-title text-lg">Slippage</p>
       <Slider
         className="gap-8 w-2/3 ml-auto"
-        size="md"
         value={slippage}
         onChange={(e) => setSlippage(parseFloat(e.target.value))}
         min={0}
